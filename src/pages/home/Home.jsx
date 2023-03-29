@@ -1,20 +1,20 @@
 import { Card, Typography } from "@mui/material";
 import React from "react";
 
-function Home() {
+export default function Home() {
   return (
-    <>
-      <Card>
-        <Typography
-          variant="h4"
-          component="h3"
-          style={{ padding: "50px", margin: "auto", color: "rgb(120, 69, 17)" }}
-        >
-          Ja moin was geht
-        </Typography>
-      </Card>
-    </>
+    <Card style={{ padding: "200px", margin: "auto" }}>
+      <Typography
+        variant="h4"
+        component="h3"
+        style={{
+          padding: "25px",
+          margin: "auto",
+          color: "rgb(0, 0, 0)",
+        }}
+      >
+        Home
+      </Typography>
+    </Card>
   );
 }
-
-export default Home;

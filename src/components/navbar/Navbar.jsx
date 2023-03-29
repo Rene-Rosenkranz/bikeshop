@@ -16,7 +16,7 @@ function Navbar() {
   const menuItems = [
     {
       name: "Home",
-      path: "/home",
+      path: "/",
     },
     {
       name: "Simulation",
@@ -85,17 +85,11 @@ function NavbarItem(props) {
       to={props.path}
       style={{
         textDecoration: "none",
+        color: "white",
       }}
     >
-      <ListItemButton>
-        <ListItemText
-          sx={{
-            color: "white",
-            fontWeight: "400",
-          }}
-        >
-          {props.name}
-        </ListItemText>
+      <ListItemButton sx={{ backgroundColor: "rgb(40, 40, 40)" }}>
+        <ListItemText>{props.name}</ListItemText>
       </ListItemButton>
     </Link>
   );

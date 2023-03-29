@@ -1,6 +1,5 @@
-import { useState } from "react";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import Home from "./pages/home/Home";
 import Simulation from "./pages/simulation/Simulation";
@@ -9,8 +8,9 @@ import Results from "./pages/results/Results";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Navbar>
+    <>
+      <Navbar />
+      <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -18,7 +18,7 @@ export default function App() {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/results" element={<Results />} />
         </Routes>
-      </Navbar>
-    </BrowserRouter>
+      </div>
+    </>
   );
 }
