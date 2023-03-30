@@ -14,5 +14,10 @@
     "simulation": "Simulation",
     "marketplace": "Marketplace",
     "results": "Results"
+  },
+  "simulation": {
+    "delivery": "Delivery Program",
+    "production": "Production Program",
+    "additionalOrder": "Additional Orders"
   }
 }

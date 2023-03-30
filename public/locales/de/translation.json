@@ -14,5 +14,10 @@
     "simulation": "Simulation",
     "marketplace": "Marktplatz",
     "results": "Ergebnisse"
+  },
+  "simulation": {
+    "delivery": "Lieferprogramm",
+    "production": "Produktionsprogramm",
+    "additionalOrder": "Zusatzaufträge"
   }
 }
