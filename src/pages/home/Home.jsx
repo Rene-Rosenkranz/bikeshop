@@ -13,7 +13,7 @@ export default function Home() {
           color: "rgb(0, 0, 0)",
         }}
       >
-        Home
+        Bikeshop
       </Typography>
     </Card>
   );

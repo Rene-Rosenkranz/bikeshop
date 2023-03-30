@@ -19,6 +19,10 @@ function Navbar() {
       path: "/",
     },
     {
+      name: "Upload",
+      path: "/upload",
+    },
+    {
       name: "Simulation",
       path: "/simulation",
     },
