@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import FileUploader from "react-mui-fileuploader";
 import axios from "axios";
 import Bike from "../../assets/Bike.png";
+import { useTranslation } from "react-i18next";
 
 function FileUpload() {
+  const { t, i18n } = useTranslation("translation");
   const [oFileToUpload, fSetFileToUpload] = useState();
   const fHandeFileChange = (file) => {
     fSetFileToUpload(file);
@@ -30,19 +32,19 @@ function FileUpload() {
   return (
     <>
       <FileUploader
-        title="Upload files here"
+        title={t("fileupload.title")}
         multiFile={false}
         onFilesChange={fHandeFileChange}
         allowedExtensions={["xml"]}
-        header="Simulation über XML Datei"
-        leftLabel=""
-        rightLabel=""
-        buttonLabel="Datei auswählen"
+        header={t("fileupload.header")}
+        leftLabel={t("fileupload.labelRight")}
+        rightLabel={t("fileupload.labelLeft")}
+        buttonLabel={t("fileupload.buttonLabel")}
         imageSrc={Bike}
-        imageSrcAlt="lol das bild ist weg"
+        imageSrcAlt={t("fileupload.imageAlt")}
       />
       <Button variant="contained" onClick={fUploadFile}>
-        Datei hochladen
+        {t("fileupload.uploadButton")}
       </Button>
     </>
   );

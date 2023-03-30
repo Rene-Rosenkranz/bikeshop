@@ -1,0 +1,18 @@
+{
+  "fileupload": {
+    "title": "Upload file for simulation",
+    "header": "Select a file to upload",
+    "labelRight": "",
+    "labelLeft": "",
+    "buttonLabel": "Choose file",
+    "uploadButton": "Upload file"
+  },
+  "navbar": {
+    "appTitle": "Supply Chain Management",
+    "home": "Home",
+    "upload": "Simulation via file upload",
+    "simulation": "Simulation",
+    "marketplace": "Marketplace",
+    "results": "Results"
+  }
+}

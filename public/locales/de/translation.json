@@ -1,0 +1,18 @@
+{
+  "fileupload": {
+    "title": "Datei für Simulation hochladen",
+    "header": "Wählen sie eine Datei aus",
+    "labelRight": "",
+    "labelLeft": "",
+    "buttonLabel": "Datei auswählen",
+    "uploadButton": "Datei hochladen"
+  },
+  "navbar": {
+    "appTitle": "SCS Tool",
+    "home": "Startseite",
+    "upload": "Simulation über XML Datei",
+    "simulation": "Simulation",
+    "marketplace": "Marktplatz",
+    "results": "Ergebnisse"
+  }
+}

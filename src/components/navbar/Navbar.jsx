@@ -11,27 +11,30 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import i18n from "../../i18n";
+import { useTranslation } from "react-i18next";
 
 function Navbar() {
+  const { t, i18n } = useTranslation("translation");
   const menuItems = [
     {
-      name: "Home",
+      name: t("navbar.home"),
       path: "/",
     },
     {
-      name: "Upload",
+      name: t("navbar.upload"),
       path: "/upload",
     },
     {
-      name: "Simulation",
+      name: t("navbar.simulation"),
       path: "/simulation",
     },
     {
-      name: "Marktplatz",
+      name: t("navbar.marketplace"),
       path: "/marketplace",
     },
     {
-      name: "Ergebnisse",
+      name: t("navbar.results"),
       path: "/results",
     },
   ];
@@ -43,7 +46,7 @@ function Navbar() {
           style={{ backgroundColor: "rgb(30, 60, 90)", maxHeight: "5vh" }}
         >
           <div style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
-            <Typography>Supply Chain Management</Typography>
+            <Typography>{t("navbar.appTitle")}</Typography>
           </div>
         </Toolbar>
       </AppBar>
