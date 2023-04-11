@@ -5,7 +5,8 @@
     "labelRight": "",
     "labelLeft": "",
     "buttonLabel": "Datei auswählen",
-    "uploadButton": "Datei hochladen"
+    "uploadButton": "Datei hochladen",
+    "imageAlt": "Fahrrad"
   },
   "navbar": {
     "appTitle": "SCS Tool",
@@ -18,6 +19,12 @@
   "simulation": {
     "delivery": "Lieferprogramm",
     "production": "Produktionsprogramm",
-    "additionalOrder": "Zusatzaufträge"
+    "additionalOrder": "Zusatzaufträge",
+    "overview": "Simulationsübersicht",
+    "back": "Zurück",
+    "skip": "Überspringen",
+    "next": "Weiter",
+    "finish": "Beenden",
+    "shifts": "Arbeitszeiten"
   }
 }

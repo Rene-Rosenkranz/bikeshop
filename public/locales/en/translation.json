@@ -5,7 +5,8 @@
     "labelRight": "",
     "labelLeft": "",
     "buttonLabel": "Choose file",
-    "uploadButton": "Upload file"
+    "uploadButton": "Upload file",
+    "imageAlt": "Bike"
   },
   "navbar": {
     "appTitle": "Supply Chain Management",
@@ -18,6 +19,12 @@
   "simulation": {
     "delivery": "Delivery Program",
     "production": "Production Program",
-    "additionalOrder": "Additional Orders"
+    "additionalOrder": "Additional Orders",
+    "overview": "Simulation Overview",
+    "back": "Back",
+    "skip": "Skip",
+    "next": "Next",
+    "finish": "Finish",
+    "shifts": "Work Hours"
   }
 }
