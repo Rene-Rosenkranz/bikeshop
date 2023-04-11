@@ -18,20 +18,20 @@ function FileUpload() {
     /* frXMLReader.onloadend = function () {
       file.file = frXMLReader.result;
     }; */
-    frXMLReader.onloadend = (oEvent) => {
-      file.file = oEvent.target.result;
-    };
-    axios.post(
-      "/URL",
-      {
-        file: file,
-      },
-      {
+    frXMLReader.onloadend = async (oEvent) => {
+      const file = {
+        content: oEvent.target.result,
+      };
+      /* const pParser = new DOMParser();
+      const xmlDocument = pParser.parseFromString(file.content, "text/xml");
+      file.content = xmlDocument; */
+
+      await axios.post("/URL", file, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "text/xml",
         },
-      }
-    );
+      });
+    };
   };
 
   return (

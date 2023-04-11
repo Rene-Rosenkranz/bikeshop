@@ -30,11 +30,7 @@ function Navbar() {
       path: "/simulation",
     },
     {
-      name: t("navbar.marketplace"),
-      path: "/marketplace",
-    },
-    {
-      name: t("navbar.results"),
+      name: t("navbar.overview"),
       path: "/results",
     },
   ];

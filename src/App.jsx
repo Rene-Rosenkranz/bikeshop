@@ -3,8 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import Home from "./pages/home/Home";
 import Simulation from "./pages/simulation/Simulation";
-import Marketplace from "./pages/marketplace/Marketplace";
-import Results from "./pages/results/Results";
+import Overview from "./pages/overview/Overview";
 import FileUpload from "./pages/fileupload/FileUpload";
 
 export default function App() {
@@ -16,8 +15,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/simulation" element={<Simulation />} />
-          <Route path="/marketplace" element={<Marketplace />} />
-          <Route path="/results" element={<Results />} />
+          <Route path="/overview" element={<Overview />} />
           <Route path="/upload" element={<FileUpload />} />
         </Routes>
       </div>
