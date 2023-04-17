@@ -25,6 +25,17 @@
     "skip": "Skip",
     "next": "Next",
     "finish": "Finish",
-    "shifts": "Work Hours"
+    "shifts": "Work Hours",
+    "component": "Component",
+    "orderAmount": "Ordered Amount",
+    "shippingMethods": {
+      "normal": "Normal",
+      "fast": "Fast",
+      "JIT": "Just-in-Time",
+      "cheapVendor": "Cheap Vendor",
+      "specialDelivery": "Special Delivery"
+    },
+    "workstation": "Workstation",
+    "workstationValues": "Shifts and Overtime"
   }
 }

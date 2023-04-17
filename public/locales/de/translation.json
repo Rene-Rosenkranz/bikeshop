@@ -25,6 +25,19 @@
     "skip": "Überspringen",
     "next": "Weiter",
     "finish": "Beenden",
-    "shifts": "Arbeitszeiten"
+    "shifts": "Arbeitszeiten",
+    "component": "Bauteil",
+    "orderAmount": "Bestellmenge",
+    "productionAmount": "Produktionsmenge",
+    "errorMissingInput": "Bitte geben Sie einen Wert ein!",
+    "shippingMethods": {
+      "normal": "Standard",
+      "fast": "Schnell",
+      "JIT": "Just-in-Time",
+      "cheapVendor": "Günstiger Anbieter",
+      "specialDelivery": "Sonderlieferung"
+    },
+    "workstation": "Arbeitsstation",
+    "workstationValues": "Mehrschichten und Überstunden"
   }
 }

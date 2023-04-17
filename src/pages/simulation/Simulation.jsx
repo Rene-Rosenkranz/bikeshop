@@ -9,10 +9,15 @@ import {
   TextField,
   Stepper,
   Typography,
+  InputLabel,
+  FormHelperText,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import i18n from "../../i18n";
 import { useTranslation } from "react-i18next";
+import { useGlobalState } from "../../components/GlobalStateProvider";
+import DeliveryProgram from "./components/DeliveryProgram";
+import ProductionProgram from "./components/ProductionProgram";
+import Workinghours from "./components/Workhours";
 
 function Simulation() {
   const { t, i18n } = useTranslation();
@@ -25,9 +30,80 @@ function Simulation() {
     t("simulation.shifts"),
     t("simulation.overview"),
   ];
+  //const { oSimulationData } = useGlobalState();
+  const oSimulationData = {
+    orders: [
+      {
+        part: 21,
+        amount: 600,
+        mode: 5,
+      },
+      {
+        part: 22,
+        amount: 900,
+        mode: 5,
+      },
+      {
+        part: 23,
+        amount: 1800,
+        mode: 4,
+      },
+      {
+        part: 40,
+        amount: 22000,
+        mode: 3,
+      },
+    ],
+    production: [
+      {
+        part: 1,
+        amount: 150,
+      },
+      {
+        part: 2,
+        amount: 100,
+      },
+      {
+        part: 3,
+        amount: 150,
+      },
+    ],
+    workinghours: [
+      {
+        workplace: 1,
+        shift: 1,
+        overtime: 0,
+      },
+      {
+        workplace: 2,
+        shift: 2,
+        overtime: 15,
+      },
+      {
+        workplace: 3,
+        shift: 1,
+        overtime: 30,
+      },
+      {
+        workplace: 4,
+        shift: 1,
+        overtime: 45,
+      },
+      {
+        workplace: 5,
+        shift: 0,
+        overtime: 0,
+      },
+      {
+        workplace: 6,
+        shift: 1,
+        overtime: 40,
+      },
+    ],
+  };
 
   const fIsStepOptional = (step) => {
-    return step === aSteps.length - 2;
+    return step === aSteps.length - 3;
   };
 
   const fIsStepSkipped = (step) => {
@@ -88,6 +164,17 @@ function Simulation() {
                 >
                   {t("simulation.back")}
                 </Button>
+                {activeStep === 0 && (
+                  <DeliveryProgram data={oSimulationData.orders} />
+                )}
+                {activeStep === 1 && (
+                  <ProductionProgram data={oSimulationData.production} />
+                )}
+                {activeStep === 3 && (
+                  <Workinghours data={oSimulationData.workinghours} />
+                )}
+                {/* {activeStep === 2 && <AdditionalOrders />} */}
+                {/* {activeStep === 4 && <Overview data={oSimulationData} />} */}
                 <Box sx={{ flex: "1 1 auto" }} />
                 {fIsStepOptional(activeStep) && (
                   <Button color="inherit" onClick={fHandleSkip} sx={{ mr: 1 }}>
