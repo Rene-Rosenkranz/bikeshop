@@ -9,7 +9,7 @@ import { useGlobalState } from "../../components/GlobalStateProvider";
 function FileUpload() {
   const { t, i18n } = useTranslation("translation");
   const [oFileToUpload, fSetFileToUpload] = useState();
-  const { fSetState } = useGlobalState();
+  const { oState, fSetState } = useGlobalState();
   const fHandeFileChange = (oEvent) => {
     fSetFileToUpload(oEvent.target.files[0]);
   };
@@ -21,6 +21,17 @@ function FileUpload() {
       const file = {
         content: oEvent.target.result,
       };
+      const dpParser = new DOMParser();
+      const jqXMLFile = dpParser.parseFromString(file.content, "text/xml");
+      const oForecast = {};
+
+      const aPeriods = ["p1", "p2", "p3"];
+
+      aPeriods.forEach((sPeriod) => {
+        oForecast[sPeriod] = jqXMLFile
+          .getElementsByTagName("forecast")[0]
+          .getAttributeNode(sPeriod).value;
+      });
 
       await axios
         .post("/URL", file, {

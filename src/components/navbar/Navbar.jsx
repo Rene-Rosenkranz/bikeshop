@@ -9,13 +9,20 @@ import {
   CssBaseline,
   AppBar,
   Typography,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import i18n from "../../i18n";
 import { useTranslation } from "react-i18next";
 
 function Navbar() {
   const { t, i18n } = useTranslation("translation");
+  let [sLanguage, fSetLanguage] = React.useState(i18n.language.toLowerCase());
+  const fChangeToSelectedLanguage = (oEvent) => {
+    const sLanguage = oEvent.target.value;
+    fSetLanguage(sLanguage);
+    i18n.changeLanguage(sLanguage);
+  };
   const menuItems = [
     {
       name: t("navbar.home"),
@@ -44,6 +51,10 @@ function Navbar() {
           <div style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
             <Typography>{t("navbar.appTitle")}</Typography>
           </div>
+          <Select onChange={fChangeToSelectedLanguage} value={sLanguage}>
+            <MenuItem value={"de"}>{t("navbar.german")}</MenuItem>
+            <MenuItem value={"en"}>{t("navbar.english")}</MenuItem>
+          </Select>
         </Toolbar>
       </AppBar>
       <Drawer

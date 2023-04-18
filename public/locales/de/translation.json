@@ -14,7 +14,9 @@
     "upload": "Simulation über XML Datei",
     "simulation": "Simulation",
     "marketplace": "Marktplatz",
-    "overview": "Übersicht"
+    "overview": "Übersicht",
+    "german": "Deutsch",
+    "english": "Englisch"
   },
   "simulation": {
     "delivery": "Lieferprogramm",

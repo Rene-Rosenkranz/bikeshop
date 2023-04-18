@@ -14,7 +14,9 @@
     "upload": "Simulation via file upload",
     "simulation": "Simulation",
     "marketplace": "Marketplace",
-    "overview": "Overview"
+    "overview": "Overview",
+    "german": "German",
+    "english": "English"
   },
   "simulation": {
     "delivery": "Delivery Program",

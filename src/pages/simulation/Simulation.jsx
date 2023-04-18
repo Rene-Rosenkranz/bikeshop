@@ -18,6 +18,7 @@ import { useGlobalState } from "../../components/GlobalStateProvider";
 import DeliveryProgram from "./components/DeliveryProgram";
 import ProductionProgram from "./components/ProductionProgram";
 import Workinghours from "./components/Workhours";
+import Overview from "./components/Overview";
 
 function Simulation() {
   const { t, i18n } = useTranslation();
@@ -174,7 +175,7 @@ function Simulation() {
                   <Workinghours data={oSimulationData.workinghours} />
                 )}
                 {/* {activeStep === 2 && <AdditionalOrders />} */}
-                {/* {activeStep === 4 && <Overview data={oSimulationData} />} */}
+                {activeStep === 4 && <Overview data={oSimulationData} />}
                 <Box sx={{ flex: "1 1 auto" }} />
                 {fIsStepOptional(activeStep) && (
                   <Button color="inherit" onClick={fHandleSkip} sx={{ mr: 1 }}>
