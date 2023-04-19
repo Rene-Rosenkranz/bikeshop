@@ -9,6 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import ModeMenu from "./ModeMenu";
+import { useGlobalState } from "../../../components/GlobalStateProvider";
 
 function DeliveryProgram(props) {
   return (
@@ -17,6 +18,7 @@ function DeliveryProgram(props) {
         {props.data.map((oElement) => {
           const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
+          const { oState, fSetState } = useGlobalState();
 
           const fValidHandler = (bValid) => {
             fSetValid(bValid);
@@ -38,9 +40,17 @@ function DeliveryProgram(props) {
                   inputProps={{ min: 0 }}
                   aria-describedby="form-helper"
                   defaultValue={oElement.amount}
-                  onChange={(oInput) => {
-                    const bIsEmpty = !!oInput.target.value;
+                  onChange={(oEvent) => {
+                    const bIsEmpty = !!oEvent.target.value;
                     fValidHandler(bIsEmpty);
+                    if (bIsEmpty) return;
+                    const oNewState = oState;
+                    const iIndex = oNewState["orders"].find(
+                      (oObject) => oObject.part === oElement.part
+                    );
+                    oNewState["orders"][iIndex].amount =
+                      oEvent.target.valueAsNumber;
+                    fSetState(oNewState);
                   }}
                 />
                 {bValid && (
@@ -54,7 +64,7 @@ function DeliveryProgram(props) {
                   </FormHelperText>
                 )}
               </FormControl>
-              <ModeMenu value={oElement.mode} />
+              <ModeMenu value={oElement.mode} element={oElement} />
             </>
           );
         })}

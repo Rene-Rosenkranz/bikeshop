@@ -30,6 +30,7 @@
     "shifts": "Work Hours",
     "component": "Component",
     "orderAmount": "Ordered Amount",
+    "productionAmount": "Amount to Produce",
     "shippingMethods": {
       "normal": "Normal",
       "fast": "Fast",
