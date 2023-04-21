@@ -33,7 +33,7 @@ function FileUpload() {
         content: oEvent.target.result,
       };
       await axios
-        .post("/URL", file, {
+        .post("http:localhost:3000/URL", file, {
           headers: {
             "Content-Type": "text/xml",
           },

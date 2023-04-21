@@ -97,7 +97,7 @@ function Simulation() {
   };
 
   const fIsStepOptional = (step) => {
-    return step === aSteps.length - 2;
+    return step === aSteps.length;
   };
 
   const fIsStepSkipped = (step) => {
@@ -150,14 +150,16 @@ function Simulation() {
             <Fragment>
               <Typography>{aSteps[activeStep]}</Typography>
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                <Button
-                  color="inherit"
-                  disabled={activeStep === 0}
-                  onClick={fHandleBack}
-                  sx={{ mr: 1 }}
-                >
-                  {t("simulation.back")}
-                </Button>
+                <div>
+                  <Button
+                    color="inherit"
+                    disabled={activeStep === 0}
+                    onClick={fHandleBack}
+                    sx={{ mr: 1 }}
+                  >
+                    {t("simulation.back")}
+                  </Button>
+                </div>
                 {activeStep === 0 && (
                   <DeliveryProgram data={oSimulationData.orders} />
                 )}
@@ -170,16 +172,24 @@ function Simulation() {
                 {/* {activeStep === 2 && <AdditionalOrders />} */}
                 {activeStep === 3 && <Overview data={oSimulationData} />}
                 <Box sx={{ flex: "1 1 auto" }} />
-                {fIsStepOptional(activeStep) && (
-                  <Button color="inherit" onClick={fHandleSkip} sx={{ mr: 1 }}>
-                    {t("simulation.skip")}
+                <div>
+                  {fIsStepOptional(activeStep) && (
+                    <Button
+                      color="inherit"
+                      onClick={fHandleSkip}
+                      sx={{ mr: 1 }}
+                    >
+                      {t("simulation.skip")}
+                    </Button>
+                  )}
+                </div>
+                <div>
+                  <Button onClick={fHandleNext}>
+                    {activeStep === aSteps.length - 1
+                      ? t("simulation.finish")
+                      : t("simulation.next")}
                   </Button>
-                )}
-                <Button onClick={fHandleNext}>
-                  {activeStep === aSteps.length - 1
-                    ? t("simulation.finish")
-                    : t("simulation.next")}
-                </Button>
+                </div>
               </Box>
             </Fragment>
           ) : (

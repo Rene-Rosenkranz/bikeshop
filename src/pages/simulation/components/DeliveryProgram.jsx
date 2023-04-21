@@ -14,7 +14,7 @@ import { useGlobalState } from "../../../components/GlobalStateProvider";
 function DeliveryProgram(props) {
   return (
     <>
-      <Box>
+      <Box alignContent="center" alignItems="center">
         {props.data.map((oElement) => {
           const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
@@ -26,45 +26,47 @@ function DeliveryProgram(props) {
 
           return (
             <>
-              <FormControl
-                required={true}
-                size="small"
-                sx={{ display: "inline-flex" }}
-              >
-                <InputLabel>
-                  {t("simulation.component") + " " + oElement.part}
-                </InputLabel>
-                <Input
-                  type="number"
-                  error={!bValid}
-                  inputProps={{ min: 0 }}
-                  aria-describedby="form-helper"
-                  defaultValue={oElement.amount}
-                  onChange={(oEvent) => {
-                    const bIsEmpty = !!oEvent.target.value;
-                    fValidHandler(bIsEmpty);
-                    if (bIsEmpty) return;
-                    const oNewState = oState;
-                    const iIndex = oNewState["orders"].find(
-                      (oObject) => oObject.part === oElement.part
-                    );
-                    oNewState["orders"][iIndex].amount =
-                      oEvent.target.valueAsNumber;
-                    fSetState(oNewState);
-                  }}
-                />
-                {bValid && (
-                  <FormHelperText id="form-helper">
-                    {t("simulation.orderAmount")}
-                  </FormHelperText>
-                )}
-                {!bValid && (
-                  <FormHelperText id="form-helper" error>
-                    {t("simulation.errorMissingInput")}
-                  </FormHelperText>
-                )}
-              </FormControl>
-              <ModeMenu value={oElement.mode} element={oElement} />
+              <Box marginBottom="2rem">
+                <FormControl
+                  required={true}
+                  size="small"
+                  sx={{ display: "inline-flex" }}
+                >
+                  <InputLabel>
+                    {t("simulation.component") + " " + oElement.part}
+                  </InputLabel>
+                  <Input
+                    type="number"
+                    error={!bValid}
+                    inputProps={{ min: 0 }}
+                    aria-describedby="form-helper"
+                    defaultValue={oElement.amount}
+                    onChange={(oEvent) => {
+                      const bIsEmpty = !!oEvent.target.value;
+                      fValidHandler(bIsEmpty);
+                      if (bIsEmpty) return;
+                      const oNewState = oState;
+                      const iIndex = oNewState["orders"].find(
+                        (oObject) => oObject.part === oElement.part
+                      );
+                      oNewState["orders"][iIndex].amount =
+                        oEvent.target.valueAsNumber;
+                      fSetState(oNewState);
+                    }}
+                  />
+                  {bValid && (
+                    <FormHelperText id="form-helper">
+                      {t("simulation.orderAmount")}
+                    </FormHelperText>
+                  )}
+                  {!bValid && (
+                    <FormHelperText id="form-helper" error>
+                      {t("simulation.errorMissingInput")}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+                <ModeMenu value={oElement.mode} element={oElement} />
+              </Box>
             </>
           );
         })}

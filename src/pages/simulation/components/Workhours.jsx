@@ -7,7 +7,7 @@ import { useGlobalState } from "../../../components/GlobalStateProvider";
 function Workinghours(props) {
   return (
     <>
-      <Box>
+      <Box alignContent="center">
         {props.data.map((oElement) => {
           const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
@@ -17,49 +17,51 @@ function Workinghours(props) {
             fSetValid(bValid);
           };
           return (
-            <FormControl>
-              <InputLabel>
-                {t("simulation.workstation") + " " + oElement.workplace}
-              </InputLabel>
-              <Input
-                type="number"
-                aria-describedby="form-helper"
-                inputProps={{ min: 1, max: 3 }}
-                defaultValue={oElement.shift}
-                onChange={(oEvent) => {
-                  const bIsEmpty = !!oEvent.target.value;
-                  fValidHandler(bIsEmpty);
-                  if (bIsEmpty) return;
-                  const oNewState = oState;
-                  const iIndex = oNewState["production"].find(
-                    (oObject) => oObject.workplace === oElement.workplace
-                  );
-                  oNewState["workinghours"][iIndex].shift =
-                    oEvent.target.valueAsNumber;
-                  fSetState(oNewState);
-                }}
-              />
-              <Input
-                type="number"
-                inputProps={{ min: 0, max: 241 }}
-                defaultValue={oElement.overtime}
-                onChange={(oEvent) => {
-                  const bIsEmpty = !!oEvent.target.value;
-                  fValidHandler(bIsEmpty);
-                  if (bIsEmpty) return;
-                  const oNewState = oState;
-                  const iIndex = oNewState["production"].find(
-                    (oObject) => oObject.workplace === oElement.workplace
-                  );
-                  oNewState["workinghours"][iIndex].overtime =
-                    oEvent.target.valueAsNumber;
-                  fSetState(oNewState);
-                }}
-              />
-              <FormHelperText id="form-helper">
-                {t("simulation.workstationValues")}
-              </FormHelperText>
-            </FormControl>
+            <Box alignContent="center" margin="2rem">
+              <FormControl>
+                <InputLabel>
+                  {t("simulation.workstation") + " " + oElement.workplace}
+                </InputLabel>
+                <Input
+                  type="number"
+                  aria-describedby="form-helper"
+                  inputProps={{ min: 1, max: 3 }}
+                  defaultValue={oElement.shift}
+                  onChange={(oEvent) => {
+                    const bIsEmpty = !!oEvent.target.value;
+                    fValidHandler(bIsEmpty);
+                    if (bIsEmpty) return;
+                    const oNewState = oState;
+                    const iIndex = oNewState["production"].find(
+                      (oObject) => oObject.workplace === oElement.workplace
+                    );
+                    oNewState["workinghours"][iIndex].shift =
+                      oEvent.target.valueAsNumber;
+                    fSetState(oNewState);
+                  }}
+                />
+                <Input
+                  type="number"
+                  inputProps={{ min: 0, max: 241 }}
+                  defaultValue={oElement.overtime}
+                  onChange={(oEvent) => {
+                    const bIsEmpty = !!oEvent.target.value;
+                    fValidHandler(bIsEmpty);
+                    if (bIsEmpty) return;
+                    const oNewState = oState;
+                    const iIndex = oNewState["production"].find(
+                      (oObject) => oObject.workplace === oElement.workplace
+                    );
+                    oNewState["workinghours"][iIndex].overtime =
+                      oEvent.target.valueAsNumber;
+                    fSetState(oNewState);
+                  }}
+                />
+                <FormHelperText id="form-helper">
+                  {t("simulation.workstationValues")}
+                </FormHelperText>
+              </FormControl>
+            </Box>
           );
         })}
       </Box>
