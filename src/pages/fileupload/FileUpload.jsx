@@ -2,6 +2,7 @@ import {
   Button,
   Input,
   TableContainer,
+  TextField,
   Table,
   TableRow,
   TableHead,
@@ -23,8 +24,45 @@ function FileUpload() {
   const fHandeFileChange = (oEvent) => {
     fSetFileToUpload(oEvent.target.files[0]);
   };
-  const fSendFile = () => {};
-  const fUpdateXMLFile = () => {};
+  const fSendFile = async () => {
+    const frXMLReader = new FileReader();
+    let file = {};
+    frXMLReader.readAsText(oFileToUpload);
+    frXMLReader.onloadend = async (oEvent) => {
+      file = {
+        content: oEvent.target.result,
+      };
+      await axios
+        .post("/URL", file, {
+          headers: {
+            "Content-Type": "text/xml",
+          },
+        })
+        .then((oResponse) => {
+          fSetState(oResponse.data);
+        });
+    };
+  };
+  const fUpdateXMLFile = (oUpdateEvent) => {
+    const frXMLReader = new FileReader();
+    let file = {};
+    const sKey = oUpdateEvent.currentTarget.getAttribute("t-key");
+    const sValue = oUpdateEvent.target.value;
+    frXMLReader.readAsText(oFileToUpload);
+    frXMLReader.onloadend = async (oUploadEvent) => {
+      file = {
+        content: oUploadEvent.target.result,
+      };
+      const dpParser = new DOMParser();
+      const jqXMLFile = dpParser.parseFromString(file.content, "text/xml");
+
+      jqXMLFile
+        .getElementsByTagName("forecast")[0]
+        .getAttributeNode(sKey).value = sValue;
+
+      oUpdateEvent.target.value = sValue;
+    };
+  };
   const fUploadFile = () => {
     const frXMLReader = new FileReader();
     let file = {};
@@ -46,16 +84,6 @@ function FileUpload() {
 
       fSetForecast(oForecast);
       fSetFileLoaded(true);
-
-      /* await axios
-        .post("/URL", file, {
-          headers: {
-            "Content-Type": "text/xml",
-          },
-        })
-        .then((oResponse) => {
-          fSetState(oResponse.data);
-        }); */
     };
   };
 
@@ -74,7 +102,11 @@ function FileUpload() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>{t("fileupload.productionPlanning")}</TableCell>
+                <TableCell />
+                <TableCell align="center">
+                  {t("fileupload.productionPlanning")}
+                </TableCell>
+                <TableCell />
               </TableRow>
               <TableRow>
                 <TableCell>{t("fileupload.product1")}</TableCell>
@@ -88,9 +120,13 @@ function FileUpload() {
                   <TableCell
                     contentEditable
                     onChange={fUpdateXMLFile}
-                    key={oProduct[0]}
+                    t-key={oProduct[0]}
                   >
-                    {oProduct[1]}
+                    <TextField
+                      t-key={oProduct[0]}
+                      style={{ width: "8rem" }}
+                      value={oProduct[1]}
+                    />
                   </TableCell>
                 ))}
               </TableRow>

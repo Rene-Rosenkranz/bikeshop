@@ -13,7 +13,14 @@ export default function Home() {
           color: "rgb(0, 0, 0)",
         }}
       >
-        Bikeshop
+        Bikeshop SCS Tool
+      </Typography>
+      <Typography>
+        Planen Sie hier ihre Produktion. Beginnen Sie bei "Simulation über XML
+        Datei", um die aktuellen Informationen hochzuladen. Dort können Sie dann
+        auf Basis der Prognosen ihr Produktionsprogramm festlegen. Danach sehen
+        in dem Reiter "Simulation" die vorgeschlagenen Bestell- und
+        Produktionsprogramme.
       </Typography>
     </Card>
   );
