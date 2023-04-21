@@ -6,7 +6,12 @@
     "labelLeft": "",
     "buttonLabel": "Datei auswählen",
     "uploadButton": "Datei hochladen",
-    "imageAlt": "Fahrrad"
+    "imageAlt": "Fahrrad",
+    "productionPlanning": "Produktionsplanung",
+    "product1": "Produkt 1 (Herrenfahrräder)",
+    "product2": "Produkt 2 (Damenfahrräder)",
+    "product3": "Produkt 3 (Kinderfahrräder)",
+    "planSimulation": "Simulation planen"
   },
   "navbar": {
     "appTitle": "SCS Tool",
@@ -32,6 +37,7 @@
     "orderAmount": "Bestellmenge",
     "productionAmount": "Produktionsmenge",
     "errorMissingInput": "Bitte geben Sie einen Wert ein!",
+    "shippingMethod": "Versandart",
     "shippingMethods": {
       "normal": "Standard",
       "fast": "Schnell",
@@ -40,6 +46,10 @@
       "specialDelivery": "Sonderlieferung"
     },
     "workstation": "Arbeitsstation",
-    "workstationValues": "Mehrschichten und Überstunden"
+    "overtime": "Überstunden",
+    "workstationValues": "Mehrschichten und Überstunden",
+    "part": "Bauteil",
+    "amount": "Menge",
+    "mode": "Modus"
   }
 }

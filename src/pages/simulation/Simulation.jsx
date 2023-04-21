@@ -2,19 +2,13 @@ import React, { Fragment, useState } from "react";
 import {
   Button,
   Container,
-  FormControl,
-  Input,
   Step,
   StepLabel,
-  TextField,
   Stepper,
   Typography,
-  InputLabel,
-  FormHelperText,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
-import { useGlobalState } from "../../components/GlobalStateProvider";
 import DeliveryProgram from "./components/DeliveryProgram";
 import ProductionProgram from "./components/ProductionProgram";
 import Workinghours from "./components/Workhours";
@@ -27,7 +21,6 @@ function Simulation() {
   const aSteps = [
     t("simulation.delivery"),
     t("simulation.production"),
-    t("simulation.additionalOrder"),
     t("simulation.shifts"),
     t("simulation.overview"),
   ];
@@ -104,7 +97,7 @@ function Simulation() {
   };
 
   const fIsStepOptional = (step) => {
-    return step === aSteps.length - 3;
+    return step === aSteps.length - 2;
   };
 
   const fIsStepSkipped = (step) => {
@@ -171,11 +164,11 @@ function Simulation() {
                 {activeStep === 1 && (
                   <ProductionProgram data={oSimulationData.production} />
                 )}
-                {activeStep === 3 && (
+                {activeStep === 2 && (
                   <Workinghours data={oSimulationData.workinghours} />
                 )}
                 {/* {activeStep === 2 && <AdditionalOrders />} */}
-                {activeStep === 4 && <Overview data={oSimulationData} />}
+                {activeStep === 3 && <Overview data={oSimulationData} />}
                 <Box sx={{ flex: "1 1 auto" }} />
                 {fIsStepOptional(activeStep) && (
                   <Button color="inherit" onClick={fHandleSkip} sx={{ mr: 1 }}>

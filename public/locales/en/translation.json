@@ -6,7 +6,12 @@
     "labelLeft": "",
     "buttonLabel": "Choose file",
     "uploadButton": "Upload file",
-    "imageAlt": "Bike"
+    "imageAlt": "Bike",
+    "productionPlanning": "Production Planning",
+    "product1": "Product 1 (men's bikes)",
+    "product2": "Product 2 (women's bikes)",
+    "product3": "Product 3 (child's bikes)",
+    "planSimulation": "Plan Simulation"
   },
   "navbar": {
     "appTitle": "Supply Chain Management",
@@ -31,6 +36,8 @@
     "component": "Component",
     "orderAmount": "Ordered Amount",
     "productionAmount": "Amount to Produce",
+    "errorMissingInput": "Please enter a value!",
+    "shippingMethod": "Versandart",
     "shippingMethods": {
       "normal": "Normal",
       "fast": "Fast",
@@ -39,6 +46,10 @@
       "specialDelivery": "Special Delivery"
     },
     "workstation": "Workstation",
-    "workstationValues": "Shifts and Overtime"
+    "overtime": "Overtime",
+    "workstationValues": "Shifts and Overtime",
+    "part": "Part",
+    "amount": "Amount",
+    "mode": "Mode"
   }
 }

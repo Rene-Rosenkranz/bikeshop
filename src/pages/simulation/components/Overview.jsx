@@ -34,9 +34,9 @@ function Overview(props) {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Bauteil</TableCell>
-                <TableCell>Menge</TableCell>
-                <TableCell>Art</TableCell>
+                <TableCell>{t("simulation.part")}</TableCell>
+                <TableCell>{t("simulation.amount")}</TableCell>
+                <TableCell>{t("simulation.mode")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -56,8 +56,8 @@ function Overview(props) {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Bauteil</TableCell>
-                <TableCell>Menge</TableCell>
+                <TableCell>{t("simulation.part")}</TableCell>
+                <TableCell>{t("simulation.amount")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -76,9 +76,9 @@ function Overview(props) {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Station</TableCell>
-                <TableCell>Schichten</TableCell>
-                <TableCell>Überstunden</TableCell>
+                <TableCell>{t("simulation.workstation")}</TableCell>
+                <TableCell>{t("simulation.shifts")}</TableCell>
+                <TableCell>{t("simulation.overtime")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

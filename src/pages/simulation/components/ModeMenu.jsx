@@ -28,7 +28,11 @@ function ModeMenu(data) {
   };
   return (
     <FormControl>
-      <Select value={iMode} label="Versandart" onChange={fHandleChange}>
+      <Select
+        value={iMode}
+        label={t("simulation.shippingMethod")}
+        onChange={fHandleChange}
+      >
         {oShippingMethods.map((oMenuItem) => {
           return <MenuItem value={oMenuItem.value}>{oMenuItem.text}</MenuItem>;
         })}
