@@ -33,21 +33,21 @@ function DeliveryProgram(props) {
                   sx={{ display: "inline-flex" }}
                 >
                   <InputLabel>
-                    {t("simulation.component") + " " + oElement.part}
+                    {t("simulation.component") + " " + oElement.article}
                   </InputLabel>
                   <Input
                     type="number"
                     error={!bValid}
                     inputProps={{ min: 0 }}
                     aria-describedby="form-helper"
-                    defaultValue={oElement.amount}
+                    defaultValue={oElement.quantity}
                     onChange={(oEvent) => {
                       const bIsEmpty = !!oEvent.target.value;
                       fValidHandler(bIsEmpty);
                       if (bIsEmpty) return;
                       const oNewState = oState;
                       const iIndex = oNewState["orders"].find(
-                        (oObject) => oObject.part === oElement.part
+                        (oObject) => oObject.article === oElement.article
                       );
                       oNewState["orders"][iIndex].amount =
                         oEvent.target.valueAsNumber;
@@ -65,7 +65,7 @@ function DeliveryProgram(props) {
                     </FormHelperText>
                   )}
                 </FormControl>
-                <ModeMenu value={oElement.mode} element={oElement} />
+                <ModeMenu value={oElement.modus} element={oElement} />
               </Box>
             </>
           );

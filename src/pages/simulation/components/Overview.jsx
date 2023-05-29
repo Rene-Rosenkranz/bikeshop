@@ -41,11 +41,11 @@ function Overview(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {props.data.orders.map((oOrder) => (
+                {props.data.orderlist.map((oOrder) => (
                   <TableRow key={oOrder.part}>
-                    <TableCell>{oOrder.part}</TableCell>
-                    <TableCell>{oOrder.amount}</TableCell>
-                    <TableCell>{mModeMap.get(oOrder.mode)}</TableCell>
+                    <TableCell>{oOrder.article}</TableCell>
+                    <TableCell>{oOrder.quantity}</TableCell>
+                    <TableCell>{mModeMap.get(oOrder.modus)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -62,10 +62,10 @@ function Overview(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {props.data.production.map((oOrder) => (
-                  <TableRow key={oOrder.part}>
-                    <TableCell>{oOrder.part}</TableCell>
-                    <TableCell>{oOrder.amount}</TableCell>
+                {props.data.productionlist.map((oOrder) => (
+                  <TableRow key={oOrder.article}>
+                    <TableCell>{oOrder.article}</TableCell>
+                    <TableCell>{oOrder.quantity}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -83,9 +83,9 @@ function Overview(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {props.data.workinghours.map((oOrder) => (
-                  <TableRow key={oOrder.workplace}>
-                    <TableCell>{oOrder.workplace}</TableCell>
+                {props.data.workingtimelist.map((oOrder) => (
+                  <TableRow key={oOrder.station}>
+                    <TableCell>{oOrder.station}</TableCell>
                     <TableCell>{oOrder.shift}</TableCell>
                     <TableCell>{oOrder.overtime}</TableCell>
                   </TableRow>

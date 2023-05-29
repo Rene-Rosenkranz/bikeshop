@@ -20,7 +20,7 @@ function Workinghours(props) {
             <Box alignContent="center" margin="2rem">
               <FormControl>
                 <InputLabel>
-                  {t("simulation.workstation") + " " + oElement.workplace}
+                  {t("simulation.workstation") + " " + oElement.station}
                 </InputLabel>
                 <Input
                   type="number"
@@ -33,7 +33,7 @@ function Workinghours(props) {
                     if (bIsEmpty) return;
                     const oNewState = oState;
                     const iIndex = oNewState["production"].find(
-                      (oObject) => oObject.workplace === oElement.workplace
+                      (oObject) => oObject.workplace === oElement.station
                     );
                     oNewState["workinghours"][iIndex].shift =
                       oEvent.target.valueAsNumber;
@@ -50,7 +50,7 @@ function Workinghours(props) {
                     if (bIsEmpty) return;
                     const oNewState = oState;
                     const iIndex = oNewState["production"].find(
-                      (oObject) => oObject.workplace === oElement.workplace
+                      (oObject) => oObject.workplace === oElement.station
                     );
                     oNewState["workinghours"][iIndex].overtime =
                       oEvent.target.valueAsNumber;

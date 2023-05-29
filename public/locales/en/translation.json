@@ -8,10 +8,12 @@
     "uploadButton": "Upload file",
     "imageAlt": "Bike",
     "productionPlanning": "Production Planning",
-    "product1": "Product 1 (men's bikes)",
-    "product2": "Product 2 (women's bikes)",
-    "product3": "Product 3 (child's bikes)",
-    "planSimulation": "Plan Simulation"
+    "productp1": "Product 1 (men's bikes)",
+    "productp2": "Product 2 (women's bikes)",
+    "productp3": "Product 3 (child's bikes)",
+    "planSimulation": "Plan Simulation",
+    "forecast": "Forecast",
+    "chooseResult": "Choose your results of the last period"
   },
   "navbar": {
     "appTitle": "Supply Chain Management",
@@ -50,6 +52,7 @@
     "workstationValues": "Shifts and Overtime",
     "part": "Part",
     "amount": "Amount",
-    "mode": "Mode"
+    "mode": "Mode",
+    "planPeriod": "Plan period for this production"
   }
 }

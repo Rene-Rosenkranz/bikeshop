@@ -9,8 +9,16 @@ const GlobalStateContext = createContext({
 // Setter and Getter for the global object
 const GlobalStateProvider = ({ children, value }) => {
   const [state, setState] = useState(value || {});
+
+  const updateState = (newState) => {
+    setState((prevState) => ({
+      ...prevState,
+      ...newState,
+    }));
+  };
+
   return (
-    <GlobalStateContext.Provider value={{ state, setState }}>
+    <GlobalStateContext.Provider value={{ state, setState: updateState }}>
       {children}
     </GlobalStateContext.Provider>
   );

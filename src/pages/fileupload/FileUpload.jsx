@@ -8,10 +8,12 @@ import {
   TableHead,
   TableCell,
   TableBody,
+  Box,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { redirect } from "react-router";
 import axios from "axios";
-import Bike from "../../assets/Bike.png";
 import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../components/GlobalStateProvider";
 
@@ -33,21 +35,26 @@ function FileUpload() {
         content: oEvent.target.result,
       };
       await axios
-        .post("http:localhost:3000/URL", file, {
+        .post("http:localhost:8080/api/input", file, {
           headers: {
             "Content-Type": "text/xml",
           },
         })
         .then((oResponse) => {
-          fSetState(oResponse.data);
+          redirect("/simulation");
+        })
+        .catch((oError) => {
+          //redirect("/simulation");
+          window.location.replace("http://localhost:5173/simulation");
         });
     };
   };
-  const fUpdateXMLFile = (oUpdateEvent) => {
+  /* const fUpdateXMLFile = (oUpdateEvent) => {
+    const sValue = oUpdateEvent.target.value;
     const frXMLReader = new FileReader();
     let file = {};
     const sKey = oUpdateEvent.currentTarget.getAttribute("t-key");
-    const sValue = oUpdateEvent.target.value;
+
     frXMLReader.readAsText(oFileToUpload);
     frXMLReader.onloadend = async (oUploadEvent) => {
       file = {
@@ -62,8 +69,8 @@ function FileUpload() {
 
       oUpdateEvent.target.value = sValue;
     };
-  };
-  const fUploadFile = () => {
+  }; */
+  /* const fUploadFile = () => {
     const frXMLReader = new FileReader();
     let file = {};
     frXMLReader.readAsText(oFileToUpload);
@@ -85,58 +92,94 @@ function FileUpload() {
       fSetForecast(oForecast);
       fSetFileLoaded(true);
     };
-  };
+  }; */
 
   return (
     <>
       {!bFileLoaded && (
-        <>
+        <Box>
+          <Typography marginBottom="5rem">
+            {t("fileupload.chooseResult")}
+          </Typography>
           <input type="file" accept=".xml" onChange={fHandeFileChange} />
-          <Button variant="contained" onClick={fUploadFile}>
-            {t("fileupload.uploadButton")}
-          </Button>
-        </>
+          {!!oFileToUpload && (
+            <Button variant="contained" onClick={fSendFile}>
+              {t("fileupload.uploadButton")}
+            </Button>
+          )}
+        </Box>
       )}
-      {bFileLoaded && (
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell align="center">
-                  {t("fileupload.productionPlanning")}
-                </TableCell>
-                <TableCell />
-              </TableRow>
-              <TableRow>
-                <TableCell>{t("fileupload.product1")}</TableCell>
-                <TableCell>{t("fileupload.product2")}</TableCell>
-                <TableCell>{t("fileupload.product3")}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                {Object.entries(oForecast).map((oProduct) => (
-                  <TableCell
-                    contentEditable
-                    onChange={fUpdateXMLFile}
-                    t-key={oProduct[0]}
-                  >
-                    <TextField
-                      t-key={oProduct[0]}
-                      style={{ width: "8rem" }}
-                      value={oProduct[1]}
-                    />
+      {/* {bFileLoaded && (
+        <Button onClick={fSendFile} variant="contained">
+          {t("fileupload.planSimulation")}
+        </Button>
+      )} */}
+      {/* {bFileLoaded && (
+        <>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell align="center">
+                    {t("fileupload.forecast")}
                   </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          </Table>
-          <Button onClick={fSendFile} variant="contained">
-            {t("fileupload.planSimulation")}
-          </Button>
-        </TableContainer>
-      )}
+                  <TableCell />
+                </TableRow>
+                <TableRow>
+                  <TableCell>{t("fileupload.product1")}</TableCell>
+                  <TableCell>{t("fileupload.product2")}</TableCell>
+                  <TableCell>{t("fileupload.product3")}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  {Object.entries(oForecast).map((oProduct) => {
+                    return (
+                      <TableCell onChange={fUpdateXMLFile} t-key={oProduct[0]}>
+                        {oProduct[1]}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell align="center">
+                    {t("fileupload.productionPlanning")}
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+                <TableRow>
+                  <TableCell>{t("fileupload.product1")}</TableCell>
+                  <TableCell>{t("fileupload.product2")}</TableCell>
+                  <TableCell>{t("fileupload.product3")}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  {Object.entries(oForecast).map((oProduct) => {
+                    return (
+                      <TableCell onChange={fUpdateXMLFile} t-key={oProduct[0]}>
+                        <Input
+                          t-key={oProduct[0]}
+                          style={{ width: "8rem" }}
+                          value={oProduct[1]}
+                        />
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )} */}
     </>
   );
 }
