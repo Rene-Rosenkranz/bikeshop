@@ -15,10 +15,6 @@ function Overview(props) {
   const { oState, fSetState } = useGlobalState();
   const { t, i18n } = useTranslation();
 
-  // Anzeigen der Daten für
-  // 1. Lieferungen
-  // 2. Produktion
-  // 3. Workhours
   const mModeMap = new Map([
     [1, t("simulation.shippingMethods.specialDelivery")],
     [2, t("simulation.shippingMethods.cheapVendor")],
@@ -33,6 +29,11 @@ function Overview(props) {
         <Box margin="2rem">
           <TableContainer component={Paper}>
             <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t("simulation.orderListOverview")}</TableCell>
+                </TableRow>
+              </TableHead>
               <TableHead>
                 <TableRow>
                   <TableCell>{t("simulation.part")}</TableCell>
@@ -57,6 +58,13 @@ function Overview(props) {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell>
+                    {t("simulation.productionListOverview")}
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableHead>
+                <TableRow>
                   <TableCell>{t("simulation.part")}</TableCell>
                   <TableCell>{t("simulation.amount")}</TableCell>
                 </TableRow>
@@ -75,6 +83,13 @@ function Overview(props) {
         <Box margin="2rem">
           <TableContainer component={Paper}>
             <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    {t("simulation.workingTimeListOverview")}
+                  </TableCell>
+                </TableRow>
+              </TableHead>
               <TableHead>
                 <TableRow>
                   <TableCell>{t("simulation.workstation")}</TableCell>

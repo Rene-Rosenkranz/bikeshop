@@ -39,7 +39,7 @@
     "orderAmount": "Ordered Amount",
     "productionAmount": "Amount to Produce",
     "errorMissingInput": "Please enter a value!",
-    "shippingMethod": "Versandart",
+    "shippingMethod": "Shipping",
     "shippingMethods": {
       "normal": "Normal",
       "fast": "Fast",
@@ -53,6 +53,9 @@
     "part": "Part",
     "amount": "Amount",
     "mode": "Mode",
-    "planPeriod": "Plan period for this production"
+    "planPeriod": "Plan period for this production",
+    "orderListOverview": "Overview: Orders",
+    "productionListOverview": "Overview: Production",
+    "workingTimeListOverview": "Overview: Working Hours"
   }
 }

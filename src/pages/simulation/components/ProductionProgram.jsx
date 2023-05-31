@@ -11,7 +11,7 @@ function ProductionProgram(props) {
         {props.data.map((oElement) => {
           const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
-          const { oState, fSetState } = useGlobalState();
+          const { state, setState } = useGlobalState();
 
           const fValidHandler = (bValid) => {
             fSetValid(bValid);
@@ -33,16 +33,17 @@ function ProductionProgram(props) {
                   aria-describedby="form-helper"
                   defaultValue={oElement.quantity}
                   onChange={(oEvent) => {
-                    const bIsEmpty = !!oEvent.target.value;
-                    fValidHandler(bIsEmpty);
+                    const bIsEmpty = !oEvent.target.value;
+                    fValidHandler(!bIsEmpty);
                     if (bIsEmpty) return;
-                    const oNewState = oState;
-                    const iIndex = oNewState["production"].find(
+                    const oNewState = state;
+                    const oIndex = oNewState["productionlist"].find(
                       (oObject) => oObject.article === oElement.article
                     );
-                    oNewState["production"][iIndex].amount =
+                    const iIndex = oNewState["productionlist"].indexOf(oIndex);
+                    oNewState["productionlist"][iIndex].quantity =
                       oEvent.target.valueAsNumber;
-                    fSetState(oNewState);
+                    setState(oNewState);
                   }}
                 />
                 {bValid && (

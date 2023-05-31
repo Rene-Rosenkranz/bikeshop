@@ -53,6 +53,9 @@
     "part": "Bauteil",
     "amount": "Menge",
     "mode": "Modus",
-    "planPeriod": "Periode für diese Produktion planen"
+    "planPeriod": "Periode für diese Produktion planen",
+    "orderListOverview": "Übersicht: Bestellungen",
+    "productionListOverview": "Übersicht: Produktion",
+    "workingTimeListOverview": "Übersicht: Arbeitszeiten"
   }
 }

@@ -11,7 +11,7 @@ function Workinghours(props) {
         {props.data.map((oElement) => {
           const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
-          const { oState, fSetState } = useGlobalState();
+          const { state, setState } = useGlobalState();
 
           const fValidHandler = (bValid) => {
             fSetValid(bValid);
@@ -28,16 +28,17 @@ function Workinghours(props) {
                   inputProps={{ min: 1, max: 3 }}
                   defaultValue={oElement.shift}
                   onChange={(oEvent) => {
-                    const bIsEmpty = !!oEvent.target.value;
-                    fValidHandler(bIsEmpty);
+                    const bIsEmpty = !oEvent.target.value;
+                    fValidHandler(!bIsEmpty);
                     if (bIsEmpty) return;
-                    const oNewState = oState;
-                    const iIndex = oNewState["production"].find(
-                      (oObject) => oObject.workplace === oElement.station
+                    const oNewState = state;
+                    const oIndex = oNewState["workingtimelist"].find(
+                      (oObject) => oObject.station === oElement.station
                     );
-                    oNewState["workinghours"][iIndex].shift =
+                    const iIndex = oNewState["workingtimelist"].indexOf(oIndex);
+                    oNewState["workingtimelist"][iIndex].shift =
                       oEvent.target.valueAsNumber;
-                    fSetState(oNewState);
+                    setState(oNewState);
                   }}
                 />
                 <Input
@@ -45,16 +46,17 @@ function Workinghours(props) {
                   inputProps={{ min: 0, max: 241 }}
                   defaultValue={oElement.overtime}
                   onChange={(oEvent) => {
-                    const bIsEmpty = !!oEvent.target.value;
-                    fValidHandler(bIsEmpty);
+                    const bIsEmpty = !oEvent.target.value;
+                    fValidHandler(!bIsEmpty);
                     if (bIsEmpty) return;
-                    const oNewState = oState;
-                    const iIndex = oNewState["production"].find(
-                      (oObject) => oObject.workplace === oElement.station
+                    const oNewState = state;
+                    const oIndex = oNewState["workingtimelist"].find(
+                      (oObject) => oObject.station === oElement.station
                     );
-                    oNewState["workinghours"][iIndex].overtime =
+                    const iIndex = oNewState["workingtimelist"].indexOf(oIndex);
+                    oNewState["workingtimelist"][iIndex].overtime =
                       oEvent.target.valueAsNumber;
-                    fSetState(oNewState);
+                    setState(oNewState);
                   }}
                 />
                 <FormHelperText id="form-helper">

@@ -5,7 +5,7 @@ import { useGlobalState } from "../../../components/GlobalStateProvider";
 
 function ModeMenu(data) {
   const { t, i18n } = useTranslation();
-  const { oState, fSetState } = useGlobalState();
+  const { state, setState } = useGlobalState();
 
   const oShippingMethods = [
     { value: 5, text: t("simulation.shippingMethods.normal") },
@@ -16,15 +16,17 @@ function ModeMenu(data) {
   ];
 
   const [iMode, fSetMode] = useState(data.value);
+  const oElement = data.element;
   const fHandleChange = (oEvent) => {
     const iMode = oEvent.target.value;
     fSetMode(iMode);
-    const oNewState = oState;
-    const iIndex = oNewState["orders"].find(
-      (oObject) => oObject.part === oElement.part
+    const oNewState = state;
+    const oIndex = oNewState["orderlist"].find(
+      (oObject) => oObject.article === oElement.article
     );
-    oNewState["orders"][iIndex].mode = oEvent.target.valueAsNumber;
-    fSetState(oNewState);
+    const iIndex = oNewState["orderlist"].indexOf(oIndex);
+    oNewState["orderlist"][iIndex].modus = iMode;
+    setState(oNewState);
   };
   return (
     <FormControl>
