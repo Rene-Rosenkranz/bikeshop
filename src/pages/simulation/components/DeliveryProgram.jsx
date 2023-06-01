@@ -12,6 +12,7 @@ import ModeMenu from "./ModeMenu";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 
 function DeliveryProgram(props) {
+  const fSetGlobalValid = props.validate;
   return (
     <>
       <Box alignContent="center" alignItems="center">
@@ -22,6 +23,7 @@ function DeliveryProgram(props) {
 
           const fValidHandler = (bValid) => {
             fSetValid(bValid);
+            fSetGlobalValid(bValid);
           };
 
           return (
@@ -42,7 +44,9 @@ function DeliveryProgram(props) {
                     aria-describedby="form-helper"
                     defaultValue={oElement.quantity}
                     onChange={(oEvent) => {
-                      const bIsEmpty = !oEvent.target.value;
+                      const bIsEmpty =
+                        /^[0-9]*$/.test(oEvent.target.value) &&
+                        oEvent.target.value.length > 0;
                       fValidHandler(!bIsEmpty);
                       if (bIsEmpty) return;
                       const oNewState = state;

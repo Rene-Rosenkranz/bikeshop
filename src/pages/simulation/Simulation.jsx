@@ -13,6 +13,7 @@ import {
   TableRow,
   TableCell,
   Input,
+  FormHelperText,
 } from "@mui/material";
 import axios from "axios";
 import { Box } from "@mui/system";
@@ -28,6 +29,8 @@ function Simulation() {
   const [activeStep, setActiveStep] = useState(0);
   const [bProductionPlanned, fSetProductionPlanned] = useState(false);
   const { state, setState } = useGlobalState();
+  const [bValid, fSetValid] = useState(true);
+  const [bGlobalValid, fSetGlobalValid] = useState(true);
   const [oForecast, fSetForecast] = useState({
     p1: 150,
     p2: 200,
@@ -40,7 +43,12 @@ function Simulation() {
     t("simulation.shifts"),
     t("simulation.overview"),
   ];
-
+  const fValidHandler = (bValid) => {
+    fSetValid(bValid);
+  };
+  const fGlobalValidHandler = (bValid) => {
+    fSetGlobalValid(bValid);
+  };
   /* useEffect(() => {
     axios
       .get("http://localhost:8080/api/getForecast")
@@ -77,6 +85,8 @@ function Simulation() {
   const fUpdateForecast = (oEvent) => {
     const sKey = oEvent.currentTarget.getAttribute("t-key");
     const sAmount = oEvent.target.value;
+    const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
+    fValidHandler(bValid);
     fSetForecast((oForecast) => {
       oForecast[sKey] = Number(sAmount);
       return oForecast;
@@ -154,6 +164,7 @@ function Simulation() {
                           onChange={fUpdateForecast}
                         >
                           <Input
+                            error={!bValid}
                             t-key={oProduct[0]}
                             style={{ width: "8rem" }}
                             defaultValue={oProduct[1]}
@@ -165,9 +176,18 @@ function Simulation() {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Button variant="contained" onClick={fSendForecastForPlanning}>
+            <Button
+              variant="contained"
+              onClick={fSendForecastForPlanning}
+              disabled={!bValid}
+            >
               {t("simulation.planPeriod")}
             </Button>
+            {!bValid && (
+              <FormHelperText id="form-helper" error>
+                {t("simulation.inputInvalid")}
+              </FormHelperText>
+            )}
           </Box>
         </Container>
       )}
@@ -190,7 +210,7 @@ function Simulation() {
                   <div>
                     <Button
                       color="inherit"
-                      disabled={activeStep === 0}
+                      disabled={activeStep === 0 || !bGlobalValid}
                       onClick={fHandleBack}
                       sx={{ mr: 1 }}
                     >
@@ -198,13 +218,22 @@ function Simulation() {
                     </Button>
                   </div>
                   {activeStep === 0 && (
-                    <DeliveryProgram data={state.orderlist} />
+                    <DeliveryProgram
+                      data={state.orderlist}
+                      validate={fGlobalValidHandler}
+                    />
                   )}
                   {activeStep === 1 && (
-                    <ProductionProgram data={state.productionlist} />
+                    <ProductionProgram
+                      data={state.productionlist}
+                      validate={fGlobalValidHandler}
+                    />
                   )}
                   {activeStep === 2 && (
-                    <Workinghours data={state.workingtimelist} />
+                    <Workinghours
+                      data={state.workingtimelist}
+                      validate={fGlobalValidHandler}
+                    />
                   )}
                   {/* {activeStep === 2 && <AdditionalOrders />} */}
                   {activeStep === 3 && <Overview data={state} />}
@@ -215,13 +244,14 @@ function Simulation() {
                         color="inherit"
                         onClick={fHandleSkip}
                         sx={{ mr: 1 }}
+                        disabled={!bGlobalValid}
                       >
                         {t("simulation.skip")}
                       </Button>
                     )}
                   </div>
                   <div>
-                    <Button onClick={fHandleNext}>
+                    <Button onClick={fHandleNext} disabled={!bGlobalValid}>
                       {activeStep === aSteps.length - 1
                         ? t("simulation.finish")
                         : t("simulation.next")}

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 
 function Workinghours(props) {
+  const fSetGlobalValid = props.validate;
   return (
     <>
       <Box alignContent="center">
@@ -15,6 +16,7 @@ function Workinghours(props) {
 
           const fValidHandler = (bValid) => {
             fSetValid(bValid);
+            fSetGlobalValid(bValid);
           };
           return (
             <Box alignContent="center" margin="2rem">
@@ -28,7 +30,9 @@ function Workinghours(props) {
                   inputProps={{ min: 1, max: 3 }}
                   defaultValue={oElement.shift}
                   onChange={(oEvent) => {
-                    const bIsEmpty = !oEvent.target.value;
+                    const bIsEmpty =
+                      /^[0-9]*$/.test(oEvent.target.value) &&
+                      oEvent.target.value.length > 0;
                     fValidHandler(!bIsEmpty);
                     if (bIsEmpty) return;
                     const oNewState = state;

@@ -56,6 +56,7 @@
     "planPeriod": "Plan period for this production",
     "orderListOverview": "Overview: Orders",
     "productionListOverview": "Overview: Production",
-    "workingTimeListOverview": "Overview: Working Hours"
+    "workingTimeListOverview": "Overview: Working Hours",
+    "inputInvalid": "Please enter a number and do not leave the fields empty."
   }
 }

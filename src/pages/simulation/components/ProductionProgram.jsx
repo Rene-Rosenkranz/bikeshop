@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 
 function ProductionProgram(props) {
+  const fSetGlobalValid = props.validate;
   return (
     <>
       <Box alignContent="center">
@@ -15,6 +16,7 @@ function ProductionProgram(props) {
 
           const fValidHandler = (bValid) => {
             fSetValid(bValid);
+            fSetGlobalValid(bValid);
           };
           return (
             <Box margin="2rem">
@@ -33,7 +35,10 @@ function ProductionProgram(props) {
                   aria-describedby="form-helper"
                   defaultValue={oElement.quantity}
                   onChange={(oEvent) => {
-                    const bIsEmpty = !oEvent.target.value;
+                    const bIsEmpty = !(
+                      /^[0-9]*$/.test(oEvent.target.value) &&
+                      oEvent.target.value.length > 0
+                    );
                     fValidHandler(!bIsEmpty);
                     if (bIsEmpty) return;
                     const oNewState = state;

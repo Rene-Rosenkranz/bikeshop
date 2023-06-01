@@ -67,7 +67,6 @@ function FileUpload() {
           } else {
             return {
               id: oElement.attributes.id,
-              article: oElement.attributes.article,
               amount: oElement.attributes.amount,
               pct: oElement.attributes.pct,
               price: oElement.attributes.price,
@@ -101,12 +100,9 @@ function FileUpload() {
           return {
             article: oElement.attributes.id,
             amount: oElement.attributes.amount,
-            entirecosts: oElement.attributes.entirecosts,
-            materialcosts: oElement.attributes.materialcosts,
             mode: oElement.attributes.mode,
-            ordercosts: oElement.attributes.ordercosts,
+            id: oElement.attributes.id,
             orderperiod: oElement.attributes.orderperiod,
-            time: oElement.attributes.time,
           };
         }
       );
@@ -267,58 +263,13 @@ function FileUpload() {
           },
         })
         .then((oResponse) => {
-          redirect("/simulation");
+          window.location.replace("http://localhost:5173/simulation");
         })
         .catch((oError) => {
-          //redirect("/simulation");
           window.location.replace("http://localhost:5173/simulation");
         });
     };
   };
-  /* const fUpdateXMLFile = (oUpdateEvent) => {
-    const sValue = oUpdateEvent.target.value;
-    const frXMLReader = new FileReader();
-    let file = {};
-    const sKey = oUpdateEvent.currentTarget.getAttribute("t-key");
-
-    frXMLReader.readAsText(oFileToUpload);
-    frXMLReader.onloadend = async (oUploadEvent) => {
-      file = {
-        content: oUploadEvent.target.result,
-      };
-      const dpParser = new DOMParser();
-      const jqXMLFile = dpParser.parseFromString(file.content, "text/xml");
-
-      jqXMLFile
-        .getElementsByTagName("forecast")[0]
-        .getAttributeNode(sKey).value = sValue;
-
-      oUpdateEvent.target.value = sValue;
-    };
-  }; */
-  /* const fUploadFile = () => {
-    const frXMLReader = new FileReader();
-    let file = {};
-    frXMLReader.readAsText(oFileToUpload);
-    frXMLReader.onloadend = async (oEvent) => {
-      file = {
-        content: oEvent.target.result,
-      };
-      const dpParser = new DOMParser();
-      const jqXMLFile = dpParser.parseFromString(file.content, "text/xml");
-
-      const aPeriods = ["p1", "p2", "p3"];
-
-      aPeriods.forEach((sPeriod) => {
-        oForecast[sPeriod] = jqXMLFile
-          .getElementsByTagName("forecast")[0]
-          .getAttributeNode(sPeriod).value;
-      });
-
-      fSetForecast(oForecast);
-      fSetFileLoaded(true);
-    };
-  }; */
 
   return (
     <>
