@@ -4,20 +4,25 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
-  Menu,
+  Tooltip,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import ModeMenu from "./ModeMenu";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 
+import { InfoOutlined } from "@mui/icons-material";
+
 function DeliveryProgram(props) {
   const fSetGlobalValid = props.validate;
+  const { t, i18n } = useTranslation();
   return (
     <>
-      <Box alignContent="center" alignItems="center">
+      <Box>
+        <Tooltip arrow title={t("simulation.tooltipDeliveryProgram")}>
+          <InfoOutlined />
+        </Tooltip>
         {props.data.map((oElement) => {
-          const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
           const { state, setState } = useGlobalState();
 
@@ -44,11 +49,11 @@ function DeliveryProgram(props) {
                     aria-describedby="form-helper"
                     defaultValue={oElement.quantity}
                     onChange={(oEvent) => {
-                      const bIsEmpty =
+                      const bIsValid =
                         /^[0-9]*$/.test(oEvent.target.value) &&
                         oEvent.target.value.length > 0;
-                      fValidHandler(!bIsEmpty);
-                      if (bIsEmpty) return;
+                      fValidHandler(bIsValid);
+                      if (!bIsValid) return;
                       const oNewState = state;
                       const oIndex = oNewState["orderlist"].find(
                         (oObject) => oObject.article === oElement.article

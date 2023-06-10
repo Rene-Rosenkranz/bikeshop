@@ -26,19 +26,19 @@
     "english": "Englisch"
   },
   "simulation": {
-    "delivery": "Lieferprogramm",
+    "delivery": "Bestellungen",
     "production": "Produktionsprogramm",
     "additionalOrder": "Zusatzaufträge",
     "overview": "Simulationsübersicht",
     "back": "Zurück",
     "skip": "Überspringen",
     "next": "Weiter",
-    "finish": "Beenden",
+    "finish": "XML Datei generieren",
     "shifts": "Arbeitsschichten",
     "component": "Bauteil",
     "orderAmount": "Bestellmenge",
     "productionAmount": "Produktionsmenge",
-    "errorMissingInput": "Bitte geben Sie einen Wert ein!",
+    "errorMissingInput": "Bitte achten Sie darauf, dass ihre Eingabe nur Zahlen enthält und nicht leer ist.",
     "shippingMethod": "Versandart",
     "shippingMethods": {
       "normal": "Standard",
@@ -57,6 +57,12 @@
     "orderListOverview": "Übersicht: Bestellungen",
     "productionListOverview": "Übersicht: Produktion",
     "workingTimeListOverview": "Übersicht: Arbeitszeiten",
-    "inputInvalid": "Bitte geben Sie eine Zahl ein und lassen Sie die Felder nicht leer."
+    "inputInvalid": "Bitte geben Sie eine Zahl ein und lassen Sie die Felder nicht leer.",
+    "selectSplit": "Wählen Sie aus, ob Produktionsaufträge gesplitted werden sollen.",
+    "tooltipProductionPlanning": "Planen Sie hier ihre Produktion für die nächste Periode.\nDie vorgegebenen Werte entstehen abhängig der gegebenen Prognosen.\nBitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.\nSplitting bedeutet, die Aufspaltung von Produktionsaufträgen, um potenziell optimalere Abläufe im Produktionsprogramm zu erzielen.",
+    "tooltipProductionProgram": "Hier können Sie das berechnete Produktionsprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
+    "tooltipDeliveryProgram": "Hier können Sie das berechnete Bestellprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
+    "tooltipWorkhours": "Hier können Sie die berechneten Mehrschichten und Überstunden einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
+    "tooltipOverview": "Hier können Sie die gesamte Planung der kommenden Periode einsehen. Drücken Sie auf 'Beenden', um eine Datei mit der Planung zu generieren."
   }
 }

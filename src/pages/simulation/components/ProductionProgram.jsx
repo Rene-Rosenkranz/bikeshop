@@ -1,16 +1,27 @@
 import React, { useState } from "react";
-import { Input, FormControl, InputLabel, FormHelperText } from "@mui/material";
+import {
+  Input,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+  Tooltip,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 
+import { InfoOutlined } from "@mui/icons-material";
+
 function ProductionProgram(props) {
   const fSetGlobalValid = props.validate;
+  const { t, i18n } = useTranslation();
   return (
     <>
       <Box alignContent="center">
+        <Tooltip arrow title={t("simulation.tooltipProductionProgram")}>
+          <InfoOutlined />
+        </Tooltip>
         {props.data.map((oElement) => {
-          const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
           const { state, setState } = useGlobalState();
 

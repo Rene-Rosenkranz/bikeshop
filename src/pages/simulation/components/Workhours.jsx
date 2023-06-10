@@ -1,16 +1,27 @@
-import { FormControl, Input, InputLabel, FormHelperText } from "@mui/material";
+import {
+  FormControl,
+  Input,
+  InputLabel,
+  FormHelperText,
+  Tooltip,
+} from "@mui/material";
 import React, { useState } from "react";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
+import { InfoOutlined } from "@mui/icons-material";
 
 function Workinghours(props) {
   const fSetGlobalValid = props.validate;
+  const { t, i18n } = useTranslation();
   return (
     <>
       <Box alignContent="center">
+        <Tooltip arrow title={t("simulation.tooltipWorkhours")}>
+          <InfoOutlined />
+        </Tooltip>
+
         {props.data.map((oElement) => {
-          const { t, i18n } = useTranslation();
           let [bValid, fSetValid] = useState(true);
           const { state, setState } = useGlobalState();
 
@@ -30,11 +41,11 @@ function Workinghours(props) {
                   inputProps={{ min: 1, max: 3 }}
                   defaultValue={oElement.shift}
                   onChange={(oEvent) => {
-                    const bIsEmpty =
+                    const bIsValid =
                       /^[0-9]*$/.test(oEvent.target.value) &&
                       oEvent.target.value.length > 0;
-                    fValidHandler(!bIsEmpty);
-                    if (bIsEmpty) return;
+                    fValidHandler(bIsValid);
+                    if (!bIsValid) return;
                     const oNewState = state;
                     const oIndex = oNewState["workingtimelist"].find(
                       (oObject) => oObject.station === oElement.station
@@ -63,9 +74,16 @@ function Workinghours(props) {
                     setState(oNewState);
                   }}
                 />
-                <FormHelperText id="form-helper">
-                  {t("simulation.workstationValues")}
-                </FormHelperText>
+                {bValid && (
+                  <FormHelperText id="form-helper">
+                    {t("simulation.workstationValues")}
+                  </FormHelperText>
+                )}
+                {!bValid && (
+                  <FormHelperText id="form-helper" error>
+                    {t("simulation.errorMissingInput")}
+                  </FormHelperText>
+                )}
               </FormControl>
             </Box>
           );

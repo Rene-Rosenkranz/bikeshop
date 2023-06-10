@@ -14,6 +14,9 @@ import {
   TableCell,
   Input,
   FormHelperText,
+  Checkbox,
+  FormControlLabel,
+  Tooltip,
 } from "@mui/material";
 import axios from "axios";
 import { Box } from "@mui/system";
@@ -23,6 +26,7 @@ import ProductionProgram from "./components/ProductionProgram";
 import Workinghours from "./components/Workhours";
 import Overview from "./components/Overview";
 import { useGlobalState } from "../../components/GlobalStateProvider";
+import { InfoOutlined } from "@mui/icons-material";
 
 function Simulation() {
   const { t, i18n } = useTranslation();
@@ -37,6 +41,7 @@ function Simulation() {
     p3: 250,
   });
   const [skipped, setSkipped] = React.useState(new Set());
+  const [bSplit, fSetSplit] = useState(false);
   const aSteps = [
     t("simulation.delivery"),
     t("simulation.production"),
@@ -49,12 +54,19 @@ function Simulation() {
   const fGlobalValidHandler = (bValid) => {
     fSetGlobalValid(bValid);
   };
+  const fHandleCheckboxChange = (oEvent) => {
+    fSetSplit(!bSplit);
+  };
+
   /* useEffect(() => {
     axios
       .get("http://localhost:8080/api/getForecast")
       .then((oReponse) => fSetForecast(oReponse.data));
   }); */
   const fSendForecastForPlanning = () => {
+    const oPlanning = {
+      production: [],
+    };
     let aProduction = [];
     for (let index = 0; index < 4; index++) {
       aProduction.push({
@@ -64,8 +76,10 @@ function Simulation() {
         product3Consumption: oForecast["p3"],
       });
     }
+    oPlanning.production = [...aProduction];
+    oPlanning.splitting = bSplit;
     axios
-      .post("http://localhost:8080/api/planning", aProduction, {
+      .post("http://localhost:8080/api/planning", oPlanning, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -134,48 +148,62 @@ function Simulation() {
     <>
       {!bProductionPlanned && (
         <Container maxWidth="xl">
+          <Box>
+            <Tooltip arrow title={t("simulation.tooltipProductionPlanning")}>
+              <InfoOutlined />
+            </Tooltip>
+          </Box>
           <Box sx={{ bgcolor: "rgb(250, 250, 250)", height: "900px", p: 5 }}>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell />
-                    <TableCell align="center">
-                      {t("fileupload.productionPlanning")}
-                    </TableCell>
-                    <TableCell />
-                  </TableRow>
-                  <TableRow>
-                    {Object.entries(oForecast).map((oProduct) => {
-                      return (
-                        <TableCell>
-                          {t(`fileupload.product${oProduct[0]}`)}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    {Object.entries(oForecast).map((oProduct) => {
-                      return (
-                        <TableCell
-                          t-key={oProduct[0]}
-                          onChange={fUpdateForecast}
-                        >
-                          <Input
-                            error={!bValid}
+            <Box>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell align="center">
+                        {t("fileupload.productionPlanning")}
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                    <TableRow>
+                      {Object.entries(oForecast).map((oProduct) => {
+                        return (
+                          <TableCell>
+                            {t(`fileupload.product${oProduct[0]}`)}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      {Object.entries(oForecast).map((oProduct) => {
+                        return (
+                          <TableCell
                             t-key={oProduct[0]}
-                            style={{ width: "8rem" }}
-                            defaultValue={oProduct[1]}
-                          />
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+                            onChange={fUpdateForecast}
+                          >
+                            <Input
+                              type="number"
+                              error={!bValid}
+                              t-key={oProduct[0]}
+                              style={{ width: "8rem" }}
+                              defaultValue={oProduct[1]}
+                            />
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <FormControlLabel
+                label={t("simulation.selectSplit")}
+                control={
+                  <Checkbox value={bSplit} onChange={fHandleCheckboxChange} />
+                }
+              />
+            </Box>
             <Button
               variant="contained"
               onClick={fSendForecastForPlanning}

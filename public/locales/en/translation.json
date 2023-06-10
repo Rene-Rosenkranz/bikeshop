@@ -26,7 +26,7 @@
     "english": "English"
   },
   "simulation": {
-    "delivery": "Delivery Program",
+    "delivery": "Deliveries",
     "production": "Production Program",
     "additionalOrder": "Additional Orders",
     "overview": "Simulation Overview",
@@ -38,7 +38,7 @@
     "component": "Component",
     "orderAmount": "Ordered Amount",
     "productionAmount": "Amount to Produce",
-    "errorMissingInput": "Please enter a value!",
+    "errorMissingInput": "Please only enter digits and do not leave your inputs empty.",
     "shippingMethod": "Shipping",
     "shippingMethods": {
       "normal": "Normal",
@@ -57,6 +57,12 @@
     "orderListOverview": "Overview: Orders",
     "productionListOverview": "Overview: Production",
     "workingTimeListOverview": "Overview: Working Hours",
-    "inputInvalid": "Please enter a number and do not leave the fields empty."
+    "inputInvalid": "Please enter a number and do not leave the fields empty.",
+    "selectSplit": "Select if production should split orders",
+    "tooltipProductionPlanning": "Planen Sie hier ihre Produktion für die nächste Periode.\nDie vorgegebenen Werte entstehen abhängig der gegebenen Prognosen.\nBitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.\nSplitting bedeutet, die Aufspaltung von Produktionsaufträgen, um potenziell optimalere Abläufe im Produktionsprogramm zu erzielen.",
+    "tooltipProductionProgram": "Hier können Sie das berechnete Produktionsprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
+    "tooltipDeliveryProgram": "Hier können Sie das berechnete Bestellprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
+    "tooltipWorkhours": "Hier können Sie die berechneten Mehrschichten und Überstunden einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
+    "tooltipOverview": "Hier können Sie die gesamte Planung der kommenden Periode einsehen. Drücken Sie auf 'Beenden', um eine Datei mit der Planung zu generieren."
   }
 }

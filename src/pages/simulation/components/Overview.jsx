@@ -6,10 +6,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 import { useTranslation } from "react-i18next";
+
+import { InfoOutlined } from "@mui/icons-material";
 
 function Overview(props) {
   const { oState, fSetState } = useGlobalState();
@@ -26,6 +29,11 @@ function Overview(props) {
   return (
     <>
       <Box alignContent="center">
+        <Box>
+          <Tooltip arrow title={t("simulation.tooltipOverview")}>
+            <InfoOutlined />
+          </Tooltip>
+        </Box>
         <Box margin="2rem">
           <TableContainer component={Paper}>
             <Table>
