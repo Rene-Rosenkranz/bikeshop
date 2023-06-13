@@ -7,13 +7,15 @@
     "buttonLabel": "Datei auswählen",
     "uploadButton": "Datei hochladen",
     "imageAlt": "Fahrrad",
-    "productionPlanning": "Produktionsplanung für die nächste Periode",
-    "productp1": "Produkt 1 (Herrenfahrräder)",
+    "productionPlanning": "Produktionsplanung für die nächsten 4 Perioden",
+    "productp1": "Produkt 1 (Kinderfahrräder)",
     "productp2": "Produkt 2 (Damenfahrräder)",
-    "productp3": "Produkt 3 (Kinderfahrräder)",
+    "productp3": "Produkt 3 (Herrenfahrräder)",
     "planSimulation": "Simulation planen",
     "forecast": "Prognose",
-    "chooseResult": "Wählen Sie hier ihre Ergebnisliste der vorherigen Periode aus"
+    "chooseResult": "Wählen Sie hier ihre Ergebnisliste der vorherigen Periode aus",
+    "directSelling": "Direktverkäufe",
+    "overallProduction": "Gesamtproduktionsplanung"
   },
   "navbar": {
     "appTitle": "SCS Tool",
@@ -63,6 +65,11 @@
     "tooltipProductionProgram": "Hier können Sie das berechnete Produktionsprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
     "tooltipDeliveryProgram": "Hier können Sie das berechnete Bestellprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
     "tooltipWorkhours": "Hier können Sie die berechneten Mehrschichten und Überstunden einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
-    "tooltipOverview": "Hier können Sie die gesamte Planung der kommenden Periode einsehen. Drücken Sie auf 'Beenden', um eine Datei mit der Planung zu generieren."
+    "tooltipOverview": "Hier können Sie die gesamte Planung der kommenden Periode einsehen. Drücken Sie auf 'Beenden', um eine Datei mit der Planung zu generieren.",
+    "productionPlanningAmount": "Produktionsmenge",
+    "directSellingQuantity": "Menge",
+    "directSellingPrice": "Preis in €",
+    "directSellingPenalty": "Strafe in €",
+    "sequenceNumber": "Sequenznummer"
   }
 }

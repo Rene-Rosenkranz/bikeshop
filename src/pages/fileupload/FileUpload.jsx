@@ -98,7 +98,7 @@ function FileUpload() {
       const aFutureInwardStockMovement = file.content.elements[3].elements.map(
         (oElement) => {
           return {
-            article: oElement.attributes.id,
+            article: oElement.attributes.article,
             amount: oElement.attributes.amount,
             mode: oElement.attributes.mode,
             id: oElement.attributes.id,

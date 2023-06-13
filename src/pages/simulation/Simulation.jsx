@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { create } from "xmlbuilder";
 import {
   Button,
   Container,
@@ -17,6 +18,7 @@ import {
   Checkbox,
   FormControlLabel,
   Tooltip,
+  InputLabel,
 } from "@mui/material";
 import axios from "axios";
 import { Box } from "@mui/system";
@@ -35,10 +37,30 @@ function Simulation() {
   const { state, setState } = useGlobalState();
   const [bValid, fSetValid] = useState(true);
   const [bGlobalValid, fSetGlobalValid] = useState(true);
-  const [oForecast, fSetForecast] = useState({
-    p1: 150,
-    p2: 200,
-    p3: 250,
+  const [oPlanning, fSetPlanning] = useState({
+    production: [
+      { p1: 0, p2: 0, p3: 0 },
+      { p1: 0, p2: 0, p3: 0 },
+      { p1: 0, p2: 0, p3: 0 },
+      { p1: 0, p2: 0, p3: 0 },
+    ],
+    direct: {
+      p1: {
+        quantity: 0,
+        price: 0,
+        penalty: 0,
+      },
+      p2: {
+        quantity: 0,
+        price: 0,
+        penalty: 0,
+      },
+      p3: {
+        quantity: 0,
+        price: 0,
+        penalty: 0,
+      },
+    },
   });
   const [skipped, setSkipped] = React.useState(new Set());
   const [bSplit, fSetSplit] = useState(false);
@@ -64,22 +86,11 @@ function Simulation() {
       .then((oReponse) => fSetForecast(oReponse.data));
   }); */
   const fSendForecastForPlanning = () => {
-    const oPlanning = {
-      production: [],
-    };
-    let aProduction = [];
-    for (let index = 0; index < 4; index++) {
-      aProduction.push({
-        periode: index + 1,
-        product1Consumption: oForecast["p1"],
-        product2Consumption: oForecast["p2"],
-        product3Consumption: oForecast["p3"],
-      });
-    }
-    oPlanning.production = [...aProduction];
-    oPlanning.splitting = bSplit;
+    const oObj = oPlanning;
+    oObj.splitting = bSplit;
+
     axios
-      .post("http://localhost:8080/api/planning", oPlanning, {
+      .post("http://localhost:8080/api/planning", oObj, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -95,14 +106,137 @@ function Simulation() {
         }
       });
   };
+  const fDownLoadXMLFile = (sXmlString, sFileName) => {
+    const blob = new Blob([sXmlString], { type: "text/xml" });
+    const sUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = sUrl;
+    link.download = sFileName;
+    link.click();
+    URL.revokeObjectURL(sUrl);
+  };
+  const fHandleFinish = () => {
+    const oData = state;
+    const oProduction = oPlanning;
+    const oObj = {
+      input: {
+        user: {
+          "@game": "1",
+          "@group": "1",
+          "@period": "1",
+        },
+        qualitycontrol: {
+          "@type": "yes",
+          "@losequantity": "0",
+          "@delay": "8",
+        },
+        sellwish: {
+          item: [],
+        },
+        selldirect: {
+          item: [],
+        },
+        orderlist: {
+          order: [],
+        },
+        productionlist: {
+          production: [],
+        },
+        workingtimelist: {
+          workingtime: [],
+        },
+      },
+    };
+
+    oData.orderlist.forEach((oOrder) => {
+      oObj.input.orderlist.order.push({
+        "@article": oOrder.article,
+        "@quantity": oOrder.quantity,
+        "@modus": oOrder.modus,
+      });
+    });
+
+    oData.productionlist.forEach((oProduction) => {
+      oObj.input.productionlist.production.push({
+        "@article": oProduction.article,
+        "@quantity": oProduction.quantity,
+      });
+    });
+
+    oData.workingtimelist.forEach((oWorkstation) => {
+      oObj.input.workingtimelist.workingtime.push({
+        "@station": oWorkstation.station,
+        "@shift": oWorkstation.shift,
+        "@overtime": oWorkstation.overtime,
+      });
+    });
+
+    Object.entries(oProduction["production"]).forEach((oArticle) => {
+      oObj.input.sellwish.item.push({
+        "@article":
+          oArticle[0] === "p1" ? "1" : oArticle[0] === "p2" ? "2" : "3",
+        "@quantity": oArticle[1],
+      });
+    });
+
+    Object.entries(oProduction["direct"]).forEach((oArticle) => {
+      oObj.input.sellwish.item.push({
+        "@article":
+          oArticle[0] === "p1" ? "1" : oArticle[0] === "p2" ? "2" : "3",
+        "@quantity": oArticle[1].quantity,
+        "@price": oArticle[1].price,
+        "@penalty": oArticle[1].penalty,
+      });
+    });
+
+    const xmlresult = create(oObj).end({ prettyPrint: true });
+
+    const sFileName = "inputFile.xml";
+
+    fDownLoadXMLFile(xmlresult, sFileName);
+  };
 
   const fUpdateForecast = (oEvent) => {
+    const sKey = oEvent.currentTarget.getAttribute("t-key");
+    const aKeys = sKey.split(" ");
+    const sAmount = oEvent.target.value;
+    const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
+    fValidHandler(bValid);
+    fSetPlanning((oForecast) => {
+      oForecast["production"][aKeys[0]][aKeys[1]] = Number(sAmount);
+      return oForecast;
+    });
+  };
+
+  const fUpdateDirectAmount = (oEvent) => {
     const sKey = oEvent.currentTarget.getAttribute("t-key");
     const sAmount = oEvent.target.value;
     const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
     fValidHandler(bValid);
-    fSetForecast((oForecast) => {
-      oForecast[sKey] = Number(sAmount);
+    fSetPlanning((oForecast) => {
+      oForecast["direct"][sKey].quantity = Number(sAmount);
+      return oForecast;
+    });
+  };
+
+  const fUpdateDirectPrice = (oEvent) => {
+    const sKey = oEvent.currentTarget.getAttribute("t-key");
+    const sAmount = oEvent.target.value;
+    const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
+    fValidHandler(bValid);
+    fSetPlanning((oForecast) => {
+      oForecast["direct"][sKey].price = Number(sAmount);
+      return oForecast;
+    });
+  };
+
+  const fUpdateDirectPenalty = (oEvent) => {
+    const sKey = oEvent.currentTarget.getAttribute("t-key");
+    const sAmount = oEvent.target.value;
+    const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
+    fValidHandler(bValid);
+    fSetPlanning((oForecast) => {
+      oForecast["direct"][sKey].penalty = Number(sAmount);
       return oForecast;
     });
   };
@@ -155,6 +289,7 @@ function Simulation() {
           </Box>
           <Box sx={{ bgcolor: "rgb(250, 250, 250)", height: "900px", p: 5 }}>
             <Box>
+              {/* Produktionsplanung */}
               <TableContainer>
                 <Table>
                   <TableHead>
@@ -166,7 +301,62 @@ function Simulation() {
                       <TableCell />
                     </TableRow>
                     <TableRow>
-                      {Object.entries(oForecast).map((oProduct) => {
+                      {Object.entries(oPlanning.production[0]).map(
+                        (oProduct) => {
+                          return (
+                            <TableCell>
+                              {t(`fileupload.product${oProduct[0]}`)}
+                            </TableCell>
+                          );
+                        }
+                      )}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {oPlanning.production.map((oPeriod, index) => {
+                      return (
+                        <TableRow>
+                          {Object.entries(oPeriod).map((oProduct) => {
+                            return (
+                              <TableCell
+                                t-key={`${index} ${oProduct[0]}`}
+                                onChange={fUpdateForecast}
+                              >
+                                <InputLabel>
+                                  {t("simulation.productionPlanningAmount") +
+                                    " P" +
+                                    "+" +
+                                    (index + 1)}
+                                </InputLabel>
+                                <Input
+                                  type="number"
+                                  error={!bValid}
+                                  t-key={oProduct[0]}
+                                  style={{ width: "8rem" }}
+                                  defaultValue={oProduct[1]}
+                                />
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              {/* Direktverkauf */}
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell align="center">
+                        {t("fileupload.directSelling")}
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                    <TableRow>
+                      {Object.entries(oPlanning.direct).map((oProduct) => {
                         return (
                           <TableCell>
                             {t(`fileupload.product${oProduct[0]}`)}
@@ -177,18 +367,60 @@ function Simulation() {
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      {Object.entries(oForecast).map((oProduct) => {
+                      {Object.entries(oPlanning.direct).map((oProduct) => {
                         return (
                           <TableCell
                             t-key={oProduct[0]}
-                            onChange={fUpdateForecast}
+                            onChange={fUpdateDirectAmount}
                           >
+                            <InputLabel>
+                              {t("simulation.directSellingQuantity")}
+                            </InputLabel>
                             <Input
                               type="number"
                               error={!bValid}
-                              t-key={oProduct[0]}
                               style={{ width: "8rem" }}
-                              defaultValue={oProduct[1]}
+                              defaultValue={oProduct[1].quantity}
+                            />
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                    <TableRow>
+                      {Object.entries(oPlanning.direct).map((oProduct) => {
+                        return (
+                          <TableCell
+                            t-key={oProduct[0]}
+                            onChange={fUpdateDirectPrice}
+                          >
+                            <InputLabel>
+                              {t("simulation.directSellingPrice")}
+                            </InputLabel>
+                            <Input
+                              type="number"
+                              error={!bValid}
+                              style={{ width: "8rem" }}
+                              defaultValue={oProduct[1].price}
+                            />
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                    <TableRow>
+                      {Object.entries(oPlanning.direct).map((oProduct) => {
+                        return (
+                          <TableCell
+                            t-key={oProduct[0]}
+                            onChange={fUpdateDirectPenalty}
+                          >
+                            <InputLabel>
+                              {t("simulation.directSellingPenalty")}
+                            </InputLabel>
+                            <Input
+                              type="number"
+                              error={!bValid}
+                              style={{ width: "8rem" }}
+                              defaultValue={oProduct[1].penalty}
                             />
                           </TableCell>
                         );
@@ -279,10 +511,29 @@ function Simulation() {
                     )}
                   </div>
                   <div>
-                    <Button onClick={fHandleNext} disabled={!bGlobalValid}>
-                      {activeStep === aSteps.length - 1
-                        ? t("simulation.finish")
-                        : t("simulation.next")}
+                    <Button
+                      onClick={fHandleNext}
+                      style={{
+                        visibility:
+                          activeStep !== aSteps.length - 1
+                            ? "visible"
+                            : "hidden",
+                      }}
+                      disabled={!bGlobalValid}
+                    >
+                      {t("simulation.next")}
+                    </Button>
+                    <Button
+                      onClick={fHandleFinish}
+                      style={{
+                        visibility:
+                          activeStep === aSteps.length - 1
+                            ? "visible"
+                            : "hidden",
+                      }}
+                      disabled={!bGlobalValid}
+                    >
+                      {t("simulation.finish")}
                     </Button>
                   </div>
                 </Box>

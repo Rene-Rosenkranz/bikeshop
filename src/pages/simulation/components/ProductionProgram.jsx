@@ -5,12 +5,13 @@ import {
   InputLabel,
   FormHelperText,
   Tooltip,
+  Select,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
-
 import { InfoOutlined } from "@mui/icons-material";
+import SequenceNumberMenu from "./SequenceNumberMenu";
 
 function ProductionProgram(props) {
   const fSetGlobalValid = props.validate;
@@ -36,6 +37,10 @@ function ProductionProgram(props) {
                 size="small"
                 sx={{ display: "inline-flex" }}
               >
+                <SequenceNumberMenu
+                  value={oElement.sequenceNumer}
+                  element={oElement}
+                />
                 <InputLabel>
                   {t("simulation.component") + " " + oElement.article}
                 </InputLabel>

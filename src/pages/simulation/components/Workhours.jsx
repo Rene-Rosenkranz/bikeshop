@@ -43,7 +43,8 @@ function Workinghours(props) {
                   onChange={(oEvent) => {
                     const bIsValid =
                       /^[0-9]*$/.test(oEvent.target.value) &&
-                      oEvent.target.value.length > 0;
+                      oEvent.target.value.length > 0 &&
+                      oEvent.target.valueAsNumber <= 3;
                     fValidHandler(bIsValid);
                     if (!bIsValid) return;
                     const oNewState = state;
@@ -61,13 +62,15 @@ function Workinghours(props) {
                   inputProps={{ min: 0, max: 241 }}
                   defaultValue={oElement.overtime}
                   onChange={(oEvent) => {
-                    const bIsEmpty = !oEvent.target.value;
-                    fValidHandler(!bIsEmpty);
-                    if (bIsEmpty) return;
                     const oNewState = state;
                     const oIndex = oNewState["workingtimelist"].find(
                       (oObject) => oObject.station === oElement.station
                     );
+                    const bIsValid =
+                      !!oEvent.target.value &&
+                      oIndex.shift === 3 &&
+                      oEvent.target.valueAsNumber === 0;
+                    fValidHandler(bIsValid);
                     const iIndex = oNewState["workingtimelist"].indexOf(oIndex);
                     oNewState["workingtimelist"][iIndex].overtime =
                       oEvent.target.valueAsNumber;

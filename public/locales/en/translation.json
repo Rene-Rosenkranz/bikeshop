@@ -7,13 +7,15 @@
     "buttonLabel": "Choose file",
     "uploadButton": "Upload file",
     "imageAlt": "Bike",
-    "productionPlanning": "Production Planning for the following period",
-    "productp1": "Product 1 (men's bikes)",
-    "productp2": "Product 2 (women's bikes)",
-    "productp3": "Product 3 (child's bikes)",
+    "productionPlanning": "Production Planning for the following 4 periods",
+    "productp1": "Product 1 (Children's bikes)",
+    "productp2": "Product 2 (Women's bikes)",
+    "productp3": "Product 3 (Men's bikes)",
     "planSimulation": "Plan Simulation",
     "forecast": "Forecast",
-    "chooseResult": "Choose your results of the last period"
+    "chooseResult": "Choose your results of the last period",
+    "directSelling": "Direct Sellings",
+    "overallProduction": "Overall Production Planning"
   },
   "navbar": {
     "appTitle": "Supply Chain Management",
@@ -59,10 +61,15 @@
     "workingTimeListOverview": "Overview: Working Hours",
     "inputInvalid": "Please enter a number and do not leave the fields empty.",
     "selectSplit": "Select if production should split orders",
-    "tooltipProductionPlanning": "Planen Sie hier ihre Produktion für die nächste Periode.\nDie vorgegebenen Werte entstehen abhängig der gegebenen Prognosen.\nBitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.\nSplitting bedeutet, die Aufspaltung von Produktionsaufträgen, um potenziell optimalere Abläufe im Produktionsprogramm zu erzielen.",
-    "tooltipProductionProgram": "Hier können Sie das berechnete Produktionsprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
-    "tooltipDeliveryProgram": "Hier können Sie das berechnete Bestellprogramm einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
-    "tooltipWorkhours": "Hier können Sie die berechneten Mehrschichten und Überstunden einsehen. Bitte geben Sie nur Zahlen ein und lassen die Felder nicht leer.",
-    "tooltipOverview": "Hier können Sie die gesamte Planung der kommenden Periode einsehen. Drücken Sie auf 'Beenden', um eine Datei mit der Planung zu generieren."
+    "tooltipProductionPlanning": "Here You can plan your production for the next four periods..\nAll given values derive from given forecasts.\n Please only enter Numbers and don't leave the input fields empty.\nSplitting means the breakdown of production orders, to improve the production programm.",
+    "tooltipProductionProgram": "Here You can overview the calculated production program. Please only enter Numbers and don't leave the input fields empty.",
+    "tooltipDeliveryProgram": "Here you can overview the calculated order program. Please only enter Numbers and don't leave the input fields empty.",
+    "tooltipWorkhours": "Here you can overview the calculated shifts and overtimes. Please only enter Numbers and don't leave the input fields empty.",
+    "tooltipOverview": "Here you can overview the full period's planning. Press 'Generate XML File', to generate a file with for that period.",
+    "productionPlanningAmount": "Production Amount",
+    "directSellingQuantity": "Amount",
+    "directSellingPrice": "Price in €",
+    "directSellingPenalty": "Penalty in €",
+    "sequenceNumber": "sequence number"
   }
 }

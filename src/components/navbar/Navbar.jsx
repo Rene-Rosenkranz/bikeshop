@@ -36,10 +36,6 @@ function Navbar() {
       name: t("navbar.simulation"),
       path: "/simulation",
     },
-    {
-      name: t("navbar.overview"),
-      path: "/results",
-    },
   ];
   return (
     <Box sx={{ display: "flex" }}>
