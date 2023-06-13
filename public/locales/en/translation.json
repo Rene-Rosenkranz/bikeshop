@@ -29,14 +29,14 @@
   },
   "simulation": {
     "delivery": "Deliveries",
-    "production": "Production Program",
+    "production": "Production Orders",
     "additionalOrder": "Additional Orders",
     "overview": "Simulation Overview",
     "back": "Back",
     "skip": "Skip",
     "next": "Next",
-    "finish": "Finish",
-    "shifts": "Shifts",
+    "finish": "Generate XML File",
+    "shifts": "Capacity Planning",
     "component": "Component",
     "orderAmount": "Ordered Amount",
     "productionAmount": "Amount to Produce",
@@ -66,10 +66,12 @@
     "tooltipDeliveryProgram": "Here you can overview the calculated order program. Please only enter Numbers and don't leave the input fields empty.",
     "tooltipWorkhours": "Here you can overview the calculated shifts and overtimes. Please only enter Numbers and don't leave the input fields empty.",
     "tooltipOverview": "Here you can overview the full period's planning. Press 'Generate XML File', to generate a file with for that period.",
+    "tooltipDirectSelling": "Here you can plan your direct sells. Please keep in mind to only enter numbers as values.",
     "productionPlanningAmount": "Production Amount",
     "directSellingQuantity": "Amount",
     "directSellingPrice": "Price in €",
     "directSellingPenalty": "Penalty in €",
-    "sequenceNumber": "sequence number"
+    "sequenceNumber": "sequence number",
+    "productionOrder": "Production Order"
   }
 }

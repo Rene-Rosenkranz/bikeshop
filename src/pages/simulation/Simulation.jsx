@@ -314,7 +314,7 @@ function Simulation() {
                           {Object.entries(oPlanning.production[0]).map(
                             (oProduct) => {
                               return (
-                                <TableCell>
+                                <TableCell align="center">
                                   {t(`fileupload.product${oProduct[0]}`)}
                                 </TableCell>
                               );
@@ -331,6 +331,7 @@ function Simulation() {
                                   <TableCell
                                     t-key={`${index} ${oProduct[0]}`}
                                     onChange={fUpdateForecast}
+                                    align="center" // Hinzufügen
                                   >
                                     <InputLabel>
                                       {t(

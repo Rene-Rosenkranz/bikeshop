@@ -17,31 +17,44 @@ function DeliveryProgram(props) {
   const fSetGlobalValid = props.validate;
   const { t, i18n } = useTranslation();
   return (
-    <>
-      <Box>
-        <Tooltip arrow title={t("simulation.tooltipDeliveryProgram")}>
-          <InfoOutlined />
-        </Tooltip>
-        {props.data.map((oElement) => {
-          let [bValid, fSetValid] = useState(true);
-          const { state, setState } = useGlobalState();
+    <Box>
+      <Tooltip arrow title={t("simulation.tooltipDeliveryProgram")}>
+        <InfoOutlined />
+      </Tooltip>
+      {props.data.map((oElement) => {
+        let [bValid, fSetValid] = useState(true);
+        const { state, setState } = useGlobalState();
 
-          const fValidHandler = (bValid) => {
-            fSetValid(bValid);
-            fSetGlobalValid(bValid);
-          };
+        const fValidHandler = (bValid) => {
+          fSetValid(bValid);
+          fSetGlobalValid(bValid);
+        };
 
-          return (
-            <>
-              <Box marginBottom="2rem">
+        return (
+          <Box
+            key={oElement.article} // Added key prop for optimization
+            marginBottom="2rem"
+            border={1}
+            borderRadius="5px"
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            padding="1rem"
+            boxShadow="0px 2px 4px rgba(0, 0, 0, 0.1)"
+            bgcolor="white"
+          >
+            <Box>
+              <Box display="flex" alignItems="center">
+                <strong>{t("simulation.component")}:</strong>
+                <Box marginLeft="0.5rem">{oElement.article}</Box>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <strong>{t("simulation.orderAmount")}:</strong>
                 <FormControl
                   required={true}
                   size="small"
-                  sx={{ display: "inline-flex" }}
+                  sx={{ display: "inline-flex", marginLeft: "0.5rem" }}
                 >
-                  <InputLabel>
-                    {t("simulation.component") + " " + oElement.article}
-                  </InputLabel>
                   <Input
                     type="number"
                     error={!bValid}
@@ -64,24 +77,19 @@ function DeliveryProgram(props) {
                       setState(oNewState);
                     }}
                   />
-                  {bValid && (
-                    <FormHelperText id="form-helper">
-                      {t("simulation.orderAmount")}
-                    </FormHelperText>
-                  )}
                   {!bValid && (
                     <FormHelperText id="form-helper" error>
                       {t("simulation.errorMissingInput")}
                     </FormHelperText>
                   )}
                 </FormControl>
-                <ModeMenu value={oElement.modus} element={oElement} />
               </Box>
-            </>
-          );
-        })}
-      </Box>
-    </>
+            </Box>
+            <ModeMenu value={oElement.modus} element={oElement} />
+          </Box>
+        );
+      })}
+    </Box>
   );
 }
 

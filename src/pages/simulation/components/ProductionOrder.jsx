@@ -42,44 +42,61 @@ function ProductionOrder(props) {
     setItems(props.data);
   }, [state]);
   return (
-    <Box alignContent="center">
-      <Tooltip arrow title={t("simulation.tooltipProductionProgram")}>
-        <InfoOutlined />
-      </Tooltip>
+    <Box display="flex" justifyContent="center" alignItems="center">
+      <Box maxWidth="800px">
+        <Tooltip arrow title={t("simulation.tooltipProductionProgram")}>
+          <InfoOutlined />
+        </Tooltip>
 
-      <List>
-        {items &&
-          items.map((oItem) => {
-            return (
-              <ListItem key={oItem.id}>
-                <ListItemText
-                  primary={oItem.article}
-                  secondary={t("simulation.part")}
-                />
-                <TextField
-                  label={t("simulation.sequenceNumber")}
-                  variant="outlined"
-                  value={oItem.sequenceNumer}
-                  onChange={(e) =>
-                    handleSequenceNumberChange(
-                      oItem.id,
-                      parseInt(e.target.value)
-                    )
-                  }
-                  type="number"
-                  inputProps={{
-                    min: 1,
-                    max: state["productionlist"].length,
-                    onKeyDown: (event) => {
-                      event.preventDefault();
-                    },
+        <List sx={{ width: "100%" }}>
+          {items &&
+            items.map((oItem) => {
+              return (
+                <ListItem
+                  key={oItem.id}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "1rem",
+                    marginBottom: "0.5rem",
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "8px",
+                    backgroundColor: "#fff",
+                    width: "100%",
                   }}
-                  sx={{ marginLeft: "10px" }}
-                />
-              </ListItem>
-            );
-          })}
-      </List>
+                >
+                  <Box>
+                    <Typography variant="body1">
+                      {t("simulation.part")}
+                    </Typography>
+                    <Typography variant="body2">{oItem.article}</Typography>
+                  </Box>
+                  <TextField
+                    label={t("simulation.sequenceNumber")}
+                    variant="outlined"
+                    value={oItem.sequenceNumer}
+                    onChange={(e) =>
+                      handleSequenceNumberChange(
+                        oItem.id,
+                        parseInt(e.target.value)
+                      )
+                    }
+                    type="number"
+                    inputProps={{
+                      min: 1,
+                      max: state["productionlist"].length,
+                      onKeyDown: (event) => {
+                        event.preventDefault();
+                      },
+                    }}
+                    sx={{ marginLeft: "10px", width: "6rem" }}
+                  />
+                </ListItem>
+              );
+            })}
+        </List>
+      </Box>
     </Box>
   );
 }
