@@ -161,34 +161,36 @@ function FileUpload() {
 
       oResults.waitinglistworkstations = [...aWaitingListWorkStations];
 
-      const aWaitingListStock = file.content.elements[6].elements.map(
-        (oElement) => {
-          const aWorkplaces = oElement.elements.map((oWorkplace) => {
-            const aWaitingLists = oWorkplace.elements.map((oWaitingList) => {
+      if (file.content.elements[6].elements) {
+        const aWaitingListStock = file.content.elements[6].elements.map(
+          (oElement) => {
+            const aWorkplaces = oElement.elements.map((oWorkplace) => {
+              const aWaitingLists = oWorkplace.elements.map((oWaitingList) => {
+                return {
+                  period: oWaitingList.attributes.period,
+                  amount: oWaitingList.attributes.amount,
+                  firstbatch: oWaitingList.attributes.firstbatch,
+                  lastbatch: oWaitingList.attributes.lastbatch,
+                  item: oWaitingList.attributes.item,
+                  order: oWaitingList.attributes.order,
+                  timeneed: oWaitingList.attributes.timeneed,
+                };
+              });
               return {
-                period: oWaitingList.attributes.period,
-                amount: oWaitingList.attributes.amount,
-                firstbatch: oWaitingList.attributes.firstbatch,
-                lastbatch: oWaitingList.attributes.lastbatch,
-                item: oWaitingList.attributes.item,
-                order: oWaitingList.attributes.order,
-                timeneed: oWaitingList.attributes.timeneed,
+                id: oWorkplace.attributes.id,
+                timeneed: oWorkplace.attributes.timeneed,
+                waitinglists: aWaitingLists,
               };
             });
             return {
-              id: oWorkplace.attributes.id,
-              timeneed: oWorkplace.attributes.timeneed,
-              waitinglists: aWaitingLists,
+              id: oElement.attributes.id,
+              workplaces: aWorkplaces,
             };
-          });
-          return {
-            id: oElement.attributes.id,
-            workplaces: aWorkplaces,
-          };
-        }
-      );
+          }
+        );
 
-      oResults.waitingliststock = [...aWaitingListStock];
+        oResults.waitingliststock = [...aWaitingListStock];
+      }
 
       const aOrdersInWork = file.content.elements[7].elements.map(
         (oElement) => {

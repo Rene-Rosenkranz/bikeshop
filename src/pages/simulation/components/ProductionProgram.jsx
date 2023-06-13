@@ -39,10 +39,10 @@ function ProductionProgram(props) {
                 size="small"
                 sx={{ display: "inline-flex" }}
               >
-                <SequenceNumberMenu
+                {/* <SequenceNumberMenu
                   value={oElement.sequenceNumer}
                   element={oElement}
-                />
+                /> */}
                 {/* <Box>
                   <Select
                     defaultValue={oElement.sequenceNumer}
