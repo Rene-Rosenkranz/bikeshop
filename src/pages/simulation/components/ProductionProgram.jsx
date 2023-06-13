@@ -6,16 +6,18 @@ import {
   FormHelperText,
   Tooltip,
   Select,
+  MenuItem,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
-import { InfoOutlined } from "@mui/icons-material";
+import { InfoOutlined, Label } from "@mui/icons-material";
 import SequenceNumberMenu from "./SequenceNumberMenu";
 
 function ProductionProgram(props) {
   const fSetGlobalValid = props.validate;
   const { t, i18n } = useTranslation();
+  const [oSequences, fSetSequence] = useState();
   return (
     <>
       <Box alignContent="center">
@@ -41,6 +43,24 @@ function ProductionProgram(props) {
                   value={oElement.sequenceNumer}
                   element={oElement}
                 />
+                {/* <Box>
+                  <Select
+                    defaultValue={oElement.sequenceNumer}
+                    onChange={fHandleChange}
+                    key={oElement.article}
+                  >
+                    {state.productionlist
+                      .sort((a, b) => a.sequenceNumer - b.sequenceNumer)
+                      .map((oSequenceItem) => {
+                        return (
+                          <MenuItem value={oSequenceItem.sequenceNumer}>
+                            {oSequenceItem.sequenceNumer}
+                          </MenuItem>
+                        );
+                      })}
+                  </Select>
+                </Box> */}
+
                 <InputLabel>
                   {t("simulation.component") + " " + oElement.article}
                 </InputLabel>
