@@ -38,7 +38,13 @@ function Workinghours(props) {
                 <Input
                   type="number"
                   aria-describedby="form-helper"
-                  inputProps={{ min: 1, max: 3 }}
+                  inputProps={{
+                    min: 1,
+                    max: 3,
+                    onKeyDown: (event) => {
+                      event.preventDefault();
+                    },
+                  }}
                   defaultValue={oElement.shift}
                   onChange={(oEvent) => {
                     const bIsValid =
@@ -59,17 +65,23 @@ function Workinghours(props) {
                 />
                 <Input
                   type="number"
-                  inputProps={{ min: 0, max: 241 }}
+                  inputProps={{
+                    min: 0,
+                    max: 241,
+                    onKeyDown: (event) => {
+                      event.preventDefault();
+                    },
+                  }}
                   defaultValue={oElement.overtime}
                   onChange={(oEvent) => {
                     const oNewState = state;
                     const oIndex = oNewState["workingtimelist"].find(
                       (oObject) => oObject.station === oElement.station
                     );
-                    const bIsValid =
-                      !!oEvent.target.value &&
-                      oIndex.shift === 3 &&
-                      oEvent.target.valueAsNumber === 0;
+                    let bIsValid = !!oEvent.target.value;
+                    if (oIndex.shift === 3 && oEvent.target.valueAsNumber > 0) {
+                      bIsValid = false;
+                    }
                     fValidHandler(bIsValid);
                     const iIndex = oNewState["workingtimelist"].indexOf(oIndex);
                     oNewState["workingtimelist"][iIndex].overtime =
