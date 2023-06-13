@@ -265,10 +265,9 @@ function FileUpload() {
           },
         })
         .then((oResponse) => {
-          //window.location.replace("http://localhost:5173/simulation");
-        })
-        .catch((oError) => {
-          //window.location.replace("http://localhost:5173/simulation");
+          if (oResponse.status === "200") {
+            window.location.replace("http://localhost:5173/simulation");
+          }
         });
     };
   };

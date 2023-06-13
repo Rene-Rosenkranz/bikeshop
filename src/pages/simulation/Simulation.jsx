@@ -39,31 +39,6 @@ function Simulation() {
   const { state, setState } = useGlobalState();
   const [bValid, fSetValid] = useState(true);
   const [bGlobalValid, fSetGlobalValid] = useState(true);
-  /* const [oPlanning, fSetPlanning] = useState({
-    production: [
-      { p1: 0, p2: 0, p3: 0 },
-      { p1: 0, p2: 0, p3: 0 },
-      { p1: 0, p2: 0, p3: 0 },
-      { p1: 0, p2: 0, p3: 0 },
-    ],
-    direct: {
-      p1: {
-        quantity: 0,
-        price: 0,
-        penalty: 0,
-      },
-      p2: {
-        quantity: 0,
-        price: 0,
-        penalty: 0,
-      },
-      p3: {
-        quantity: 0,
-        price: 0,
-        penalty: 0,
-      },
-    },
-  }); */
   const [oPlanning, fSetPlanning] = useState({});
   const [skipped, setSkipped] = React.useState(new Set());
   const [bSplit, fSetSplit] = useState(false);
@@ -152,11 +127,6 @@ function Simulation() {
     const oProduction = oPlanning;
     const oObj = {
       input: {
-        /* user: {
-          "@game": "1",
-          "@group": "1",
-          "@period": "1",
-        }, */
         qualitycontrol: {
           "@type": "no",
           "@losequantity": "0",
