@@ -1,4 +1,7 @@
 {
+  "home": {
+    "welcomeText": "Planen Sie hier ihre Produktion. Beginnen Sie bei 'Simulation über XML Datei', um die aktuellen Informationen hochzuladen. Dort können Sie dann auf Basis der Prognosen ihr Produktionsprogramm festlegen. Danach sehen in dem Reiter 'Simulation' die vorgeschlagenen Bestell- und Produktionsprogramme."
+  },
   "fileupload": {
     "title": "Datei für Simulation hochladen",
     "header": "Wählen sie eine Datei aus",
@@ -37,6 +40,7 @@
     "next": "Weiter",
     "finish": "XML Datei generieren",
     "shifts": "Kapazitätsplanung",
+    "shift": "Schicht",
     "component": "Bauteil",
     "orderAmount": "Bestellmenge",
     "productionAmount": "Produktionsmenge",
@@ -50,7 +54,7 @@
       "specialDelivery": "Sonderlieferung"
     },
     "workstation": "Arbeitsstation",
-    "overtime": "Überstunden",
+    "overtime": "Überminuten pro Tag",
     "workstationValues": "Mehrschichten und Überstunden",
     "part": "Bauteil",
     "amount": "Menge",

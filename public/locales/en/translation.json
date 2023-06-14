@@ -1,4 +1,7 @@
 {
+  "home": {
+    "welcomeText": "With this tool you can plan your production period. Start with 'Simulation via XML File', to upload the newest information data. Based on the forecast you can then set your production plan. In 'Simulation' you can then see the proposed planned period and alter to your wishes."
+  },
   "fileupload": {
     "title": "Upload file for simulation",
     "header": "Select a file to upload",
@@ -37,6 +40,7 @@
     "next": "Next",
     "finish": "Generate XML File",
     "shifts": "Capacity Planning",
+    "shift": "Shift",
     "component": "Component",
     "orderAmount": "Ordered Amount",
     "productionAmount": "Amount to Produce",
@@ -50,7 +54,7 @@
       "specialDelivery": "Special Delivery"
     },
     "workstation": "Workstation",
-    "overtime": "Overtime",
+    "overtime": "Overtime in minutes per day",
     "workstationValues": "Shifts and Overtime",
     "part": "Part",
     "amount": "Amount",

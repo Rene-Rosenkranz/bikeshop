@@ -347,6 +347,12 @@ function Simulation() {
                                       t-key={oProduct[0]}
                                       style={{ width: "8rem" }}
                                       defaultValue={oProduct[1]}
+                                      inputProps={{
+                                        min: 0,
+                                        onKeyDown: (event) => {
+                                          event.preventDefault();
+                                        },
+                                      }}
                                     />
                                   </TableCell>
                                 );
@@ -401,6 +407,12 @@ function Simulation() {
                                   error={!bValid}
                                   style={{ width: "8rem" }}
                                   defaultValue={oProduct[1].quantity}
+                                  inputProps={{
+                                    min: 0,
+                                    onKeyDown: (event) => {
+                                      event.preventDefault();
+                                    },
+                                  }}
                                 />
                               </TableCell>
                             );

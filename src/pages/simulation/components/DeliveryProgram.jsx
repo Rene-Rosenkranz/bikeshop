@@ -58,7 +58,12 @@ function DeliveryProgram(props) {
                   <Input
                     type="number"
                     error={!bValid}
-                    inputProps={{ min: 0 }}
+                    inputProps={{
+                      min: 0,
+                      onKeyDown: (event) => {
+                        event.preventDefault();
+                      },
+                    }}
                     aria-describedby="form-helper"
                     defaultValue={oElement.quantity}
                     onChange={(oEvent) => {

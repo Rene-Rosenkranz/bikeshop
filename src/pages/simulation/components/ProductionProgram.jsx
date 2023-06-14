@@ -64,7 +64,12 @@ function ProductionProgram(props) {
                   <Input
                     type="number"
                     error={!bValid}
-                    inputProps={{ min: 0 }}
+                    inputProps={{
+                      min: 0,
+                      onKeyDown: (event) => {
+                        event.preventDefault();
+                      },
+                    }}
                     aria-describedby="form-helper"
                     defaultValue={oElement.quantity}
                     sx={{ width: "6rem", textAlign: "center" }} // Adjust width and center align the value
