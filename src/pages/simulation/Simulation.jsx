@@ -307,15 +307,21 @@ function Simulation() {
     const sAmount = oEvent.target.value;
 
     fSetPlanning((oNewPlanning) => {
-      const sProductionValue = Number(sAmount);
-      const sDistributionValue = Number(
-        oNewPlanning["distribution"][aKeys[0]][aKeys[1]]
+      const iNewProductionValue = Number(sAmount);
+      const iOldProductionValue = Number(
+        oNewPlanning["production"][aKeys[0]][aKeys[1]]
       );
-      const sOld = Number(oNewPlanning["inventory"][aKeys[0]][aKeys[1]]);
-      oNewPlanning["production"][aKeys[0]][aKeys[1]] = Number(sAmount);
 
-      oNewPlanning["inventory"][aKeys[0]][aKeys[1]] =
-        sOld + sProductionValue - sDistributionValue;
+      oNewPlanning["production"][aKeys[0]][aKeys[1]] = Number(sAmount);
+      const iValueDifference = iNewProductionValue - iOldProductionValue;
+
+      let iNewValue;
+
+      for (aKeys[0]; aKeys[0] < 4; aKeys[0]++) {
+        iNewValue =
+          oNewPlanning["inventory"][aKeys[0]][aKeys[1]] + iValueDifference;
+        oNewPlanning["inventory"][aKeys[0]][aKeys[1]] = iNewValue;
+      }
 
       return oNewPlanning;
     });
@@ -324,18 +330,25 @@ function Simulation() {
   const fUpdateDistribution = (oEvent) => {
     const sKey = oEvent.currentTarget.getAttribute("t-key");
     const aKeys = sKey.split(" ");
-    const iDistributionValue = Number(oEvent.target.value);
+    const sAmount = oEvent.target.value;
 
     fSetPlanning((oNewPlanning) => {
-      const sOld = Number(oNewPlanning["inventory"][aKeys[0]][aKeys[1]]);
-      const iOldDistributionValue =
-        oNewPlanning["distribution"][aKeys[0]][aKeys[1]];
-      const sProductionValue = Number(
-        oNewPlanning["production"][aKeys[0]][aKeys[1]]
+      const iNewProductionValue = Number(sAmount);
+      const iOldProductionValue = Number(
+        oNewPlanning["distribution"][aKeys[0]][aKeys[1]]
       );
-      oNewPlanning["distribution"][aKeys[0]][aKeys[1]] = iDistributionValue;
-      oNewPlanning["inventory"][aKeys[0]][aKeys[1]] =
-        sOld + (iDistributionValue - iOldDistributionValue);
+
+      oNewPlanning["distribution"][aKeys[0]][aKeys[1]] = Number(sAmount);
+      const iValueDifference = iOldProductionValue - iNewProductionValue;
+
+      let iNewValue;
+
+      for (aKeys[0]; aKeys[0] < 4; aKeys[0]++) {
+        iNewValue =
+          oNewPlanning["inventory"][aKeys[0]][aKeys[1]] + iValueDifference;
+        oNewPlanning["inventory"][aKeys[0]][aKeys[1]] = iNewValue;
+      }
+
       return oNewPlanning;
     });
   };
