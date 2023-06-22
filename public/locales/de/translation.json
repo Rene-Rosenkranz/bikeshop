@@ -78,6 +78,8 @@
     "sequenceNumber": "Sequenz",
     "productionOrder": "Produktionsreihenfolge",
     "noItems": "Keine Items vorhanden",
-    "splitItem": "Splitten (50 / 50)"
+    "splitItem": "Splitten (50 / 50)",
+    "inventoryAmount": "Lagerbestand",
+    "distributionAmount": "Vertriebmenge"
   }
 }

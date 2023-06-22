@@ -43,12 +43,6 @@ function Simulation() {
   const [bValid, fSetValid] = useState(true);
   const [bGlobalValid, fSetGlobalValid] = useState(true);
   const [oPlanning, fSetPlanning] = useState({});
-  const [oInventory, fSetInventory] = useState([
-    { p1: 0, p2: 0, p3: 0 },
-    { p1: 0, p2: 0, p3: 0 },
-    { p1: 0, p2: 0, p3: 0 },
-    { p1: 0, p2: 0, p3: 0 },
-  ]);
   const [skipped, setSkipped] = React.useState(new Set());
   const aSteps = [
     t("simulation.delivery"),
@@ -118,6 +112,12 @@ function Simulation() {
             p2: 0,
             p3: 0,
           },
+        ],
+        inventory: [
+          { p1: 100, p2: 200, p3: 300 },
+          { p1: 0, p2: 0, p3: 0 },
+          { p1: 0, p2: 0, p3: 0 },
+          { p1: 0, p2: 0, p3: 0 },
         ],
         direct: {
           p1: {
@@ -359,251 +359,239 @@ function Simulation() {
               <Box
                 sx={{ bgcolor: "rgb(250, 250, 250)", height: "900px", p: 5 }}
               >
-                <Box>
+                <Box sx={{ marginBottom: "20px" }}>
                   {/* Vetriebssplanung */}
+                  <Box>
+                    <Tooltip
+                      title={t(
+                        "simulation.tooltipInventoryOverviewEndOfPeriod"
+                      )}
+                    >
+                      <InfoOutlined />
+                    </Tooltip>
+                  </Box>
+                  {t("simulaiton.tooltipDistributionPlanning")}
                   <TableContainer>
                     <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell />
-                          <TableCell align="center">
-                            <Box>
-                              <Tooltip
-                                title={t(
-                                  "simulation.tooltipDistributionPlanning"
-                                )}
-                              >
-                                <InfoOutlined />
-                              </Tooltip>
-                            </Box>
-                            {t("simulation.distributionPlanning")}
-                          </TableCell>
-                          <TableCell />
-                        </TableRow>
-                        <TableRow>
-                          {Object.entries(oPlanning.distribution[0]).map(
-                            (oProduct) => {
-                              return (
-                                <TableCell align="center">
-                                  {t(`fileupload.product${oProduct[0]}`)}
-                                </TableCell>
-                              );
-                            }
-                          )}
+                          {oPlanning.distribution.map((oPeriod, index) => {
+                            return (
+                              <TableCell align="center">
+                                <InputLabel>
+                                  {t("simulation.distributionAmount") +
+                                    " P+" +
+                                    (index + 1)}
+                                </InputLabel>
+                              </TableCell>
+                            );
+                          })}
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {oPlanning.distribution.map((oPeriod, index) => {
-                          return (
-                            <TableRow>
-                              {Object.entries(oPeriod).map((oProduct) => {
-                                return (
-                                  <TableCell
-                                    t-key={`${index} ${oProduct[0]}`}
-                                    onChange={fUpdateForecast}
-                                    align="center" // Hinzufügen
-                                  >
-                                    <InputLabel>
-                                      {t(
-                                        "simulation.productionPlanningAmount"
-                                      ) +
-                                        " P" +
-                                        "+" +
-                                        (index + 1)}
-                                    </InputLabel>
-                                    <Input
-                                      type="number"
-                                      error={!bValid}
-                                      t-key={oProduct[0]}
-                                      style={{ width: "8rem" }}
-                                      defaultValue={oProduct[1]}
-                                      inputProps={{
-                                        min: 0,
-                                        onKeyDown: (event) => {
-                                          if (
-                                            (!/^\d$/.test(event.key) &&
-                                              !allowedKeys.includes(
-                                                event.key
-                                              )) ||
-                                            (event.key === "Backspace" &&
-                                              event.target.value.length === 1)
-                                          ) {
-                                            event.preventDefault();
-                                          }
-                                        },
-                                      }}
-                                    />
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          );
-                        })}
+                        {Object.entries(oPlanning.distribution[0]).map(
+                          (oProduct) => {
+                            return (
+                              <TableRow>
+                                <TableCell align="center">
+                                  {t(`fileupload.product${oProduct[0]}`)}
+                                </TableCell>
+                                {oPlanning.distribution.map(
+                                  (oPeriod, index) => {
+                                    return (
+                                      <TableCell
+                                        t-key={`${index} ${oProduct[0]}`}
+                                        onChange={fUpdateForecast}
+                                        align="center"
+                                      >
+                                        <Input
+                                          type="number"
+                                          error={!bValid}
+                                          t-key={oProduct[0]}
+                                          style={{ width: "8rem" }}
+                                          defaultValue={oPeriod[oProduct[0]]}
+                                          inputProps={{
+                                            min: 0,
+                                            onKeyDown: (event) => {
+                                              if (
+                                                (!/^\d$/.test(event.key) &&
+                                                  !allowedKeys.includes(
+                                                    event.key
+                                                  )) ||
+                                                (event.key === "Backspace" &&
+                                                  event.target.value.length ===
+                                                    1)
+                                              ) {
+                                                event.preventDefault();
+                                              }
+                                            },
+                                          }}
+                                        />
+                                      </TableCell>
+                                    );
+                                  }
+                                )}
+                              </TableRow>
+                            );
+                          }
+                        )}
                       </TableBody>
                     </Table>
                   </TableContainer>
+                </Box>
+                <Box sx={{ marginBottom: "20px" }}>
                   {/* Produktionsplanung */}
+                  <Box>
+                    <Tooltip title={t("simulation.tooltipProductionPlanning")}>
+                      <InfoOutlined />
+                    </Tooltip>
+                  </Box>
+                  {t("simulation.productionPlanning")}
                   <TableContainer>
                     <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell />
-                          <TableCell align="center">
-                            <Box>
-                              <Tooltip
-                                title={t(
-                                  "simulation.tooltipProductionPlanning"
-                                )}
-                              >
-                                <InfoOutlined />
-                              </Tooltip>
-                            </Box>
-                            {t("simulation.productionPlanning")}
-                          </TableCell>
-                          <TableCell />
-                        </TableRow>
-                        <TableRow>
-                          {Object.entries(oPlanning.production[0]).map(
-                            (oProduct) => {
-                              return (
-                                <TableCell align="center">
-                                  {t(`fileupload.product${oProduct[0]}`)}
-                                </TableCell>
-                              );
-                            }
-                          )}
+                          {oPlanning.production.map((oPeriod, index) => {
+                            return (
+                              <TableCell align="center">
+                                <InputLabel>
+                                  {t("simulation.productionPlanningAmount") +
+                                    " P+" +
+                                    (index + 1)}
+                                </InputLabel>
+                              </TableCell>
+                            );
+                          })}
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {oPlanning.production.map((oPeriod, index) => {
-                          return (
-                            <TableRow>
-                              {Object.entries(oPeriod).map((oProduct) => {
-                                return (
-                                  <TableCell
-                                    t-key={`${index} ${oProduct[0]}`}
-                                    onChange={fUpdateForecast}
-                                    align="center" // Hinzufügen
-                                  >
-                                    <InputLabel>
-                                      {t(
-                                        "simulation.productionPlanningAmount"
-                                      ) +
-                                        " P" +
-                                        "+" +
-                                        (index + 1)}
-                                    </InputLabel>
-                                    <Input
-                                      type="number"
-                                      error={!bValid}
-                                      t-key={oProduct[0]}
-                                      style={{ width: "8rem" }}
-                                      defaultValue={oProduct[1]}
-                                      inputProps={{
-                                        min: 0,
-                                        onKeyDown: (event) => {
-                                          if (
-                                            (!/^\d$/.test(event.key) &&
-                                              !allowedKeys.includes(
-                                                event.key
-                                              )) ||
-                                            (event.key === "Backspace" &&
-                                              event.target.value.length === 1)
-                                          ) {
-                                            event.preventDefault();
-                                          }
-                                        },
-                                      }}
-                                    />
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          );
-                        })}
+                        {Object.entries(oPlanning.production[0]).map(
+                          (oProduct) => {
+                            return (
+                              <TableRow>
+                                <TableCell align="center">
+                                  {t(`fileupload.product${oProduct[0]}`)}
+                                </TableCell>
+                                {oPlanning.production.map((oPeriod, index) => {
+                                  return (
+                                    <TableCell
+                                      t-key={`${index} ${oProduct[0]}`}
+                                      onChange={fUpdateForecast}
+                                      align="center"
+                                    >
+                                      <Input
+                                        type="number"
+                                        error={!bValid}
+                                        t-key={oProduct[0]}
+                                        style={{ width: "8rem" }}
+                                        defaultValue={oPeriod[oProduct[0]]}
+                                        inputProps={{
+                                          min: 0,
+                                          onKeyDown: (event) => {
+                                            if (
+                                              (!/^\d$/.test(event.key) &&
+                                                !allowedKeys.includes(
+                                                  event.key
+                                                )) ||
+                                              (event.key === "Backspace" &&
+                                                event.target.value.length === 1)
+                                            ) {
+                                              event.preventDefault();
+                                            }
+                                          },
+                                        }}
+                                      />
+                                    </TableCell>
+                                  );
+                                })}
+                              </TableRow>
+                            );
+                          }
+                        )}
                       </TableBody>
                     </Table>
                   </TableContainer>
+                </Box>
+                <Box sx={{ marginBottom: "20px" }}>
                   {/* Inventarüberblick */}
+                  <Box>
+                    <Tooltip
+                      title={t(
+                        "simulation.tooltipInventoryOverviewEndOfPeriod"
+                      )}
+                    >
+                      <InfoOutlined />
+                    </Tooltip>
+                  </Box>
+                  {t("fileupload.inventoryOverview")}
                   <TableContainer>
                     <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell />
-                          <TableCell align="center">
-                            <Box>
-                              <Tooltip
-                                title={t(
-                                  "simulation.tooltipInventoryOverviewEndOfPeriod"
-                                )}
-                              >
-                                <InfoOutlined />
-                              </Tooltip>
-                            </Box>
-                            {t("fileupload.inventoryOverview")}
-                          </TableCell>
-                          <TableCell />
-                        </TableRow>
-                        <TableRow>
-                          {Object.entries(oPlanning.production[0]).map(
-                            (oProduct) => {
-                              return (
-                                <TableCell align="center">
-                                  {t(`fileupload.product${oProduct[0]}`)}
-                                </TableCell>
-                              );
-                            }
-                          )}
+                          {oPlanning.inventory.map((oPeriod, index) => {
+                            return (
+                              <TableCell align="center">
+                                <InputLabel>
+                                  {t("simulation.inventoryAmount") +
+                                    " P +" +
+                                    (index + 1)}
+                                </InputLabel>
+                              </TableCell>
+                            );
+                          })}
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {oPlanning.production.map((oPeriod, index) => {
-                          return (
-                            <TableRow>
-                              {Object.entries(oPeriod).map((oProduct) => {
-                                return (
-                                  <TableCell
-                                    t-key={`${index} ${oProduct[0]}`}
-                                    onChange={fUpdateForecast}
-                                    align="center" // Hinzufügen
-                                  >
-                                    <InputLabel>
-                                      {t("simulation.inventoryAmount") +
-                                        " P" +
-                                        "+" +
-                                        (index + 1)}
-                                    </InputLabel>
-                                    <Input
-                                      type="number"
-                                      error={!bValid}
-                                      t-key={oProduct[0]}
-                                      style={{ width: "8rem" }}
-                                      defaultValue={oProduct[1]}
-                                      inputProps={{
-                                        min: 0,
-                                        onKeyDown: (event) => {
-                                          if (
-                                            (!/^\d$/.test(event.key) &&
-                                              !allowedKeys.includes(
-                                                event.key
-                                              )) ||
-                                            (event.key === "Backspace" &&
-                                              event.target.value.length === 1)
-                                          ) {
-                                            event.preventDefault();
-                                          }
-                                        },
-                                      }}
-                                    />
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          );
-                        })}
+                        {Object.entries(oPlanning.inventory[0]).map(
+                          (oProduct) => {
+                            return (
+                              <TableRow>
+                                <TableCell align="center">
+                                  {t(`fileupload.product${oProduct[0]}`)}
+                                </TableCell>
+                                {oPlanning.inventory.map((oPeriod, index) => {
+                                  return (
+                                    <TableCell
+                                      t-key={`${index} ${oProduct[0]}`}
+                                      align="center"
+                                    >
+                                      <Input
+                                        type="number"
+                                        error={!bValid}
+                                        t-key={oProduct[0]}
+                                        style={{ width: "8rem" }}
+                                        value={oPeriod[oProduct[0]]}
+                                        inputProps={{
+                                          min: 0,
+                                          onKeyDown: (event) => {
+                                            if (
+                                              (!/^\d$/.test(event.key) &&
+                                                !allowedKeys.includes(
+                                                  event.key
+                                                )) ||
+                                              (event.key === "Backspace" &&
+                                                event.target.value.length === 1)
+                                            ) {
+                                              event.preventDefault();
+                                            }
+                                          },
+                                        }}
+                                      />
+                                    </TableCell>
+                                  );
+                                })}
+                              </TableRow>
+                            );
+                          }
+                        )}
                       </TableBody>
                     </Table>
                   </TableContainer>
+                </Box>
+                <Box sx={{ marginBottom: "20px" }}>
                   {/* Direktverkauf */}
                   <TableContainer>
                     <Table>
@@ -736,19 +724,20 @@ function Simulation() {
                     </Table>
                   </TableContainer>
                 </Box>
-                <Button
-                  variant="contained"
-                  onClick={fSendForecastForPlanning}
-                  disabled={!bValid}
-                >
-                  {t("simulation.planPeriod")}
-                </Button>
-                {!bValid && (
-                  <FormHelperText id="form-helper" error>
-                    {t("simulation.inputInvalid")}
-                  </FormHelperText>
-                )}
               </Box>
+              <Button
+                variant="contained"
+                onClick={fSendForecastForPlanning}
+                disabled={!bValid}
+                sx={{ mt: 70 }}
+              >
+                {t("simulation.planPeriod")}
+              </Button>
+              {!bValid && (
+                <FormHelperText id="form-helper" error>
+                  {t("simulation.inputInvalid")}
+                </FormHelperText>
+              )}
             </Container>
           )}
           {bProductionPlanned && (
