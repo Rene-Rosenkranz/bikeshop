@@ -76,6 +76,8 @@
     "directSellingPrice": "Price in €",
     "directSellingPenalty": "Penalty in €",
     "sequenceNumber": "sequence number",
-    "productionOrder": "Production Order"
+    "productionOrder": "Production Order",
+    "noItems": "No items available",
+    "splitItem": "Split (50 / 50)"
   }
 }

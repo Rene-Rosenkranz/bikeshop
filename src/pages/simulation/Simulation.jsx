@@ -3,6 +3,7 @@ import { create } from "xmlbuilder";
 import {
   Button,
   Container,
+  Divider,
   Step,
   StepLabel,
   Stepper,
@@ -30,6 +31,8 @@ import Overview from "./components/Overview";
 import ProductionOrder from "./components/ProductionOrder";
 import { useGlobalState } from "../../components/GlobalStateProvider";
 import { InfoOutlined } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Simulation() {
   const { t, i18n } = useTranslation();
@@ -40,8 +43,13 @@ function Simulation() {
   const [bValid, fSetValid] = useState(true);
   const [bGlobalValid, fSetGlobalValid] = useState(true);
   const [oPlanning, fSetPlanning] = useState({});
+  const [oInventory, fSetInventory] = useState([
+    { p1: 0, p2: 0, p3: 0 },
+    { p1: 0, p2: 0, p3: 0 },
+    { p1: 0, p2: 0, p3: 0 },
+    { p1: 0, p2: 0, p3: 0 },
+  ]);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [bSplit, fSetSplit] = useState(false);
   const aSteps = [
     t("simulation.delivery"),
     t("simulation.production"),
@@ -49,20 +57,68 @@ function Simulation() {
     t("simulation.shifts"),
     t("simulation.overview"),
   ];
+  const allowedKeys = [
+    "ArrowLeft",
+    "ArrowRight",
+    "Backspace",
+    "ArrowUp",
+    "ArrowDown",
+    "Tab",
+  ];
   const fValidHandler = (bValid) => {
     fSetValid(bValid);
   };
   const fGlobalValidHandler = (bValid) => {
     fSetGlobalValid(bValid);
   };
-  const fHandleCheckboxChange = (oEvent) => {
-    fSetSplit(!bSplit);
-  };
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/forecast").then((oReponse) => {
       const oObj = {
-        production: [],
+        production: [
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+        ],
+        distribution: [
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+        ],
         direct: {
           p1: {
             quantity: 0,
@@ -81,7 +137,7 @@ function Simulation() {
           },
         },
       };
-      oObj.production = oReponse.data.map((oElement) => {
+      oObj.distribution = oReponse.data.map((oElement) => {
         return {
           p1: oElement.p1,
           p2: oElement.p2,
@@ -94,7 +150,8 @@ function Simulation() {
   }, []);
   const fSendForecastForPlanning = () => {
     const oObj = oPlanning;
-    oObj.splitting = bSplit;
+    oObj.splitting = false;
+    toast.info(t("toast.infoStartCalculation"));
 
     axios
       .post("http://localhost:8080/api/planning", oObj, {
@@ -110,6 +167,7 @@ function Simulation() {
             productionlist: oReponse.data.productionlist,
             orderlist: oReponse.data.orderlist,
           });
+          toast.success(t("toast.successPeriodCalculation"));
         }
       });
   };
@@ -123,6 +181,7 @@ function Simulation() {
     URL.revokeObjectURL(sUrl);
   };
   const fHandleFinish = () => {
+    toast.info(t("toast.generateXML"));
     const oData = state;
     const oProduction = oPlanning;
     const oObj = {
@@ -243,6 +302,17 @@ function Simulation() {
     });
   };
 
+  const fUpdateDistributionPlan = (oEvent) => {
+    const sKey = oEvent.currentTarget.getAttribute("t-key");
+    const sAmount = oEvent.target.value;
+    const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
+    fValidHandler(bValid);
+    fSetPlanning((oForecast) => {
+      oForecast["distribution"][sKey] = Number(sAmount);
+      return oForecast;
+    });
+  };
+
   const fIsStepOptional = (step) => {
     return step === aSteps.length;
   };
@@ -290,6 +360,88 @@ function Simulation() {
                 sx={{ bgcolor: "rgb(250, 250, 250)", height: "900px", p: 5 }}
               >
                 <Box>
+                  {/* Vetriebssplanung */}
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell />
+                          <TableCell align="center">
+                            <Box>
+                              <Tooltip
+                                title={t(
+                                  "simulation.tooltipDistributionPlanning"
+                                )}
+                              >
+                                <InfoOutlined />
+                              </Tooltip>
+                            </Box>
+                            {t("simulation.distributionPlanning")}
+                          </TableCell>
+                          <TableCell />
+                        </TableRow>
+                        <TableRow>
+                          {Object.entries(oPlanning.distribution[0]).map(
+                            (oProduct) => {
+                              return (
+                                <TableCell align="center">
+                                  {t(`fileupload.product${oProduct[0]}`)}
+                                </TableCell>
+                              );
+                            }
+                          )}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {oPlanning.distribution.map((oPeriod, index) => {
+                          return (
+                            <TableRow>
+                              {Object.entries(oPeriod).map((oProduct) => {
+                                return (
+                                  <TableCell
+                                    t-key={`${index} ${oProduct[0]}`}
+                                    onChange={fUpdateForecast}
+                                    align="center" // Hinzufügen
+                                  >
+                                    <InputLabel>
+                                      {t(
+                                        "simulation.productionPlanningAmount"
+                                      ) +
+                                        " P" +
+                                        "+" +
+                                        (index + 1)}
+                                    </InputLabel>
+                                    <Input
+                                      type="number"
+                                      error={!bValid}
+                                      t-key={oProduct[0]}
+                                      style={{ width: "8rem" }}
+                                      defaultValue={oProduct[1]}
+                                      inputProps={{
+                                        min: 0,
+                                        onKeyDown: (event) => {
+                                          if (
+                                            (!/^\d$/.test(event.key) &&
+                                              !allowedKeys.includes(
+                                                event.key
+                                              )) ||
+                                            (event.key === "Backspace" &&
+                                              event.target.value.length === 1)
+                                          ) {
+                                            event.preventDefault();
+                                          }
+                                        },
+                                      }}
+                                    />
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                   {/* Produktionsplanung */}
                   <TableContainer>
                     <Table>
@@ -306,7 +458,7 @@ function Simulation() {
                                 <InfoOutlined />
                               </Tooltip>
                             </Box>
-                            {t("fileupload.productionPlanning")}
+                            {t("simulation.productionPlanning")}
                           </TableCell>
                           <TableCell />
                         </TableRow>
@@ -350,7 +502,96 @@ function Simulation() {
                                       inputProps={{
                                         min: 0,
                                         onKeyDown: (event) => {
-                                          event.preventDefault();
+                                          if (
+                                            (!/^\d$/.test(event.key) &&
+                                              !allowedKeys.includes(
+                                                event.key
+                                              )) ||
+                                            (event.key === "Backspace" &&
+                                              event.target.value.length === 1)
+                                          ) {
+                                            event.preventDefault();
+                                          }
+                                        },
+                                      }}
+                                    />
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  {/* Inventarüberblick */}
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell />
+                          <TableCell align="center">
+                            <Box>
+                              <Tooltip
+                                title={t(
+                                  "simulation.tooltipInventoryOverviewEndOfPeriod"
+                                )}
+                              >
+                                <InfoOutlined />
+                              </Tooltip>
+                            </Box>
+                            {t("fileupload.inventoryOverview")}
+                          </TableCell>
+                          <TableCell />
+                        </TableRow>
+                        <TableRow>
+                          {Object.entries(oPlanning.production[0]).map(
+                            (oProduct) => {
+                              return (
+                                <TableCell align="center">
+                                  {t(`fileupload.product${oProduct[0]}`)}
+                                </TableCell>
+                              );
+                            }
+                          )}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {oPlanning.production.map((oPeriod, index) => {
+                          return (
+                            <TableRow>
+                              {Object.entries(oPeriod).map((oProduct) => {
+                                return (
+                                  <TableCell
+                                    t-key={`${index} ${oProduct[0]}`}
+                                    onChange={fUpdateForecast}
+                                    align="center" // Hinzufügen
+                                  >
+                                    <InputLabel>
+                                      {t("simulation.inventoryAmount") +
+                                        " P" +
+                                        "+" +
+                                        (index + 1)}
+                                    </InputLabel>
+                                    <Input
+                                      type="number"
+                                      error={!bValid}
+                                      t-key={oProduct[0]}
+                                      style={{ width: "8rem" }}
+                                      defaultValue={oProduct[1]}
+                                      inputProps={{
+                                        min: 0,
+                                        onKeyDown: (event) => {
+                                          if (
+                                            (!/^\d$/.test(event.key) &&
+                                              !allowedKeys.includes(
+                                                event.key
+                                              )) ||
+                                            (event.key === "Backspace" &&
+                                              event.target.value.length === 1)
+                                          ) {
+                                            event.preventDefault();
+                                          }
                                         },
                                       }}
                                     />
@@ -410,7 +651,14 @@ function Simulation() {
                                   inputProps={{
                                     min: 0,
                                     onKeyDown: (event) => {
-                                      event.preventDefault();
+                                      if (
+                                        (!/^\d$/.test(event.key) &&
+                                          !allowedKeys.includes(event.key)) ||
+                                        (event.key === "Backspace" &&
+                                          event.target.value.length === 1)
+                                      ) {
+                                        event.preventDefault();
+                                      }
                                     },
                                   }}
                                 />
@@ -433,6 +681,19 @@ function Simulation() {
                                   error={!bValid}
                                   style={{ width: "8rem" }}
                                   defaultValue={oProduct[1].price}
+                                  inputProps={{
+                                    min: 0,
+                                    onKeyDown: (event) => {
+                                      if (
+                                        (!/^\d$/.test(event.key) &&
+                                          !allowedKeys.includes(event.key)) ||
+                                        (event.key === "Backspace" &&
+                                          event.target.value.length === 1)
+                                      ) {
+                                        event.preventDefault();
+                                      }
+                                    },
+                                  }}
                                 />
                               </TableCell>
                             );
@@ -453,6 +714,19 @@ function Simulation() {
                                   error={!bValid}
                                   style={{ width: "8rem" }}
                                   defaultValue={oProduct[1].penalty}
+                                  inputProps={{
+                                    min: 0,
+                                    onKeyDown: (event) => {
+                                      if (
+                                        (!/^\d$/.test(event.key) &&
+                                          !allowedKeys.includes(event.key)) ||
+                                        (event.key === "Backspace" &&
+                                          event.target.value.length === 1)
+                                      ) {
+                                        event.preventDefault();
+                                      }
+                                    },
+                                  }}
                                 />
                               </TableCell>
                             );
@@ -461,15 +735,6 @@ function Simulation() {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                  <FormControlLabel
-                    label={t("simulation.selectSplit")}
-                    control={
-                      <Checkbox
-                        value={bSplit}
-                        onChange={fHandleCheckboxChange}
-                      />
-                    }
-                  />
                 </Box>
                 <Button
                   variant="contained"
