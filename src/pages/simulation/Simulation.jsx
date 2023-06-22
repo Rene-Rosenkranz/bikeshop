@@ -67,7 +67,7 @@ function Simulation() {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/forecast").then((oReponse) => {
+    axios.get("http://localhost:8080/api/forecasts").then((oReponse) => {
       const oObj = {
         production: [
           {
@@ -114,7 +114,7 @@ function Simulation() {
           },
         ],
         inventory: [
-          { p1: 100, p2: 200, p3: 300 },
+          { p1: 0, p2: 0, p3: 0 },
           { p1: 0, p2: 0, p3: 0 },
           { p1: 0, p2: 0, p3: 0 },
           { p1: 0, p2: 0, p3: 0 },
@@ -137,13 +137,57 @@ function Simulation() {
           },
         },
       };
-      oObj.distribution = oReponse.data.map((oElement) => {
+      oObj.distribution = oReponse.data.forecasts.map((oElement) => {
         return {
           p1: oElement.p1,
           p2: oElement.p2,
           p3: oElement.p3,
         };
       });
+      const aInitialInventory = [];
+      const oFirstPeriodInventory = {};
+      oReponse.data.products.forEach((oElement) => {
+        if (oElement.productId > 3) return;
+        oFirstPeriodInventory[`p${oElement.productId}`] =
+          oElement.stock - oObj.distribution[0][`p${oElement.productId}`];
+      });
+      aInitialInventory.push(oFirstPeriodInventory);
+
+      const oSecondPeriodInventory = {};
+
+      oSecondPeriodInventory["p1"] =
+        oFirstPeriodInventory["p1"] - oObj.distribution[1]["p1"];
+      oSecondPeriodInventory["p2"] =
+        oFirstPeriodInventory["p2"] - oObj.distribution[1]["p2"];
+      oSecondPeriodInventory["p3"] =
+        oFirstPeriodInventory["p3"] - oObj.distribution[1]["p3"];
+
+      aInitialInventory.push(oSecondPeriodInventory);
+
+      const oThirdPeriodInventory = {};
+
+      oThirdPeriodInventory["p1"] =
+        oSecondPeriodInventory["p1"] - oObj.distribution[2]["p1"];
+      oThirdPeriodInventory["p2"] =
+        oSecondPeriodInventory["p2"] - oObj.distribution[2]["p2"];
+      oThirdPeriodInventory["p3"] =
+        oSecondPeriodInventory["p3"] - oObj.distribution[2]["p3"];
+
+      aInitialInventory.push(oThirdPeriodInventory);
+
+      const oFourthPeriodInventory = {};
+
+      oFourthPeriodInventory["p1"] =
+        oThirdPeriodInventory["p1"] - oObj.distribution[3]["p1"];
+      oFourthPeriodInventory["p2"] =
+        oThirdPeriodInventory["p2"] - oObj.distribution[3]["p2"];
+      oFourthPeriodInventory["p3"] =
+        oThirdPeriodInventory["p3"] - oObj.distribution[3]["p3"];
+
+      aInitialInventory.push(oFourthPeriodInventory);
+
+      oObj.inventory = aInitialInventory;
+
       fSetForecastLoaded(true);
       fSetPlanning(oObj);
     });
@@ -257,15 +301,42 @@ function Simulation() {
     fDownLoadXMLFile(xmlresult, sFileName);
   };
 
-  const fUpdateForecast = (oEvent) => {
+  const fUpdateProduction = (oEvent) => {
     const sKey = oEvent.currentTarget.getAttribute("t-key");
     const aKeys = sKey.split(" ");
     const sAmount = oEvent.target.value;
-    const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
-    fValidHandler(bValid);
-    fSetPlanning((oForecast) => {
-      oForecast["production"][aKeys[0]][aKeys[1]] = Number(sAmount);
-      return oForecast;
+
+    fSetPlanning((oNewPlanning) => {
+      const sProductionValue = Number(sAmount);
+      const sDistributionValue = Number(
+        oNewPlanning["distribution"][aKeys[0]][aKeys[1]]
+      );
+      const sOld = Number(oNewPlanning["inventory"][aKeys[0]][aKeys[1]]);
+      oNewPlanning["production"][aKeys[0]][aKeys[1]] = Number(sAmount);
+
+      oNewPlanning["inventory"][aKeys[0]][aKeys[1]] =
+        sOld + sProductionValue - sDistributionValue;
+
+      return oNewPlanning;
+    });
+  };
+
+  const fUpdateDistribution = (oEvent) => {
+    const sKey = oEvent.currentTarget.getAttribute("t-key");
+    const aKeys = sKey.split(" ");
+    const iDistributionValue = Number(oEvent.target.value);
+
+    fSetPlanning((oNewPlanning) => {
+      const sOld = Number(oNewPlanning["inventory"][aKeys[0]][aKeys[1]]);
+      const iOldDistributionValue =
+        oNewPlanning["distribution"][aKeys[0]][aKeys[1]];
+      const sProductionValue = Number(
+        oNewPlanning["production"][aKeys[0]][aKeys[1]]
+      );
+      oNewPlanning["distribution"][aKeys[0]][aKeys[1]] = iDistributionValue;
+      oNewPlanning["inventory"][aKeys[0]][aKeys[1]] =
+        sOld + (iDistributionValue - iOldDistributionValue);
+      return oNewPlanning;
     });
   };
 
@@ -298,17 +369,6 @@ function Simulation() {
     fValidHandler(bValid);
     fSetPlanning((oForecast) => {
       oForecast["direct"][sKey].penalty = Number(sAmount);
-      return oForecast;
-    });
-  };
-
-  const fUpdateDistributionPlan = (oEvent) => {
-    const sKey = oEvent.currentTarget.getAttribute("t-key");
-    const sAmount = oEvent.target.value;
-    const bValid = /^[0-9]*$/.test(sAmount) && sAmount.length > 0;
-    fValidHandler(bValid);
-    fSetPlanning((oForecast) => {
-      oForecast["distribution"][sKey] = Number(sAmount);
       return oForecast;
     });
   };
@@ -402,7 +462,7 @@ function Simulation() {
                                     return (
                                       <TableCell
                                         t-key={`${index} ${oProduct[0]}`}
-                                        onChange={fUpdateForecast}
+                                        onChange={fUpdateDistribution}
                                         align="center"
                                       >
                                         <Input
@@ -478,7 +538,7 @@ function Simulation() {
                                   return (
                                     <TableCell
                                       t-key={`${index} ${oProduct[0]}`}
-                                      onChange={fUpdateForecast}
+                                      onChange={fUpdateProduction}
                                       align="center"
                                     >
                                       <Input
@@ -536,7 +596,7 @@ function Simulation() {
                               <TableCell align="center">
                                 <InputLabel>
                                   {t("simulation.inventoryAmount") +
-                                    " P +" +
+                                    " P+" +
                                     (index + 1)}
                                 </InputLabel>
                               </TableCell>
@@ -559,25 +619,10 @@ function Simulation() {
                                       align="center"
                                     >
                                       <Input
-                                        type="number"
-                                        error={!bValid}
-                                        t-key={oProduct[0]}
                                         style={{ width: "8rem" }}
                                         value={oPeriod[oProduct[0]]}
                                         inputProps={{
-                                          min: 0,
-                                          onKeyDown: (event) => {
-                                            if (
-                                              (!/^\d$/.test(event.key) &&
-                                                !allowedKeys.includes(
-                                                  event.key
-                                                )) ||
-                                              (event.key === "Backspace" &&
-                                                event.target.value.length === 1)
-                                            ) {
-                                              event.preventDefault();
-                                            }
-                                          },
+                                          readOnly: true,
                                         }}
                                       />
                                     </TableCell>
