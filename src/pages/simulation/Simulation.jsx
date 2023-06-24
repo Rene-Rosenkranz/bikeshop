@@ -44,6 +44,7 @@ function Simulation() {
   const [bGlobalValid, fSetGlobalValid] = useState(true);
   const [oPlanning, fSetPlanning] = useState({});
   const [skipped, setSkipped] = React.useState(new Set());
+  const [items, setItems] = useState([]);
   const aSteps = [
     t("simulation.delivery"),
     t("simulation.production"),
@@ -65,6 +66,12 @@ function Simulation() {
   const fGlobalValidHandler = (bValid) => {
     fSetGlobalValid(bValid);
   };
+
+  useEffect(() => {
+    if (oPlanning["inventory"]) {
+      setItems([...oPlanning["inventory"]]);
+    }
+  }, [items]);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/forecasts").then((oReponse) => {
@@ -190,6 +197,7 @@ function Simulation() {
 
       fSetForecastLoaded(true);
       fSetPlanning(oObj);
+      setItems([...oObj["inventory"]]);
     });
   }, []);
   const fSendForecastForPlanning = () => {
@@ -305,14 +313,16 @@ function Simulation() {
     const sKey = oEvent.currentTarget.getAttribute("t-key");
     const aKeys = sKey.split(" ");
     const sAmount = oEvent.target.value;
+    const aInitialKeys = [...aKeys];
 
     fSetPlanning((oNewPlanning) => {
       const iNewProductionValue = Number(sAmount);
       const iOldProductionValue = Number(
-        oNewPlanning["production"][aKeys[0]][aKeys[1]]
+        oNewPlanning["production"][aInitialKeys[0]][aInitialKeys[1]]
       );
 
-      oNewPlanning["production"][aKeys[0]][aKeys[1]] = Number(sAmount);
+      oNewPlanning["production"][aInitialKeys[0]][aInitialKeys[1]] =
+        Number(sAmount);
       const iValueDifference = iNewProductionValue - iOldProductionValue;
 
       let iNewValue;
@@ -323,6 +333,7 @@ function Simulation() {
         oNewPlanning["inventory"][aKeys[0]][aKeys[1]] = iNewValue;
       }
 
+      setItems([...oNewPlanning["inventory"]]);
       return oNewPlanning;
     });
   };
@@ -331,14 +342,16 @@ function Simulation() {
     const sKey = oEvent.currentTarget.getAttribute("t-key");
     const aKeys = sKey.split(" ");
     const sAmount = oEvent.target.value;
+    const aInitialKeys = [...aKeys];
 
     fSetPlanning((oNewPlanning) => {
       const iNewProductionValue = Number(sAmount);
       const iOldProductionValue = Number(
-        oNewPlanning["distribution"][aKeys[0]][aKeys[1]]
+        oNewPlanning["distribution"][aInitialKeys[0]][aInitialKeys[1]]
       );
 
-      oNewPlanning["distribution"][aKeys[0]][aKeys[1]] = Number(sAmount);
+      oNewPlanning["distribution"][aInitialKeys[0]][aInitialKeys[1]] =
+        Number(sAmount);
       const iValueDifference = iOldProductionValue - iNewProductionValue;
 
       let iNewValue;
@@ -348,7 +361,7 @@ function Simulation() {
           oNewPlanning["inventory"][aKeys[0]][aKeys[1]] + iValueDifference;
         oNewPlanning["inventory"][aKeys[0]][aKeys[1]] = iNewValue;
       }
-
+      setItems([...oNewPlanning["inventory"]]);
       return oNewPlanning;
     });
   };
@@ -604,30 +617,33 @@ function Simulation() {
                       <TableHead>
                         <TableRow>
                           <TableCell />
-                          {oPlanning.inventory.map((oPeriod, index) => {
-                            return (
-                              <TableCell align="center">
-                                <InputLabel>
-                                  {t("simulation.inventoryAmount") +
-                                    " P+" +
-                                    (index + 1)}
-                                </InputLabel>
-                              </TableCell>
-                            );
-                          })}
+                          {items &&
+                            Array.isArray(items) &&
+                            items.map((oPeriod, index) => {
+                              return (
+                                <TableCell align="center" key={index}>
+                                  <InputLabel>
+                                    {t("simulation.inventoryAmount") +
+                                      " P+" +
+                                      (index + 1)}
+                                  </InputLabel>
+                                </TableCell>
+                              );
+                            })}
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {Object.entries(oPlanning.inventory[0]).map(
-                          (oProduct) => {
+                        {items &&
+                          Object.entries(items[0]).map((oProduct) => {
                             return (
                               <TableRow>
                                 <TableCell align="center">
                                   {t(`fileupload.product${oProduct[0]}`)}
                                 </TableCell>
-                                {oPlanning.inventory.map((oPeriod, index) => {
+                                {items.map((oPeriod, index) => {
                                   return (
                                     <TableCell
+                                      key={index + oPeriod[oProduct[0]]}
                                       t-key={`${index} ${oProduct[0]}`}
                                       align="center"
                                     >
@@ -643,8 +659,7 @@ function Simulation() {
                                 })}
                               </TableRow>
                             );
-                          }
-                        )}
+                          })}
                       </TableBody>
                     </Table>
                   </TableContainer>
