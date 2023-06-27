@@ -8,8 +8,9 @@ import {
   Typography,
   ListItem,
   ListItemText,
-  TextField,
+  Select,
   Tooltip,
+  InputLabel,
 } from "@mui/material";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 import { InfoOutlined } from "@mui/icons-material";
@@ -18,6 +19,7 @@ function ProductionOrder(props) {
   const [items, setItems] = useState([]);
   const { state, setState } = useGlobalState();
   const { t, i18n } = useTranslation();
+
   const handleSequenceNumberChange = (itemId, newSequenceNumber) => {
     const newState = state;
     const otherObject = state["productionlist"].find(
@@ -38,9 +40,11 @@ function ProductionOrder(props) {
     setItems(newState["productionlist"]);
     setState(newState);
   };
+
   useEffect(() => {
     setItems(props.data);
   }, [state]);
+
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
       <Box maxWidth="800px">
@@ -72,26 +76,28 @@ function ProductionOrder(props) {
                     </Typography>
                     <Typography variant="body2">{oItem.article}</Typography>
                   </Box>
-                  <TextField
-                    label={t("simulation.sequenceNumber")}
-                    variant="outlined"
-                    value={oItem.sequenceNumer}
-                    onChange={(e) =>
-                      handleSequenceNumberChange(
-                        oItem.id,
-                        parseInt(e.target.value)
-                      )
-                    }
-                    type="number"
-                    inputProps={{
-                      min: 1,
-                      max: state["productionlist"].length,
-                      onKeyDown: (event) => {
-                        event.preventDefault();
-                      },
-                    }}
-                    sx={{ marginLeft: "10px", width: "6rem" }}
-                  />
+                  <Box>
+                    <InputLabel>{t("simulation.sequenceNumber")}</InputLabel>
+                    <Select
+                      variant="outlined"
+                      value={oItem.sequenceNumer}
+                      onChange={(e) =>
+                        handleSequenceNumberChange(
+                          oItem.id,
+                          parseInt(e.target.value)
+                        )
+                      }
+                      sx={{ marginLeft: "10px", width: "6rem" }}
+                    >
+                      {[...Array(state["productionlist"].length)].map(
+                        (_, index) => (
+                          <MenuItem key={index} value={index + 1}>
+                            {index + 1}
+                          </MenuItem>
+                        )
+                      )}
+                    </Select>
+                  </Box>
                 </ListItem>
               );
             })}

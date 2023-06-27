@@ -48,7 +48,7 @@ function Simulation() {
   const aSteps = [
     t("simulation.delivery"),
     t("simulation.production"),
-    t("simulation.productionOrder"),
+    /* t("simulation.productionOrder"), */
     t("simulation.shifts"),
     t("simulation.overview"),
   ];
@@ -71,7 +71,7 @@ function Simulation() {
     if (oPlanning["inventory"]) {
       setItems([...oPlanning["inventory"]]);
     }
-  }, [items]);
+  }, [oPlanning["inventory"]]);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/forecasts").then((oReponse) => {
@@ -215,7 +215,6 @@ function Simulation() {
         if (oReponse.status === 200) {
           fSetProductionPlanned(true);
           setState({
-            workingtimelist: oReponse.data.workingtimelist,
             productionlist: oReponse.data.productionlist,
             orderlist: oReponse.data.orderlist,
           });
@@ -436,6 +435,30 @@ function Simulation() {
       return newSkipped;
     });
   };
+
+  const fHandleCalcWorktimes = () => {
+    axios
+      .post("http://localhost:8080/api/capacity", state["productionlist"], {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((oReponse) => {
+        if (oReponse.status === 200) {
+          const newState = { ...state };
+          newState["workingtimelist"] = oReponse.data;
+          setState(newState);
+          let newSkipped = skipped;
+          if (fIsStepSkipped(activeStep)) {
+            newSkipped = new Set(newSkipped.values());
+            newSkipped.delete(activeStep);
+          }
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          setSkipped(newSkipped);
+        }
+      });
+  };
+
   return (
     <>
       {bForecastLoaded && (
@@ -456,7 +479,7 @@ function Simulation() {
                       <InfoOutlined />
                     </Tooltip>
                   </Box>
-                  {t("simulaiton.tooltipDistributionPlanning")}
+                  {t("simulation.tooltipDistributionPlanning")}
                   <TableContainer>
                     <Table>
                       <TableHead>
@@ -611,7 +634,7 @@ function Simulation() {
                       <InfoOutlined />
                     </Tooltip>
                   </Box>
-                  {t("fileupload.inventoryOverview")}
+                  {t("simulation.inventoryOverview")}
                   <TableContainer>
                     <Table>
                       <TableHead>
@@ -850,20 +873,20 @@ function Simulation() {
                         validate={fGlobalValidHandler}
                       />
                     )}
-                    {activeStep === 2 && (
+                    {/* {activeStep === 2 && (
                       <ProductionOrder
                         data={state.productionlist}
                         validate={fGlobalValidHandler}
                       />
-                    )}
-                    {activeStep === 3 && (
+                    )} */}
+                    {activeStep === 2 && (
                       <Workinghours
                         data={state.workingtimelist}
                         validate={fGlobalValidHandler}
                       />
                     )}
 
-                    {activeStep === 4 && <Overview data={state} />}
+                    {activeStep === 3 && <Overview data={state} />}
                     <Box sx={{ flex: "1 1 auto" }} />
                     <div>
                       {fIsStepOptional(activeStep) && (
@@ -882,13 +905,25 @@ function Simulation() {
                         onClick={fHandleNext}
                         style={{
                           visibility:
-                            activeStep !== aSteps.length - 1
+                            activeStep !== aSteps.length - 1 &&
+                            activeStep !== aSteps.length - 3
                               ? "visible"
                               : "hidden",
                         }}
                         disabled={!bGlobalValid}
                       >
                         {t("simulation.next")}
+                      </Button>
+                      <Button
+                        onClick={fHandleCalcWorktimes}
+                        style={{
+                          visibility:
+                            activeStep === aSteps.length - 3
+                              ? "visible"
+                              : "hidden",
+                        }}
+                      >
+                        {t("simulation.calcWorktimes")}
                       </Button>
                       <Button
                         onClick={fHandleFinish}

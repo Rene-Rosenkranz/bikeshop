@@ -54,6 +54,27 @@ function ProductionProgram(props) {
     toast.info(t("toast.infoSplitItem"));
   };
 
+  const handleSequenceNumberChange = (itemId, newSequenceNumber) => {
+    const newState = state;
+    const otherObject = state["productionlist"].find(
+      (oObject) => oObject.sequenceNumer === newSequenceNumber
+    );
+    const currentObject = state["productionlist"].find(
+      (oObject) => oObject.id === itemId
+    );
+    const iOldSequenceNumber = currentObject.sequenceNumer;
+    const iCurrentIndex = state["productionlist"].indexOf(currentObject);
+    const iOtherIndex = state["productionlist"].indexOf(otherObject);
+
+    newState["productionlist"][iCurrentIndex].sequenceNumer = newSequenceNumber;
+    newState["productionlist"][iOtherIndex].sequenceNumer = iOldSequenceNumber;
+    newState["productionlist"].sort(
+      (a, b) => a.sequenceNumer - b.sequenceNumer
+    );
+    setItems(newState["productionlist"]);
+    setState(newState);
+  };
+
   return (
     <>
       <Box alignContent="center">
@@ -63,7 +84,7 @@ function ProductionProgram(props) {
         {items.length > 0 ? (
           items.map((oElement) => (
             <Paper
-              key={oElement.id}
+              key={oElement.sequenceNumer}
               elevation={3}
               sx={{
                 margin: "1rem",
@@ -131,6 +152,28 @@ function ProductionProgram(props) {
                     </FormHelperText>
                   )}
                 </FormControl>
+                <Box>
+                  <InputLabel>{t("simulation.sequenceNumber")}</InputLabel>
+                  <Select
+                    variant="outlined"
+                    value={oElement.sequenceNumer}
+                    onChange={(e) =>
+                      handleSequenceNumberChange(
+                        oElement.id,
+                        parseInt(e.target.value)
+                      )
+                    }
+                    sx={{ marginLeft: "10px", width: "6rem" }}
+                  >
+                    {[...Array(state["productionlist"].length)].map(
+                      (_, index) => (
+                        <MenuItem key={index} value={index + 1}>
+                          {index + 1}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                </Box>
               </Box>
               <Button
                 variant="outlined"

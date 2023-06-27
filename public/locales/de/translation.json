@@ -10,7 +10,7 @@
     "buttonLabel": "Datei auswählen",
     "uploadButton": "Datei hochladen",
     "imageAlt": "Fahrrad",
-    "productionPlanning": "Produktionsplanung für die nächsten 4 Perioden",
+
     "productp1": "Produkt 1 (Kinderfahrräder)",
     "productp2": "Produkt 2 (Damenfahrräder)",
     "productp3": "Produkt 3 (Herrenfahrräder)",
@@ -31,6 +31,7 @@
     "english": "Englisch"
   },
   "simulation": {
+    "productionPlanning": "Produktionsplanung für die nächsten 4 Perioden",
     "delivery": "Bestellungen",
     "production": "Fertigungsaufträge",
     "additionalOrder": "Zusatzaufträge",
@@ -80,6 +81,10 @@
     "noItems": "Keine Items vorhanden",
     "splitItem": "Splitten (50 / 50)",
     "inventoryAmount": "Lagerbestand",
-    "distributionAmount": "Vertriebmenge"
+    "distributionAmount": "Vertriebmenge",
+    "tooltipDistributionPlanning": "",
+    "tooltipInventoryOverviewEndOfPeriod": "",
+    "inventoryOverview": "Inventarübersicht",
+    "calcWorktimes": "Arbeitszeiten berechnen"
   }
 }
