@@ -220,7 +220,7 @@ function Simulation() {
   }, []);
   const fSendForecastForPlanning = () => {
     const oObj = oPlanning;
-    oObj.splitting = false;
+    oObj.products = [];
     toast.info(t("toast.infoStartCalculation"));
 
     axios
