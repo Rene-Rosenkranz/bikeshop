@@ -46,10 +46,9 @@ function Simulation() {
   const [skipped, setSkipped] = React.useState(new Set());
   const [items, setItems] = useState([]);
   const aSteps = [
-    t("simulation.delivery"),
     t("simulation.production"),
-    /* t("simulation.productionOrder"), */
     t("simulation.shifts"),
+    t("simulation.delivery"),
     t("simulation.overview"),
   ];
   const allowedKeys = [
@@ -143,6 +142,11 @@ function Simulation() {
             penalty: 0,
           },
         },
+        partList: {
+          p1: [],
+          p2: [],
+          p3: [],
+        },
       };
       oObj.distribution = oReponse.data.forecasts.map((oElement) => {
         return {
@@ -153,11 +157,17 @@ function Simulation() {
       });
       const aInitialInventory = [];
       const oFirstPeriodInventory = {};
-      oReponse.data.products.forEach((oElement) => {
-        if (oElement.productId > 3) return;
-        oFirstPeriodInventory[`p${oElement.productId}`] =
-          oElement.stock - oObj.distribution[0][`p${oElement.productId}`];
-      });
+
+      oFirstPeriodInventory["p1"] =
+        oReponse.data["p1"].find((e) => e.productId === 1).stock -
+        oObj["distribution"][0]["p1"];
+      oFirstPeriodInventory["p2"] =
+        oReponse.data["p2"].find((e) => e.productId === 2).stock -
+        oObj["distribution"][0]["p2"];
+      oFirstPeriodInventory["p3"] =
+        oReponse.data["p3"].find((e) => e.productId === 3).stock -
+        oObj["distribution"][0]["p3"];
+
       aInitialInventory.push(oFirstPeriodInventory);
 
       const oSecondPeriodInventory = {};
@@ -194,6 +204,14 @@ function Simulation() {
       aInitialInventory.push(oFourthPeriodInventory);
 
       oObj.inventory = aInitialInventory;
+
+      const aProductlists = Object.entries(oReponse.data).filter(
+        (oElement) => oElement[0].length === 2
+      );
+
+      aProductlists.forEach((oProduct) => {
+        oObj.partList[oProduct[0]] = oProduct[1];
+      });
 
       fSetForecastLoaded(true);
       fSetPlanning(oObj);
@@ -861,31 +879,25 @@ function Simulation() {
                         {t("simulation.back")}
                       </Button>
                     </div>
+
                     {activeStep === 0 && (
-                      <DeliveryProgram
-                        data={state.orderlist}
-                        validate={fGlobalValidHandler}
-                      />
-                    )}
-                    {activeStep === 1 && (
                       <ProductionProgram
                         data={state.productionlist}
                         validate={fGlobalValidHandler}
                       />
                     )}
-                    {/* {activeStep === 2 && (
-                      <ProductionOrder
-                        data={state.productionlist}
-                        validate={fGlobalValidHandler}
-                      />
-                    )} */}
-                    {activeStep === 2 && (
+                    {activeStep === 1 && (
                       <Workinghours
                         data={state.workingtimelist}
                         validate={fGlobalValidHandler}
                       />
                     )}
-
+                    {activeStep === 2 && (
+                      <DeliveryProgram
+                        data={state.orderlist}
+                        validate={fGlobalValidHandler}
+                      />
+                    )}
                     {activeStep === 3 && <Overview data={state} />}
                     <Box sx={{ flex: "1 1 auto" }} />
                     <div>
