@@ -45,6 +45,7 @@ function Simulation() {
   const [oPlanning, fSetPlanning] = useState({});
   const [skipped, setSkipped] = React.useState(new Set());
   const [items, setItems] = useState([]);
+  const [partListItems, setPartListItems] = useState({});
   const aSteps = [
     t("simulation.production"),
     t("simulation.shifts"),
@@ -71,6 +72,12 @@ function Simulation() {
       setItems([...oPlanning["inventory"]]);
     }
   }, [oPlanning["inventory"]]);
+
+  useEffect(() => {
+    if (oPlanning["partList"]) {
+      setPartListItems((prevState) => oPlanning["partList"]);
+    }
+  }, [oPlanning["partList"], partListItems]);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/forecasts").then((oReponse) => {
@@ -213,18 +220,45 @@ function Simulation() {
         oObj.partList[oProduct[0]] = oProduct[1];
       });
 
+      oObj.partList["p1"] = oObj.partList["p1"].map((oElement) => {
+        return { ...oElement, reserveStock: oElement.stock };
+      });
+      oObj.partList["p2"] = oObj.partList["p2"].map((oElement) => {
+        return { ...oElement, reserveStock: oElement.stock };
+      });
+      oObj.partList["p3"] = oObj.partList["p3"].map((oElement) => {
+        return { ...oElement, reserveStock: oElement.stock };
+      });
+
       fSetForecastLoaded(true);
       fSetPlanning(oObj);
       setItems([...oObj["inventory"]]);
+      setPartListItems({ ...oObj["partList"] });
     });
   }, []);
   const fSendForecastForPlanning = () => {
-    const oObj = oPlanning;
-    oObj.products = [];
+    const oObj = {};
+    oObj.production = oPlanning.production;
+    const aProducts = [];
+    Object.entries(oPlanning.partList).forEach((aArray) => {
+      aArray[1].forEach((oElement) => {
+        if (
+          !aProducts.find(
+            (oProduct) => oProduct.productId === oElement.productId
+          )
+        ) {
+          aProducts.push({
+            productId: oElement.productId,
+            reserveStock: oElement.reserveStock,
+          });
+        }
+      });
+    });
+    oObj.products = aProducts;
     toast.info(t("toast.infoStartCalculation"));
 
     axios
-      .post("http://localhost:8080/api/planning", oObj, {
+      .post("http://localhost:8080/api/productionorders", oObj, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -233,8 +267,7 @@ function Simulation() {
         if (oReponse.status === 200) {
           fSetProductionPlanned(true);
           setState({
-            productionlist: oReponse.data.productionlist,
-            orderlist: oReponse.data.orderlist,
+            productionlist: oReponse.data,
           });
           toast.success(t("toast.successPeriodCalculation"));
         }
@@ -454,6 +487,33 @@ function Simulation() {
     });
   };
 
+  const fUpdatepartList = (oEvent, propertyName, productId) => {
+    const aPropertyArray = ["p1", "p2", "p3"];
+    const aIndex = [];
+
+    aPropertyArray.forEach((oProperty) => {
+      const oIndex = oPlanning["partList"][oProperty].find(
+        (e) => e.productId === productId
+      );
+      aIndex.push(oPlanning["partList"][oProperty].indexOf(oIndex));
+    });
+
+    const iNewValue = Number(oEvent.target.value);
+
+    fSetPlanning((oObj) => {
+      aPropertyArray.forEach((oProperty, index) => {
+        const iIndex = aIndex[index];
+        if (iIndex >= 0) {
+          oObj["partList"][oProperty][iIndex].reserveStock = iNewValue;
+        }
+      });
+      setPartListItems((prevState) => {
+        return { ...oObj["partList"] };
+      });
+      return oObj;
+    });
+  };
+
   const fHandleCalcWorktimes = () => {
     axios
       .post("http://localhost:8080/api/capacity", state["productionlist"], {
@@ -474,6 +534,31 @@ function Simulation() {
           setActiveStep((prevActiveStep) => prevActiveStep + 1);
           setSkipped(newSkipped);
         }
+      });
+  };
+
+  const fHandleCalcOrders = () => {
+    axios
+      .post(
+        "http://localhost:8080/api/orders",
+        { production: oPlanning["production"] },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((oResponse) => {
+        const newState = { ...state };
+        newState["orderlist"] = oResponse.data;
+        setState(newState);
+        let newSkipped = skipped;
+        if (fIsStepSkipped(activeStep)) {
+          newSkipped = new Set(newSkipped.values());
+          newSkipped.delete(activeStep);
+        }
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
       });
   };
 
@@ -706,6 +791,76 @@ function Simulation() {
                   </TableContainer>
                 </Box>
                 <Box sx={{ marginBottom: "20px" }}>
+                  <Box>
+                    <Tooltip title={t("simulation.tooltipPartList ")}>
+                      <InfoOutlined />
+                    </Tooltip>
+                  </Box>
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>{t("simulation.part")}</TableCell>
+                          <TableCell>{t("simulation.safetyStock")}</TableCell>
+                          <TableCell>{t("simulation.stock")}</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {partListItems &&
+                          Object.entries(partListItems).map(
+                            ([propertyName, dataArray]) => (
+                              <React.Fragment key={propertyName}>
+                                <TableRow>
+                                  <TableCell colSpan={2}>
+                                    {propertyName}
+                                  </TableCell>
+                                </TableRow>
+                                {dataArray.map(
+                                  ({ productId, reserveStock, stock }) => (
+                                    <TableRow key={productId}>
+                                      <TableCell>{productId}</TableCell>
+                                      <TableCell
+                                        onChange={(oEvent) => {
+                                          fUpdatepartList(
+                                            oEvent,
+                                            propertyName,
+                                            productId
+                                          );
+                                        }}
+                                      >
+                                        <Input
+                                          value={reserveStock}
+                                          style={{ width: "8rem" }}
+                                          inputProps={{
+                                            min: 0,
+                                            onKeyDown: (event) => {
+                                              if (
+                                                (!/^\d$/.test(event.key) &&
+                                                  !allowedKeys.includes(
+                                                    event.key
+                                                  )) ||
+                                                (event.key === "Backspace" &&
+                                                  event.target.value.length ===
+                                                    1)
+                                              ) {
+                                                event.preventDefault();
+                                              }
+                                            },
+                                          }}
+                                        />
+                                      </TableCell>
+                                      <TableCell>{stock}</TableCell>
+                                    </TableRow>
+                                  )
+                                )}
+                              </React.Fragment>
+                            )
+                          )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+                <Box sx={{ marginBottom: "20px" }}>
                   {/* Direktverkauf */}
                   <TableContainer>
                     <Table>
@@ -843,7 +998,7 @@ function Simulation() {
                 variant="contained"
                 onClick={fSendForecastForPlanning}
                 disabled={!bValid}
-                sx={{ mt: 70 }}
+                sx={{ mt: 400 }}
               >
                 {t("simulation.planPeriod")}
               </Button>
@@ -918,6 +1073,7 @@ function Simulation() {
                         style={{
                           visibility:
                             activeStep !== aSteps.length - 1 &&
+                            activeStep !== aSteps.length - 4 &&
                             activeStep !== aSteps.length - 3
                               ? "visible"
                               : "hidden",
@@ -930,12 +1086,23 @@ function Simulation() {
                         onClick={fHandleCalcWorktimes}
                         style={{
                           visibility:
-                            activeStep === aSteps.length - 3
+                            activeStep === aSteps.length - 4
                               ? "visible"
                               : "hidden",
                         }}
                       >
                         {t("simulation.calcWorktimes")}
+                      </Button>
+                      <Button
+                        onClick={fHandleCalcOrders}
+                        style={{
+                          visibility:
+                            activeStep === aSteps.length - 3
+                              ? "visible"
+                              : "hidden",
+                        }}
+                      >
+                        {t("simulation.calcOrders")}
                       </Button>
                       <Button
                         onClick={fHandleFinish}
