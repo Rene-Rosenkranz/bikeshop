@@ -10,7 +10,6 @@
     "buttonLabel": "Choose file",
     "uploadButton": "Upload file",
     "imageAlt": "Bike",
-    "productionPlanning": "Production Planning for the following 4 periods",
     "productp1": "Product 1 (Children's bikes)",
     "productp2": "Product 2 (Women's bikes)",
     "productp3": "Product 3 (Men's bikes)",
@@ -31,6 +30,8 @@
     "english": "English"
   },
   "simulation": {
+    "safetyStock": "Safety Stock",
+    "stock": "Inventorystock",
     "delivery": "Deliveries",
     "production": "Production Orders",
     "additionalOrder": "Additional Orders",
@@ -78,6 +79,14 @@
     "sequenceNumber": "sequence number",
     "productionOrder": "Production Order",
     "noItems": "No items available",
-    "splitItem": "Split (50 / 50)"
+    "splitItem": "Split (50 / 50)",
+    "inventoryAmount": "Inventory",
+    "distributionAmount": "Distribution",
+    "tooltipDistributionPlanning": "",
+    "tooltipInventoryOverviewEndOfPeriod": "",
+    "inventoryOverview": "Inventory Overview",
+    "calcWorktimes": "Calculate working times",
+    "tooltipPartList": "Overview of the BOM Explosion, meaning which part is needed for the production of all three products.",
+    "partListCalculation": "BOM Explosion"
   }
 }

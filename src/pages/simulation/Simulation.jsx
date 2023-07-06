@@ -28,7 +28,6 @@ import DeliveryProgram from "./components/DeliveryProgram";
 import ProductionProgram from "./components/ProductionProgram";
 import Workinghours from "./components/Workhours";
 import Overview from "./components/Overview";
-import ProductionOrder from "./components/ProductionOrder";
 import { useGlobalState } from "../../components/GlobalStateProvider";
 import { InfoOutlined } from "@mui/icons-material";
 import { toast } from "react-toastify";
@@ -573,7 +572,13 @@ function Simulation() {
               >
                 <Box sx={{ marginBottom: "20px" }}>
                   {/* Vetriebssplanung */}
-                  <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
                     <Tooltip
                       title={t(
                         "simulation.tooltipInventoryOverviewEndOfPeriod"
@@ -581,8 +586,8 @@ function Simulation() {
                     >
                       <InfoOutlined />
                     </Tooltip>
+                    {t("simulation.distributionPlanning")}
                   </Box>
-                  {t("simulation.tooltipDistributionPlanning")}
                   <TableContainer>
                     <Table>
                       <TableHead>
@@ -791,11 +796,21 @@ function Simulation() {
                   </TableContainer>
                 </Box>
                 <Box sx={{ marginBottom: "20px" }}>
-                  <Box>
-                    <Tooltip title={t("simulation.tooltipPartList ")}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Tooltip title={t("simulation.tooltipPartList")}>
                       <InfoOutlined />
                     </Tooltip>
+                    <Typography>
+                      {t("simulation.partListCalculation")}
+                    </Typography>
                   </Box>
+
                   <TableContainer>
                     <Table>
                       <TableHead>

@@ -10,7 +10,6 @@
     "buttonLabel": "Datei auswählen",
     "uploadButton": "Datei hochladen",
     "imageAlt": "Fahrrad",
-
     "productp1": "Produkt 1 (Kinderfahrräder)",
     "productp2": "Produkt 2 (Damenfahrräder)",
     "productp3": "Produkt 3 (Herrenfahrräder)",
@@ -31,6 +30,8 @@
     "english": "Englisch"
   },
   "simulation": {
+    "safetyStock": "Sicherheitsbestand",
+    "stock": "Lagerbestand",
     "productionPlanning": "Produktionsplanung für die nächsten 4 Perioden",
     "delivery": "Bestellungen",
     "production": "Fertigungsaufträge",
@@ -79,12 +80,17 @@
     "sequenceNumber": "Sequenz",
     "productionOrder": "Produktionsreihenfolge",
     "noItems": "Keine Items vorhanden",
-    "splitItem": "Splitten (50 / 50)",
+    "splitItem": "Splitten",
     "inventoryAmount": "Lagerbestand",
     "distributionAmount": "Vertriebmenge",
     "tooltipDistributionPlanning": "",
     "tooltipInventoryOverviewEndOfPeriod": "",
     "inventoryOverview": "Inventarübersicht",
-    "calcWorktimes": "Arbeitszeiten berechnen"
+    "calcWorktimes": "Arbeitszeiten berechnen",
+    "tooltipPartList": "Übersicht der Stücklistenauflösung, also welches Bauteil für welches Produkt benötigt wird. Hier können Sie die Sicherheitsbestände der jeweiligen Bauteile festlegen.",
+    "partListCalculation": "Stücklistenauflösung",
+    "distributionPlanning": "Vertriebsplanung",
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen"
   }
 }

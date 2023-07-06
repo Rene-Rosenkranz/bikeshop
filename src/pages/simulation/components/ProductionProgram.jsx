@@ -10,6 +10,7 @@ import {
   Paper,
   Button,
   Typography,
+  Popover,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
@@ -21,9 +22,21 @@ import "react-toastify/dist/ReactToastify.css";
 function ProductionProgram(props) {
   const fSetGlobalValid = props.validate;
   const { t, i18n } = useTranslation();
+  const [anchorEl, setAnchorEl] = useState(null);
   const [items, setItems] = useState([]);
   const { state, setState } = useGlobalState();
   const [bValid, setValid] = useState(true);
+  const [iMaxValue, setMaxValue] = useState(0);
+  const [iInputValue, setInputValue] = useState(0);
+  const [oCurrentElement, setCurrentElement] = useState({});
+  const allowedKeys = [
+    "ArrowLeft",
+    "ArrowRight",
+    "Backspace",
+    "ArrowUp",
+    "ArrowDown",
+    "Tab",
+  ];
 
   useEffect(() => {
     setItems(props.data);
@@ -34,24 +47,37 @@ function ProductionProgram(props) {
     fSetGlobalValid(bValid);
   };
 
-  const handleSplitItem = (oElement) => {
+  const bOpen = Boolean(anchorEl);
+  const id = bOpen ? "splitting-popup" : undefined;
+
+  const handleClick = (oEvent, oElement) => {
+    setAnchorEl(oEvent.currentTarget);
+    setMaxValue(oElement.quantity - 1);
+    setInputValue(Math.trunc(oElement.quantity / 2));
+    setCurrentElement(oElement);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSplitItem = (oElement, oEvent) => {
     const newState = state;
-    const iIndex = newState["productionlist"].indexOf(oElement);
-    const iNewQuantity =
-      oElement.quantity % 2 === 0
-        ? oElement.quantity / 2
-        : Math.trunc(oElement.quantity / 2);
+    const iIndex = newState["productionlist"].indexOf(oCurrentElement);
+    const iNewQuantity = iInputValue;
+    const iOldQuantity = newState["productionlist"][iIndex].quantity;
     const oNewItem = {
-      ...oElement,
+      ...oCurrentElement,
       quantity: iNewQuantity,
       sequenceNumer: newState["productionlist"].length + 1,
       id: state["productionlist"].length,
     };
-    newState["productionlist"][iIndex].quantity = iNewQuantity;
+    newState["productionlist"][iIndex].quantity = iOldQuantity - iNewQuantity;
     newState["productionlist"].push(oNewItem);
     setState(newState);
     setItems(newState["productionlist"]);
     toast.info(t("toast.infoSplitItem"));
+    setAnchorEl(null);
   };
 
   const handleSequenceNumberChange = (itemId, newSequenceNumber) => {
@@ -178,10 +204,109 @@ function ProductionProgram(props) {
               <Button
                 variant="outlined"
                 sx={{ marginLeft: "1rem" }}
-                onClick={() => handleSplitItem(oElement)}
+                onClick={(oEvent) => handleClick(oEvent, oElement)}
               >
                 {t("simulation.splitItem")}
               </Button>
+              <Popover
+                id={id}
+                open={bOpen}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    padding: "1rem",
+                  }}
+                >
+                  <Typography>{t("simulation.splitItem")}</Typography>
+                  <Input
+                    id="input"
+                    type="number"
+                    onFocus={() => {
+                      const inputElement = document.getElementById("input");
+                      const hiddenInputElement =
+                        document.getElementById("hiddenInput");
+                      hiddenInputElement.value = inputElement.value;
+                    }}
+                    onChange={(oEvent) => {
+                      setInputValue(Number(oEvent.target.value));
+                      const inputElement = document.getElementById("input");
+                      const hiddenInputElement =
+                        document.getElementById("hiddenInput");
+                      hiddenInputElement.value = inputElement.value;
+                    }}
+                    inputProps={{
+                      min: 1,
+                      max: iMaxValue,
+                      defaultValue: iInputValue,
+                      onKeyDown: (event) => {
+                        const inputElement = event.target;
+                        const hiddenInputElement =
+                          document.getElementById("hiddenInput");
+                        const cursorPosition =
+                          hiddenInputElement.selectionStart;
+                        const newInput = Number(
+                          inputElement.value.slice(0, cursorPosition) +
+                            event.key +
+                            inputElement.value.slice(cursorPosition)
+                        );
+                        if (
+                          (!/^\d$/.test(event.key) &&
+                            !allowedKeys.includes(event.key)) ||
+                          (event.key === "Backspace" &&
+                            event.target.value.length === 1) ||
+                          (!!newInput && (newInput > iMaxValue || newInput < 1))
+                        ) {
+                          event.preventDefault();
+                        }
+                      },
+                    }}
+                  />
+                  <input
+                    type="text"
+                    id="hiddenInput"
+                    style={{ display: "none" }}
+                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      onClick={(oEvent) => handleSplitItem(oElement, oEvent)}
+                      sx={{
+                        margin: "0.5rem",
+                      }}
+                    >
+                      {t("simulation.confirm")}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={handleClose}
+                      sx={{
+                        margin: "0.5rem",
+                      }}
+                    >
+                      {t("simulation.cancel")}
+                    </Button>
+                  </Box>
+                </Box>
+              </Popover>
             </Paper>
           ))
         ) : (
