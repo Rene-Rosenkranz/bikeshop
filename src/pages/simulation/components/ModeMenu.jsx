@@ -34,6 +34,7 @@ function ModeMenu(data) {
         value={iMode}
         label={t("simulation.shippingMethod")}
         onChange={fHandleChange}
+        sx={{ width: "10rem" }}
       >
         {oShippingMethods.map((oMenuItem) => {
           return <MenuItem value={oMenuItem.value}>{oMenuItem.text}</MenuItem>;

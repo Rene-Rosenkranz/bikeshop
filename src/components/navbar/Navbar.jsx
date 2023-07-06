@@ -44,12 +44,20 @@ function Navbar() {
         <Toolbar
           style={{ backgroundColor: "rgb(30, 60, 90)", maxHeight: "5vh" }}
         >
-          <div style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
+          <div style={{ marginLeft: "auto", marginRight: 20, display: "flex" }}>
             <Typography>{t("navbar.appTitle")}</Typography>
           </div>
           <Select onChange={fChangeToSelectedLanguage} value={sLanguage}>
-            <MenuItem value={"de"}>{t("navbar.german")}</MenuItem>
-            <MenuItem value={"en"}>{t("navbar.english")}</MenuItem>
+            <MenuItem value={"de"}>
+              <Typography sx={{ color: "grey" }}>
+                {t("navbar.german")}
+              </Typography>
+            </MenuItem>
+            <MenuItem value={"en"}>
+              <Typography sx={{ color: "grey" }}>
+                {t("navbar.english")}
+              </Typography>
+            </MenuItem>
           </Select>
         </Toolbar>
       </AppBar>

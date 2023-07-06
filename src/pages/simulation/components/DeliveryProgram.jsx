@@ -58,6 +58,7 @@ function DeliveryProgram(props) {
                   <Input
                     type="number"
                     error={!bValid}
+                    sx={{ width: "5rem", marginRight: "2rem" }}
                     inputProps={{
                       min: 0,
                       onKeyDown: (event) => {
