@@ -92,5 +92,12 @@
     "distributionPlanning": "Vertriebsplanung",
     "confirm": "Bestätigen",
     "cancel": "Abbrechen"
+  },
+  "toast": {
+    "infoSplitItem": "Ein zu produzierendes Produkt wurde gesplittet. Sie finden es am Ende der Produktionsliste.",
+    "infoStartCalculation": "Ihr Produktionsplan wird berechnet. Dies kann einen Moment dauern.",
+    "successPeriodCalculation": "Ihr Produktionsplan wurde berechnet. Sie werden weitergeleitet.",
+    "successFileUpload": "Die Datei wurde erfolgreich hochgeladen. Die neusten Daten werden nun als Basis für die Periodenplanung genutzt.",
+    "errorFileUpload": "Etwas ist schief gegangen. Bitte versuchen Sie es mit einer anderen Datei oder wenden Sie sich an einen Administrator."
   }
 }
