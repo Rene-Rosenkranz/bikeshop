@@ -13,9 +13,9 @@ import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
 import { InfoOutlined } from "@mui/icons-material";
 
-function Workinghours(props) {
+function Workinghours({ data, calculations, validate }) {
   const [items, setItems] = useState([]);
-  const fSetGlobalValid = props.validate;
+  const fSetGlobalValid = validate;
   const { t, i18n } = useTranslation();
   const { state, setState } = useGlobalState();
   const [bValid, fSetValid] = useState(true);
@@ -26,8 +26,18 @@ function Workinghours(props) {
   };
 
   useEffect(() => {
-    setItems(props.data);
+    setItems(data);
   }, [state]);
+
+  const getCalculationExplanation = (element) => {
+    if (calculations) {
+      const calculation = calculations.find((calc) => calc.element === element);
+      if (calculation) {
+        return calculation.explanation;
+      }
+    }
+    return "Das wurde so berechnet";
+  };
 
   return (
     <Box>
@@ -104,6 +114,11 @@ function Workinghours(props) {
                       }}
                     />
                   </FormControl>
+                  {calculations && (
+                      <Typography variant="body2">
+                        Produktions- und Rüstzeiten:{getCalculationExplanation(oElement.station)}
+                      </Typography>
+                  )}
                 </Grid>
 
                 <Grid item xs={6}>

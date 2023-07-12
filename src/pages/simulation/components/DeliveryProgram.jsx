@@ -16,12 +16,13 @@ import { InfoOutlined } from "@mui/icons-material";
 function DeliveryProgram(props) {
   const fSetGlobalValid = props.validate;
   const { t, i18n } = useTranslation();
+  const orderInfos = props.data.map((obj) => obj.orderInfos);
   return (
     <Box>
       <Tooltip arrow title={t("simulation.tooltipDeliveryProgram")}>
         <InfoOutlined />
       </Tooltip>
-      {props.data.map((oElement) => {
+      {props.data.map((oElement, index) => {
         let [bValid, fSetValid] = useState(true);
         const { state, setState } = useGlobalState();
 
@@ -37,8 +38,7 @@ function DeliveryProgram(props) {
             border={1}
             borderRadius="5px"
             display="flex"
-            alignItems="center"
-            justifyContent="space-between"
+            alignItems="flex-start"
             padding="1rem"
             boxShadow="0px 2px 4px rgba(0, 0, 0, 0.1)"
             bgcolor="white"
@@ -90,8 +90,13 @@ function DeliveryProgram(props) {
                   )}
                 </FormControl>
               </Box>
+              <Box marginLeft="3rem" marginTop="2rem">
+                <p>Order Infos: {props.data[index].orderInfos}</p>
+              </Box>
             </Box>
-            <ModeMenu value={oElement.modus} element={oElement} />
+            <Box marginLeft="auto" marginRight="0rem">
+              <ModeMenu value={oElement.modus} element={oElement} />
+            </Box>
           </Box>
         );
       })}

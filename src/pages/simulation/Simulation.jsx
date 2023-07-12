@@ -29,7 +29,7 @@ import ProductionProgram from "./components/ProductionProgram";
 import Workinghours from "./components/Workhours";
 import Overview from "./components/Overview";
 import { useGlobalState } from "../../components/GlobalStateProvider";
-import { InfoOutlined } from "@mui/icons-material";
+import {InfoOutlined, WineBarRounded} from "@mui/icons-material";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -524,6 +524,7 @@ function Simulation() {
         if (oReponse.status === 200) {
           const newState = { ...state };
           newState["workingtimelist"] = oReponse.data;
+          newState["calculations"] = calculateValuesFromData(oReponse.data);
           setState(newState);
           let newSkipped = skipped;
           if (fIsStepSkipped(activeStep)) {
@@ -534,6 +535,86 @@ function Simulation() {
           setSkipped(newSkipped);
         }
       });
+  };
+
+  const calculateValuesFromData = (data) => {
+    const calculatedValues = [];
+
+    data.forEach((element) => {
+      const prodTimes = calculateProductionTimes(element.productionTimes);
+      const setupTimes = calculateSetupTimes(element.setupTimes);
+      const overallDuration = element.overallDuration;
+
+      const explanation = generateExplanation(prodTimes, setupTimes, overallDuration);
+
+      calculatedValues.push({
+        element: element.station,
+        explanation: explanation,
+      });
+    });
+
+    return calculatedValues;
+  };
+
+  const generateExplanation = (prodTimes, setupTimes, overallDuration) => {
+    const tableRows = Object.entries(prodTimes).map(([productId, duration]) => {
+      const setupTime = setupTimes[productId];
+
+      return (
+          <tr key={productId}>
+            <td>Produkt {productId}:</td>
+            <td>{duration} Min |</td>
+            <td>{setupTime} Min</td>
+          </tr>
+      );
+    });
+
+    return (
+        <table>
+          <tbody>
+          {tableRows}
+          <tr>
+            <td>Gesamtzeit:</td>
+            <td>{overallDuration} Min</td>
+          </tr>
+          </tbody>
+        </table>
+    );
+  };
+
+
+  const calculateProductionTimes = (productionTimes) => {
+    const calculatedProductionTimes = {};
+
+    productionTimes.forEach((prodTime) => {
+      const { productId, quantity, durationPerUnit } = prodTime;
+      const totalDuration = quantity * durationPerUnit;
+
+      if (calculatedProductionTimes[productId]) {
+        calculatedProductionTimes[productId] += totalDuration;
+      } else {
+        calculatedProductionTimes[productId] = totalDuration;
+      }
+    });
+
+    return calculatedProductionTimes;
+  };
+
+  const calculateSetupTimes = (setupTimes) => {
+    const calculatedSetupTimes = {};
+
+    setupTimes.forEach((setup) => {
+      const { productId, setupTime, setupQunatity } = setup;
+      const totalSetupTime = setupTime * setupQunatity;
+
+      if (calculatedSetupTimes[productId]) {
+        calculatedSetupTimes[productId] += totalSetupTime;
+      } else {
+        calculatedSetupTimes[productId] = totalSetupTime;
+      }
+    });
+
+    return calculatedSetupTimes;
   };
 
   const fHandleCalcOrders = () => {
@@ -550,6 +631,7 @@ function Simulation() {
       .then((oResponse) => {
         const newState = { ...state };
         newState["orderlist"] = oResponse.data;
+        //newState["orderInfos"] = oResponse.data.map((obj) => obj.orderInfos);
         setState(newState);
         let newSkipped = skipped;
         if (fIsStepSkipped(activeStep)) {
@@ -1059,6 +1141,7 @@ function Simulation() {
                     {activeStep === 1 && (
                       <Workinghours
                         data={state.workingtimelist}
+                        calculations={state.calculations}
                         validate={fGlobalValidHandler}
                       />
                     )}
