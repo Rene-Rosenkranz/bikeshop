@@ -91,7 +91,7 @@ function DeliveryProgram(props) {
                 </FormControl>
               </Box>
               <Box marginLeft="3rem" marginTop="2rem">
-                <p>Order Infos: {props.data[index].orderInfos}</p>
+                <p>Informationen: {props.data[index].orderInfos}</p>
               </Box>
             </Box>
             <Box marginLeft="auto" marginRight="0rem">
