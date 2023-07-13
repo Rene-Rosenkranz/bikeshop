@@ -541,11 +541,12 @@ function Simulation() {
     const calculatedValues = [];
 
     data.forEach((element) => {
-      const prodTimes = calculateProductionTimes(element.productionTimes);
+      const prodTimes = element.productionTimes;
       const setupTimes = calculateSetupTimes(element.setupTimes);
+      const waitingDuration = element.waitingDuration;
       const overallDuration = element.overallDuration;
 
-      const explanation = generateExplanation(prodTimes, setupTimes, overallDuration);
+      const explanation = generateExplanation(prodTimes, setupTimes, waitingDuration, overallDuration);
 
       calculatedValues.push({
         element: element.station,
@@ -556,15 +557,16 @@ function Simulation() {
     return calculatedValues;
   };
 
-  const generateExplanation = (prodTimes, setupTimes, overallDuration) => {
-    const tableRows = Object.entries(prodTimes).map(([productId, duration]) => {
-      const setupTime = setupTimes[productId];
+  const generateExplanation = (prodTimes, setupTimes, waitingDuration, overallDuration) => {
+    const tableRows = prodTimes.map((prodTime) => {
+      const { productId, quantity, durationPerUnit } = prodTime;
+      const duration = quantity * durationPerUnit;
 
       return (
           <tr key={productId}>
             <td>Produkt {productId}:</td>
-            <td>{duration} Min |</td>
-            <td>{setupTime} Min</td>
+            <td>{durationPerUnit}*{quantity} = {duration} Min |</td>
+            <td>{setupTimes[productId]} Min</td>
           </tr>
       );
     });
@@ -573,6 +575,10 @@ function Simulation() {
         <table>
           <tbody>
           {tableRows}
+          <tr>
+            <td>Wartezeit:</td>
+            <td>{waitingDuration} Min</td>
+          </tr>
           <tr>
             <td>Gesamtzeit:</td>
             <td>{overallDuration} Min</td>
@@ -584,21 +590,18 @@ function Simulation() {
 
 
   const calculateProductionTimes = (productionTimes) => {
-    const calculatedProductionTimes = {};
+    let explanation = "";
 
     productionTimes.forEach((prodTime) => {
-      const { productId, quantity, durationPerUnit } = prodTime;
-      const totalDuration = quantity * durationPerUnit;
+      const { quantity, durationPerUnit } = prodTime;
+      const calculation = `${durationPerUnit} * ${quantity} = ${durationPerUnit * quantity}`;
 
-      if (calculatedProductionTimes[productId]) {
-        calculatedProductionTimes[productId] += totalDuration;
-      } else {
-        calculatedProductionTimes[productId] = totalDuration;
-      }
+      explanation += `Produkt: ${prodTime.productId} (${calculation})\n`;
     });
 
-    return calculatedProductionTimes;
+    return explanation.trim();
   };
+
 
   const calculateSetupTimes = (setupTimes) => {
     const calculatedSetupTimes = {};
