@@ -91,7 +91,10 @@
     "partListCalculation": "Stücklistenauflösung",
     "distributionPlanning": "Vertriebsplanung",
     "confirm": "Bestätigen",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "calcOrders": "Bestellungen berechnen",
+    "ordersInWorkQuantity": "Menge in Bearbeitung",
+    "waitingListQuantity": "Menge auf Warteliste"
   },
   "toast": {
     "infoSplitItem": "Ein zu produzierendes Produkt wurde gesplittet. Sie finden es am Ende der Produktionsliste.",

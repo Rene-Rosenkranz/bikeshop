@@ -901,8 +901,14 @@ function Simulation() {
                       <TableHead>
                         <TableRow>
                           <TableCell>{t("simulation.part")}</TableCell>
-                          <TableCell>{t("simulation.safetyStock")}</TableCell>
                           <TableCell>{t("simulation.stock")}</TableCell>
+                          <TableCell>
+                            {t("simulation.ordersInWorkQuantity")}
+                          </TableCell>
+                          <TableCell>
+                            {t("simulation.waitingListQuantity")}
+                          </TableCell>
+                          <TableCell>{t("simulation.safetyStock")}</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -916,9 +922,23 @@ function Simulation() {
                                   </TableCell>
                                 </TableRow>
                                 {dataArray.map(
-                                  ({ productId, reserveStock, stock }) => (
+                                  ({
+                                    productId,
+                                    reserveStock,
+                                    stock,
+                                    name,
+                                    ordersInWorkQuantity,
+                                    waitingListQuantity,
+                                  }) => (
                                     <TableRow key={productId}>
-                                      <TableCell>{productId}</TableCell>
+                                      <TableCell>{name}</TableCell>
+                                      <TableCell>{stock}</TableCell>
+                                      <TableCell>
+                                        {ordersInWorkQuantity}
+                                      </TableCell>
+                                      <TableCell>
+                                        {waitingListQuantity}
+                                      </TableCell>
                                       <TableCell
                                         onChange={(oEvent) => {
                                           fUpdatepartList(
@@ -949,7 +969,6 @@ function Simulation() {
                                           }}
                                         />
                                       </TableCell>
-                                      <TableCell>{stock}</TableCell>
                                     </TableRow>
                                   )
                                 )}
