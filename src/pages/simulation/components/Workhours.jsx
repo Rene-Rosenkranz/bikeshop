@@ -55,7 +55,7 @@ function Workinghours({ data, calculations, validate }) {
                 border: "1px solid #ccc",
                 borderRadius: "4px",
                 backgroundColor: "#f5f5f5",
-                width: "500px",
+                width: "600px",
               }}
             >
               <Grid container spacing={2} alignItems="flex-start">
