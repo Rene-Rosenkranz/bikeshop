@@ -30,6 +30,9 @@
     "english": "Englisch"
   },
   "simulation": {
+    "p1": "Kinderfahrrad",
+    "p2": "Damenfahrrad",
+    "p3": "Herrenfahrrad",
     "safetyStock": "Sicherheitsbestand",
     "stock": "Lagerbestand",
     "productionPlanning": "Produktionsplanung für die nächsten 4 Perioden",

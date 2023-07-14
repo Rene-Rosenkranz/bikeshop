@@ -29,7 +29,7 @@ import ProductionProgram from "./components/ProductionProgram";
 import Workinghours from "./components/Workhours";
 import Overview from "./components/Overview";
 import { useGlobalState } from "../../components/GlobalStateProvider";
-import {InfoOutlined, WineBarRounded} from "@mui/icons-material";
+import { InfoOutlined, WineBarRounded } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -545,7 +545,11 @@ function Simulation() {
       const setupTimes = calculateSetupTimes(element.setupTimes);
       const overallDuration = element.overallDuration;
 
-      const explanation = generateExplanation(prodTimes, setupTimes, overallDuration);
+      const explanation = generateExplanation(
+        prodTimes,
+        setupTimes,
+        overallDuration
+      );
 
       calculatedValues.push({
         element: element.station,
@@ -561,27 +565,26 @@ function Simulation() {
       const setupTime = setupTimes[productId];
 
       return (
-          <tr key={productId}>
-            <td>Produkt {productId}:</td>
-            <td>{duration} Min |</td>
-            <td>{setupTime} Min</td>
-          </tr>
+        <tr key={productId}>
+          <td>Produkt {productId}:</td>
+          <td>{duration} Min |</td>
+          <td>{setupTime} Min</td>
+        </tr>
       );
     });
 
     return (
-        <table>
-          <tbody>
+      <table>
+        <tbody>
           {tableRows}
           <tr>
             <td>Gesamtzeit:</td>
             <td>{overallDuration} Min</td>
           </tr>
-          </tbody>
-        </table>
+        </tbody>
+      </table>
     );
   };
-
 
   const calculateProductionTimes = (productionTimes) => {
     const calculatedProductionTimes = {};
@@ -668,7 +671,9 @@ function Simulation() {
                     >
                       <InfoOutlined />
                     </Tooltip>
-                    {t("simulation.distributionPlanning")}
+                    <Typography fontSize="20px" fontWeight="bold">
+                      {t("simulation.distributionPlanning")}
+                    </Typography>
                   </Box>
                   <TableContainer>
                     <Table>
@@ -746,7 +751,10 @@ function Simulation() {
                       <InfoOutlined />
                     </Tooltip>
                   </Box>
-                  {t("simulation.productionPlanning")}
+                  <Typography fontSize="20px" fontWeight="bold">
+                    {t("simulation.productionPlanning")}
+                  </Typography>
+
                   <TableContainer>
                     <Table>
                       <TableHead>
@@ -824,7 +832,10 @@ function Simulation() {
                       <InfoOutlined />
                     </Tooltip>
                   </Box>
-                  {t("simulation.inventoryOverview")}
+                  <Typography fontSize="20px" fontWeight="bold">
+                    {t("simulation.inventoryOverview")}
+                  </Typography>
+
                   <TableContainer>
                     <Table>
                       <TableHead>
@@ -888,7 +899,7 @@ function Simulation() {
                     <Tooltip title={t("simulation.tooltipPartList")}>
                       <InfoOutlined />
                     </Tooltip>
-                    <Typography>
+                    <Typography fontSize="20px" fontWeight="bold">
                       {t("simulation.partListCalculation")}
                     </Typography>
                   </Box>
@@ -915,7 +926,14 @@ function Simulation() {
                               <React.Fragment key={propertyName}>
                                 <TableRow>
                                   <TableCell colSpan={2}>
-                                    {propertyName}
+                                    <Typography
+                                      sx={{
+                                        fontSize: "20px",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {t("simulation." + propertyName)}
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                                 {dataArray.map(
@@ -991,7 +1009,9 @@ function Simulation() {
                                 <InfoOutlined />
                               </Tooltip>
                             </Box>
-                            {t("fileupload.directSelling")}
+                            <Typography fontSize="20px" fontWeight="bold">
+                              {t("fileupload.directSelling")}
+                            </Typography>
                           </TableCell>
                           <TableCell />
                         </TableRow>
