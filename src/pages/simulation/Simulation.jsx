@@ -542,7 +542,7 @@ function Simulation() {
 
     data.forEach((element) => {
       const prodTimes = element.productionTimes;
-      const setupTimes = calculateSetupTimes(element.setupTimes);
+      const setupTimes = element.setupTimes;
       const waitingDuration = element.waitingDuration;
       const overallDuration = element.overallDuration;
 
@@ -571,6 +571,10 @@ function Simulation() {
     const tableRows = prodTimes.map((prodTime) => {
       const { productId, quantity, durationPerUnit } = prodTime;
       const duration = quantity * durationPerUnit;
+      const setup = setupTimes.find((setup) => setup.productId === productId);
+      const setupTime = setup.setupTime;
+      const setupQuantity = setup.setupQunatity;
+      const setupTimeTotal = setupTime * setupQuantity;
 
       return (
         <tr key={productId}>
@@ -578,7 +582,7 @@ function Simulation() {
           <td>
             {durationPerUnit}*{quantity} = {duration} Min
           </td>
-          <td>| {setupTimes[productId]} Min</td>
+          <td>| {setupQuantity}*{setupTime} = {setupTimeTotal} Min</td>
         </tr>
       );
     });
@@ -598,21 +602,6 @@ function Simulation() {
         </tbody>
       </table>
     );
-  };
-
-  const calculateProductionTimes = (productionTimes) => {
-    let explanation = "";
-
-    productionTimes.forEach((prodTime) => {
-      const { quantity, durationPerUnit } = prodTime;
-      const calculation = `${durationPerUnit} * ${quantity} = ${
-        durationPerUnit * quantity
-      }`;
-
-      explanation += `Produkt: ${prodTime.productId} (${calculation})\n`;
-    });
-
-    return explanation.trim();
   };
 
   const calculateSetupTimes = (setupTimes) => {
