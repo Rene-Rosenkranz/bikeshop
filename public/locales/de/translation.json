@@ -88,7 +88,7 @@
     "distributionAmount": "Vertriebmenge",
     "tooltipDistributionPlanning": "",
     "tooltipInventoryOverviewEndOfPeriod": "",
-    "inventoryOverview": "Inventarübersicht",
+    "inventoryOverview": "Inventarübersicht am Ende der Perioden",
     "calcWorktimes": "Arbeitszeiten berechnen",
     "tooltipPartList": "Übersicht der Stücklistenauflösung, also welches Bauteil für welches Produkt benötigt wird. Hier können Sie die Sicherheitsbestände der jeweiligen Bauteile festlegen.",
     "partListCalculation": "Stücklistenauflösung",

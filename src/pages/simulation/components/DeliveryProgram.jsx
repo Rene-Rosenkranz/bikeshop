@@ -17,6 +17,14 @@ function DeliveryProgram(props) {
   const fSetGlobalValid = props.validate;
   const { t, i18n } = useTranslation();
   const orderInfos = props.data.map((obj) => obj.orderInfos);
+  const allowedKeys = [
+    "ArrowLeft",
+    "ArrowRight",
+    "Backspace",
+    "ArrowUp",
+    "ArrowDown",
+    "Tab",
+  ];
   return (
     <Box>
       <Tooltip arrow title={t("simulation.tooltipDeliveryProgram")}>
@@ -62,7 +70,14 @@ function DeliveryProgram(props) {
                     inputProps={{
                       min: 0,
                       onKeyDown: (event) => {
-                        event.preventDefault();
+                        if (
+                          (!/^\d$/.test(event.key) &&
+                            !allowedKeys.includes(event.key)) ||
+                          (event.key === "Backspace" &&
+                            event.target.value.length === 1)
+                        ) {
+                          event.preventDefault();
+                        }
                       },
                     }}
                     aria-describedby="form-helper"
