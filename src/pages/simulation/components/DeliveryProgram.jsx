@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Input,
   FormControl,
   InputLabel,
   FormHelperText,
   Tooltip,
+  Button,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
@@ -16,7 +17,17 @@ import { InfoOutlined } from "@mui/icons-material";
 function DeliveryProgram(props) {
   const fSetGlobalValid = props.validate;
   const { t, i18n } = useTranslation();
-  const orderInfos = props.data.map((obj) => obj.orderInfos);
+  const orderInfos = props.data.map((obj) => obj.orderInfos.join("\n"));
+  const deliveryProgramRefs = useRef([]);
+  const [expandedOrderIndex, setExpandedOrderIndex] = useState(null);
+
+  const handleToggleOrderInfos = (index) => {
+    if (expandedOrderIndex === index) {
+      setExpandedOrderIndex(null);
+    } else {
+      setExpandedOrderIndex(index);
+    }
+  };
   const allowedKeys = [
     "ArrowLeft",
     "ArrowRight",
@@ -25,6 +36,7 @@ function DeliveryProgram(props) {
     "ArrowDown",
     "Tab",
   ];
+
   return (
     <Box>
       <Tooltip arrow title={t("simulation.tooltipDeliveryProgram")}>
@@ -41,7 +53,8 @@ function DeliveryProgram(props) {
 
         return (
           <Box
-            key={oElement.article} // Added key prop for optimization
+            key={oElement.article}
+            ref={(el) => (deliveryProgramRefs.current[index] = el)}
             marginBottom="2rem"
             border={1}
             borderRadius="5px"
@@ -52,6 +65,7 @@ function DeliveryProgram(props) {
             bgcolor="white"
           >
             <Box>
+              {/* Inhalte der Bestellungsbox */}
               <Box display="flex" alignItems="center">
                 <strong>{t("simulation.component")}:</strong>
                 <Box marginLeft="0.5rem">{oElement.article}</Box>
@@ -105,8 +119,36 @@ function DeliveryProgram(props) {
                   )}
                 </FormControl>
               </Box>
-              <Box marginLeft="3rem" marginTop="2rem">
-                <p>Informationen: {props.data[index].orderInfos}</p>
+              {expandedOrderIndex === index && (
+                <Box marginLeft="3rem" marginTop="2rem">
+                  <pre
+                    style={{
+                      maxWidth: "100%",
+                      overflow: "hidden",
+                      whiteSpace: "pre-wrap",
+                      textAlign: "left",
+                    }}
+                  >
+                    {orderInfos[index]}
+                  </pre>
+                </Box>
+              )}
+              <Box marginLeft="3rem" marginTop="1rem">
+                <Button
+                  onClick={() => handleToggleOrderInfos(index)}
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "white",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "crimsonblue",
+                    },
+                  }}
+                >
+                  {expandedOrderIndex === index
+                    ? "Informationen ausblenden"
+                    : "Informationen anzeigen"}
+                </Button>
               </Box>
             </Box>
             <Box marginLeft="auto" marginRight="0rem">

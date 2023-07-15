@@ -576,9 +576,9 @@ function Simulation() {
         <tr key={productId}>
           <td>Produkt {productId}:</td>
           <td>
-            {durationPerUnit}*{quantity} = {duration} Min |
+            {durationPerUnit}*{quantity} = {duration} Min
           </td>
-          <td>{setupTimes[productId]} Min</td>
+          <td>| {setupTimes[productId]} Min</td>
         </tr>
       );
     });
