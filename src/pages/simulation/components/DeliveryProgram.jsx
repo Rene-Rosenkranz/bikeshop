@@ -114,7 +114,7 @@ function DeliveryProgram(props) {
                         textAlign: "left",
                       }}
                   >
-                    Informationen: {orderInfos[index]}
+                    {orderInfos[index]}
                   </pre>
                       </Box>
                   )}
