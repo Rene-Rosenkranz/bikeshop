@@ -653,9 +653,7 @@ function Simulation() {
         <>
           {!bProductionPlanned && (
             <Container maxWidth="xl">
-              <Box
-                sx={{ bgcolor: "rgb(250, 250, 250)", height: "900px", p: 5 }}
-              >
+              <Box sx={{ p: 5 }}>
                 <Box sx={{ marginBottom: "20px" }}>
                   {/* Vetriebssplanung */}
                   <Box
@@ -822,7 +820,7 @@ function Simulation() {
                     </Table>
                   </TableContainer>
                 </Box>
-                <Box sx={{ marginBottom: "20px" }}>
+                <Box sx={{ marginBottom: "20px", backgroundColor: "#f0f0f0" }}>
                   {/* Inventarüberblick */}
                   <Box>
                     <Tooltip
@@ -868,6 +866,7 @@ function Simulation() {
                                 {items.map((oPeriod, index) => {
                                   return (
                                     <TableCell
+                                      aria-disabled
                                       key={index + oPeriod[oProduct[0]]}
                                       t-key={`${index} ${oProduct[0]}`}
                                       align="center"
@@ -1135,7 +1134,7 @@ function Simulation() {
                 variant="contained"
                 onClick={fSendForecastForPlanning}
                 disabled={!bValid}
-                sx={{ mt: 400 }}
+                sx={{ mt: 0 }}
               >
                 {t("simulation.planPeriod")}
               </Button>
