@@ -81,6 +81,28 @@ function Simulation() {
   useEffect(() => {
     axios.get("http://localhost:8080/api/forecasts").then((oReponse) => {
       const oObj = {
+        forecast: [
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+          {
+            p1: 0,
+            p2: 0,
+            p3: 0,
+          },
+        ],
         production: [
           {
             p1: 0,
@@ -582,7 +604,9 @@ function Simulation() {
           <td>
             {durationPerUnit}*{quantity} = {duration} Min
           </td>
-          <td>| {setupQuantity}*{setupTime} = {setupTimeTotal} Min</td>
+          <td>
+            | {setupQuantity}*{setupTime} = {setupTimeTotal} Min
+          </td>
         </tr>
       );
     });
@@ -654,6 +678,66 @@ function Simulation() {
           {!bProductionPlanned && (
             <Container maxWidth="xl">
               <Box sx={{ p: 5 }}>
+                <Box sx={{ marginBottom: "20px", backgroundColor: "#f0f0f0" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography fontSize="20px" fontWeight="bold">
+                      {t("simulation.forecastInformation")}
+                    </Typography>
+                  </Box>
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell />
+                          {oPlanning.distribution.map((oPeriod, index) => {
+                            return (
+                              <TableCell align="center">
+                                <InputLabel>
+                                  {t("simulation.forecastAmount") +
+                                    " P+" +
+                                    (index + 1)}
+                                </InputLabel>
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {Object.entries(oPlanning.forecast[0]).map(
+                          (oProduct) => {
+                            return (
+                              <TableRow>
+                                <TableCell align="center">
+                                  {t(`fileupload.product${oProduct[0]}`)}
+                                </TableCell>
+                                {oPlanning.distribution.map(
+                                  (oPeriod, index) => {
+                                    return (
+                                      <TableCell>
+                                        <Input
+                                          type="number"
+                                          style={{ width: "8rem" }}
+                                          value={oPeriod[oProduct[0]]}
+                                          disabled
+                                        />
+                                      </TableCell>
+                                    );
+                                  }
+                                )}
+                              </TableRow>
+                            );
+                          }
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
                 <Box sx={{ marginBottom: "20px" }}>
                   {/* Vetriebssplanung */}
                   <Box
@@ -874,6 +958,7 @@ function Simulation() {
                                       <Input
                                         style={{ width: "8rem" }}
                                         value={oPeriod[oProduct[0]]}
+                                        disabled
                                         inputProps={{
                                           readOnly: true,
                                         }}
@@ -1261,6 +1346,13 @@ function Simulation() {
               )}
             </Box>
           )}
+        </>
+      )}
+      {!bForecastLoaded && (
+        <>
+          <Typography fontWeight="bold" fontSize="40px">
+            {t("simulation.waitingForData")}
+          </Typography>
         </>
       )}
     </>
