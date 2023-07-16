@@ -5,7 +5,7 @@ import {
   InputLabel,
   FormHelperText,
   Tooltip,
-  Button,
+  Button, Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
@@ -129,6 +129,7 @@ function DeliveryProgram(props) {
                       textAlign: "left",
                     }}
                   >
+                    Name: {oElement.name}<br/>
                     {orderInfos[index]}
                   </pre>
                 </Box>
