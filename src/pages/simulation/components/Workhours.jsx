@@ -42,7 +42,7 @@ function Workinghours({ data, calculations, validate }) {
         return calculation.explanation;
       }
     }
-    return "Das wurde so berechnet";
+    return " ";
   };
 
   return (
@@ -50,6 +50,13 @@ function Workinghours({ data, calculations, validate }) {
       <Tooltip arrow title={t("simulation.tooltipWorkhours")}>
         <InfoOutlined />
       </Tooltip>
+      <Box sx={{ fontSize: "14px", textAlign: "left" }}>
+        Berechnung der Schichten und Überminuten:<br />
+        Eine normale Arbeitswoche (tägliche 8-Stunden-Schicht) besteht aus 40 Std, bzw. 2400 Min pro Woche.<br />
+        Bei bis zu 800 Min mehr (insgesamt bis zu 3200 Minuten) werden Überminuten angeordnet. Diese werden durch die 5 Arbeitstage in der Woche geteilt.<br />
+        Bei über 3200 Min Bedarf wird eine zweite Schicht und bei über 4800+800=5600 Min eine dritte Schicht angeordnet.<br />
+        Beispiel: Bei 3000 Min Bedarf ergibt das 1 Schicht und 600/5 = 120 Überminuten pro Tag.<br />
+      </Box>
       {items &&
         items.length > 0 &&
         items.map((oElement) => {
