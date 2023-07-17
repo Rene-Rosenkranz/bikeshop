@@ -11,11 +11,11 @@ import {
   Button,
   Typography,
   Popover,
+  Box,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
 import { useGlobalState } from "../../../components/GlobalStateProvider";
-import { InfoOutlined, Label } from "@mui/icons-material";
+import { InfoOutlined } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,6 +30,8 @@ function ProductionProgram(props) {
   const [iInputValue, setInputValue] = useState(0);
   const [oCurrentElement, setCurrentElement] = useState({});
   const [expandedItemIndex, setExpandedItemIndex] = useState(null);
+  const [allInformationOpen, setAllInformationOpen] = useState(false); // New state for all information open/close
+
   const allowedKeys = [
     "ArrowLeft",
     "ArrowRight",
@@ -108,6 +110,10 @@ function ProductionProgram(props) {
     } else {
       setExpandedItemIndex(index);
     }
+  };
+
+  const handleToggleAllInformation = () => {
+    setAllInformationOpen(!allInformationOpen);
   };
 
   return (
@@ -201,9 +207,34 @@ function ProductionProgram(props) {
                     {t("simulation.splitItem")}
                   </Button>
                 </Box>
+                <Box>
+                  <InputLabel>{t("simulation.sequenceNumber")}</InputLabel>
+                  <Select
+                    variant="outlined"
+                    value={oElement.sequenceNumer}
+                    onChange={(e) =>
+                      handleSequenceNumberChange(
+                        oElement.id,
+                        parseInt(e.target.value)
+                      )
+                    }
+                    sx={{ marginLeft: "10px", width: "6rem" }}
+                  >
+                    {[...Array(state["productionlist"].length)].map(
+                      (_, index) => (
+                        <MenuItem key={index} value={index + 1}>
+                          {index + 1}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                </Box>
               </Box>
-              {expandedItemIndex === index && (
-                <Box marginTop="1rem">
+              {(expandedItemIndex === index || allInformationOpen) && (
+                <Box
+                  marginTop="1rem"
+                  sx={{ fontSize: "16px", textAlign: "left" }}
+                >
                   <p>
                     {t("simulation.component")}: {oElement.name}
                   </p>
@@ -212,108 +243,107 @@ function ProductionProgram(props) {
                   ))}
                 </Box>
               )}
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Box sx={{ marginTop: "1rem", marginLeft: "1rem" }}>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleToggleOrderInfos(index)}
-                    sx={{
-                      backgroundColor: "white",
-                      color: "black",
-                      "&:hover": {
-                        backgroundColor: "crimsonblue",
-                      },
-                    }}
-                  >
-                    {expandedItemIndex === index
-                      ? "Informationen ausblenden"
-                      : "Informationen anzeigen"}
-                  </Button>
-                </Box>
-              </Box>
-              <Popover
-                id={id}
-                open={bOpen}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: "1rem",
-                  }}
-                >
-                  <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
-                    {t("simulation.splitItem")}
-                  </Typography>
-                  <Input
-                    id="input"
-                    type="number"
-                    sx={{
-                      width: "12rem",
-                      marginBottom: "1rem",
-                      padding: "0.5rem",
-                      fontSize: "1rem",
-                    }}
-                    value={iInputValue}
-                    onChange={(e) => setInputValue(Number(e.target.value))}
-                    inputProps={{
-                      min: 1,
-                      max: iMaxValue,
-                    }}
-                    onInput={(oEvent) => {
-                      if (oEvent.target.value > iMaxValue) {
-                        oEvent.target.value = iMaxValue;
-                      }
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
-                    <Button
-                      variant="outlined"
-                      onClick={(oEvent) => handleSplitItem(oElement, oEvent)}
-                      sx={{
-                        margin: "0.5rem",
-                        fontSize: "0.875rem",
-                        fontWeight: "normal",
-                      }}
-                    >
-                      {t("simulation.confirm")}
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      onClick={handleClose}
-                      sx={{
-                        margin: "0.5rem",
-                        fontSize: "0.875rem",
-                        fontWeight: "normal",
-                      }}
-                    >
-                      {t("simulation.cancel")}
-                    </Button>
-                  </Box>
-                </Box>
-              </Popover>
             </Paper>
           ))
         ) : (
           <Typography>{t("simulation.noItems")}</Typography>
         )}
       </Box>
+      <Box sx={{ display: "left", marginTop: "3rem" }}>
+        <Button
+          variant="contained"
+          onClick={handleToggleAllInformation}
+          sx={{
+            backgroundColor: "white",
+            color: "black",
+            "&:hover": {
+              backgroundColor: "crimsonblue",
+            },
+          }}
+        >
+          {allInformationOpen
+            ? "Informationen ausblenden"
+            : "Informationen anzeigen"}
+        </Button>
+      </Box>
+
+      <Popover
+        id={id}
+        open={bOpen}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "1rem",
+          }}
+        >
+          <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
+            {t("simulation.splitItem")}
+          </Typography>
+          <Input
+            id="input"
+            type="number"
+            sx={{
+              width: "12rem",
+              marginBottom: "1rem",
+              padding: "0.5rem",
+              fontSize: "1rem",
+            }}
+            value={iInputValue}
+            onChange={(e) => setInputValue(Number(e.target.value))}
+            inputProps={{
+              min: 1,
+              max: iMaxValue,
+            }}
+            onInput={(oEvent) => {
+              if (oEvent.target.value > iMaxValue) {
+                oEvent.target.value = iMaxValue;
+              }
+            }}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={(oEvent) => handleSplitItem(oElement, oEvent)}
+              sx={{
+                margin: "0.5rem",
+                fontSize: "0.875rem",
+                fontWeight: "normal",
+              }}
+            >
+              {t("simulation.confirm")}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleClose}
+              sx={{
+                margin: "0.5rem",
+                fontSize: "0.875rem",
+                fontWeight: "normal",
+              }}
+            >
+              {t("simulation.cancel")}
+            </Button>
+          </Box>
+        </Box>
+      </Popover>
     </>
   );
 }
