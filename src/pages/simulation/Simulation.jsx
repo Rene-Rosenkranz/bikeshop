@@ -673,6 +673,44 @@ function Simulation() {
       });
   };
 
+  const fSendProductionPlan = (oEvent) => {
+    const oObj = {};
+    oObj.production = oPlanning.production;
+    const aProducts = [];
+    Object.entries(oPlanning.partList).forEach((aArray) => {
+      aArray[1].forEach((oElement) => {
+        if (
+          !aProducts.find(
+            (oProduct) => oProduct.productId === oElement.productId
+          )
+        ) {
+          aProducts.push({
+            productId: oElement.productId,
+            reserveStock: oElement.reserveStock,
+          });
+        }
+      });
+    });
+    oObj.products = aProducts;
+
+    axios
+      .post("http://localhost:8080/api/productionorders", oObj, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((oResponse) => {
+        const aNewQuantities = oResponse.data.map((oItem) => ({
+          id: oItem.id,
+          quantity: oItem.quantity,
+        }));
+        aNewQuantities.forEach((oElement) => {
+          document.getElementById(`quantityPart${oElement.id}`).value =
+            oElement.quantity;
+        });
+      });
+  };
+
   return (
     <>
       {bForecastLoaded && (
@@ -845,6 +883,12 @@ function Simulation() {
                   <Typography fontSize="20px" fontWeight="bold">
                     {t("simulation.productionPlanning")}
                   </Typography>
+                  <Button
+                    variant="contained"
+                    onClick={(oEvent) => fSendProductionPlan(oEvent)}
+                  >
+                    {t("simulation.planProduction")}
+                  </Button>
 
                   <TableContainer>
                     <Table>
@@ -1016,6 +1060,9 @@ function Simulation() {
                             {t("simulation.waitingListQuantity")}
                           </TableCell>
                           <TableCell>{t("simulation.safetyStock")}</TableCell>
+                          <TableCell>
+                            {t("simulation.partProduction")}
+                          </TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -1088,6 +1135,13 @@ function Simulation() {
                                             },
                                           }}
                                         />
+                                      </TableCell>
+                                      <TableCell>
+                                        <Input
+                                          id={`quantityPart${productId}`}
+                                          defaultValue={0}
+                                          disabled
+                                        ></Input>
                                       </TableCell>
                                     </TableRow>
                                   )
