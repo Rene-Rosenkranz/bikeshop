@@ -5,7 +5,8 @@ import {
   InputLabel,
   FormHelperText,
   Tooltip,
-  Button, Typography,
+  Button,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useTranslation } from "react-i18next";
@@ -68,7 +69,9 @@ function DeliveryProgram(props) {
               {/* Inhalte der Bestellungsbox */}
               <Box display="flex" alignItems="center">
                 <strong>{t("simulation.component")}:</strong>
-                <Box marginLeft="0.5rem">{oElement.article}</Box>
+                <Box marginLeft="0.5rem">
+                  {oElement.article}: {oElement.name}
+                </Box>
               </Box>
               <Box display="flex" alignItems="center">
                 <strong>{t("simulation.orderAmount")}:</strong>
@@ -129,7 +132,7 @@ function DeliveryProgram(props) {
                       textAlign: "left",
                     }}
                   >
-                    Name: {oElement.name}<br/>
+                    {/* Name: {oElement.name}<br/> */}
                     {orderInfos[index]}
                   </pre>
                 </Box>

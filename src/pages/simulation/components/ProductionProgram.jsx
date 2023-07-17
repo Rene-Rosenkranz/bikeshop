@@ -151,7 +151,14 @@ function ProductionProgram(props) {
                     inputProps={{
                       min: 0,
                       onKeyDown: (event) => {
-                        event.preventDefault();
+                        if (
+                          (!/^\d$/.test(event.key) &&
+                            !allowedKeys.includes(event.key)) ||
+                          (event.key === "Backspace" &&
+                            event.target.value.length === 1)
+                        ) {
+                          event.preventDefault();
+                        }
                       },
                     }}
                     aria-describedby="form-helper"
