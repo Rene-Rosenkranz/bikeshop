@@ -50,12 +50,17 @@ function Workinghours({ data, calculations, validate }) {
       <Tooltip arrow title={t("simulation.tooltipWorkhours")}>
         <InfoOutlined />
       </Tooltip>
-      <Box sx={{ fontSize: "14px", textAlign: "left" }}>
-        Berechnung der Schichten und Überminuten:<br />
-        Eine normale Arbeitswoche (tägliche 8-Stunden-Schicht) besteht aus 40 Std, bzw. 2400 Min pro Woche.<br />
-        Bei bis zu 800 Min mehr (insgesamt bis zu 3200 Minuten) werden Überminuten angeordnet. Diese werden durch die 5 Arbeitstage in der Woche geteilt.<br />
-        Bei über 3200 Min Bedarf wird eine zweite Schicht und bei über 4800+800=5600 Min eine dritte Schicht angeordnet.<br />
-        Beispiel: Bei 3000 Min Bedarf ergibt das 1 Schicht und 600/5 = 120 Überminuten pro Tag.<br />
+      <Box sx={{ fontSize: "14px", textAlign: "start" }}>
+        <Typography>{t("simulation.workhoursInfo.info1")}</Typography>
+        <br />
+        <Typography>{t("simulation.workhoursInfo.info2")}</Typography>
+        <br />
+        <Typography>{t("simulation.workhoursInfo.info3")}</Typography>
+        <br />
+        <Typography>{t("simulation.workhoursInfo.info4")}</Typography>
+        <br />
+        <Typography>{t("simulation.workhoursInfo.info5")}</Typography>
+        <br />
       </Box>
       {items &&
         items.length > 0 &&
@@ -90,27 +95,23 @@ function Workinghours({ data, calculations, validate }) {
                       type="number"
                       id={"inputshift" + oElement.station}
                       aria-describedby="form-helper"
+                      onInput={(oEvent) => {
+                        if (oEvent.target.value > 3) {
+                          oEvent.target.value = 3;
+                        }
+                        if (oEvent.target.value < 0) {
+                          oEvent.target.value = 0;
+                        }
+                      }}
                       inputProps={{
-                        min: 1,
+                        min: 0,
                         max: 3,
                         onKeyDown: (event) => {
-                          const inputElement = event.target;
-                          const hiddenInputElement =
-                            document.getElementById("hiddenInput");
-                          const cursorPosition =
-                            hiddenInputElement.selectionStart;
-                          const newInput = Number(
-                            inputElement.value.slice(0, cursorPosition) +
-                              event.key +
-                              inputElement.value.slice(cursorPosition)
-                          );
                           if (
                             (!/^\d$/.test(event.key) &&
                               !allowedKeys.includes(event.key)) ||
                             (event.key === "Backspace" &&
-                              event.target.value.length === 1) ||
-                            Number(event.key) > 3 ||
-                            Number(event.key) < 1
+                              event.target.value.length === 1)
                           ) {
                             event.preventDefault();
                           }
@@ -156,61 +157,32 @@ function Workinghours({ data, calculations, validate }) {
                         min: 0,
                         max: iMaxNumber,
                         onKeyDown: (event) => {
-                          const inputElement = event.target;
-                          const hiddenInputElement =
-                            document.getElementById("hiddenInput");
-                          const cursorPosition =
-                            hiddenInputElement.selectionStart;
-                          const newInput = Number(
-                            inputElement.value.slice(0, cursorPosition) +
-                              event.key +
-                              inputElement.value.slice(cursorPosition)
-                          );
-                          const bWrongKey =
+                          if (
                             (!/^\d$/.test(event.key) &&
                               !allowedKeys.includes(event.key)) ||
                             (event.key === "Backspace" &&
-                              event.target.value.length === 1);
-
-                          const bShiftMax = oElement.shift === 3;
-                          const bInputValueWrong =
-                            !!newInput &&
-                            (newInput > iMaxNumber || newInput < 1);
-                          const bKeyIsNotNumber = !!Number(event.key);
-                          if (bWrongKey) {
-                            event.preventDefault();
-                            return;
-                          }
-
-                          if (!bWrongKey && bInputValueWrong) {
-                            toast.error(
-                              t("toast.errorInvalidInputOvertimeExceed")
-                            );
-                            event.preventDefault();
-                            return;
-                          }
-                          if (
-                            !bWrongKey &&
-                            !bInputValueWrong &&
-                            bShiftMax &&
-                            bKeyIsNotNumber
+                              event.target.value.length === 1)
                           ) {
-                            toast.error(
-                              t("toast.errorInvalidInputShiftOvertime")
-                            );
                             event.preventDefault();
-                            return;
                           }
                         },
                       }}
                       defaultValue={oElement.overtime}
+                      onInput={(oEvent) => {
+                        if (oElement.shift === 3 && oEvent.target.value > 0) {
+                          oEvent.target.value = 0;
+                          toast.error(
+                            t("toast.errorInvalidInputShiftOvertime")
+                          );
+                        }
+                        if (oElement.shift !== 3 && oEvent.target.value > 241) {
+                          oEvent.target.value = 241;
+                          toast.error(
+                            t("toast.errorInvalidInputOvertimeExceed")
+                          );
+                        }
+                      }}
                       onChange={(oEvent) => {
-                        const inputElement = document.getElementById(
-                          `inputovertime${oElement.station}`
-                        );
-                        const hiddenInputElement =
-                          document.getElementById("hiddenInput");
-                        hiddenInputElement.value = inputElement.value;
                         const oNewState = state;
                         if (oElement.shift === 3) {
                           oEvent.preventDefault();
@@ -226,11 +198,6 @@ function Workinghours({ data, calculations, validate }) {
                         setItems(oNewState["workingtimelist"]);
                         setState(oNewState);
                       }}
-                    />
-                    <input
-                      type="text"
-                      id="hiddenInput"
-                      style={{ display: "none" }}
                     />
                   </FormControl>
                 </Grid>
