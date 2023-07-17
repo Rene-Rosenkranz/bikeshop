@@ -800,6 +800,12 @@ function Simulation() {
                                           t-key={oProduct[0]}
                                           style={{ width: "8rem" }}
                                           defaultValue={oPeriod[oProduct[0]]}
+                                          onInput={(oEvent) => {
+                                            const value = oEvent.target.value;
+                                            if (value === "") {
+                                              oEvent.target.value = 0;
+                                            }
+                                          }}
                                           inputProps={{
                                             min: 0,
                                             onKeyDown: (event) => {
@@ -879,6 +885,12 @@ function Simulation() {
                                         t-key={oProduct[0]}
                                         style={{ width: "8rem" }}
                                         defaultValue={oPeriod[oProduct[0]]}
+                                        onInput={(oEvent) => {
+                                          const value = oEvent.target.value;
+                                          if (value === "") {
+                                            oEvent.target.value = 0;
+                                          }
+                                        }}
                                         inputProps={{
                                           min: 0,
                                           onKeyDown: (event) => {
@@ -1053,6 +1065,12 @@ function Simulation() {
                                         <Input
                                           value={reserveStock}
                                           style={{ width: "8rem" }}
+                                          onInput={(oEvent) => {
+                                            const value = oEvent.target.value;
+                                            if (value === "") {
+                                              oEvent.target.value = 0;
+                                            }
+                                          }}
                                           inputProps={{
                                             min: 0,
                                             onKeyDown: (event) => {
@@ -1128,6 +1146,12 @@ function Simulation() {
                                   error={!bValid}
                                   style={{ width: "8rem" }}
                                   defaultValue={oProduct[1].quantity}
+                                  onInput={(oEvent) => {
+                                    const value = oEvent.target.value;
+                                    if (value === "") {
+                                      oEvent.target.value = 0;
+                                    }
+                                  }}
                                   inputProps={{
                                     min: 0,
                                     onKeyDown: (event) => {
@@ -1161,6 +1185,12 @@ function Simulation() {
                                   error={!bValid}
                                   style={{ width: "8rem" }}
                                   defaultValue={oProduct[1].price}
+                                  onInput={(oEvent) => {
+                                    const value = oEvent.target.value;
+                                    if (value === "") {
+                                      oEvent.target.value = 0;
+                                    }
+                                  }}
                                   inputProps={{
                                     min: 0,
                                     onKeyDown: (event) => {
@@ -1194,6 +1224,12 @@ function Simulation() {
                                   error={!bValid}
                                   style={{ width: "8rem" }}
                                   defaultValue={oProduct[1].penalty}
+                                  onInput={(oEvent) => {
+                                    const value = oEvent.target.value;
+                                    if (value === "") {
+                                      oEvent.target.value = 0;
+                                    }
+                                  }}
                                   inputProps={{
                                     min: 0,
                                     onKeyDown: (event) => {
