@@ -332,13 +332,15 @@ function Simulation() {
       },
     };
 
-    oData.orderlist.forEach((oOrder) => {
-      oObj.input.orderlist.order.push({
-        "@article": oOrder.article,
-        "@quantity": oOrder.quantity,
-        "@modus": oOrder.modus,
+    oData.orderlist
+      .filter((e) => e.quantity !== 0)
+      .forEach((oOrder) => {
+        oObj.input.orderlist.order.push({
+          "@article": oOrder.article,
+          "@quantity": oOrder.quantity,
+          "@modus": oOrder.modus,
+        });
       });
-    });
 
     oData.productionlist.forEach((oProduction) => {
       oObj.input.productionlist.production.push({
