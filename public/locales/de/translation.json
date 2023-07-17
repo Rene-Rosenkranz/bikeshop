@@ -118,6 +118,7 @@
     "errorFileUpload": "Etwas ist schief gegangen. Bitte versuchen Sie es mit einer anderen Datei oder wenden Sie sich an einen Administrator.",
     "generateXML": "XML Datei ihrer geplanten Werte wird generiert",
     "errorInvalidInputOvertimeExceed": "Bitte überschreiten Sie nicht den Wert von 241 Überminuten.",
-    "errorInvalidInputShiftOvertime": "Bei drei Schichten können keine Überminuten angeordnet werden."
+    "errorInvalidInputShiftOvertime": "Bei drei Schichten können keine Überminuten angeordnet werden.",
+    "errorNotDivisibleBy10": "Der eingegebene Wert muss durch 10 teilbar sein."
   }
 }

@@ -53,34 +53,39 @@ function ProductionProgram(props) {
     const id = bOpen ? "splitting-popup" : undefined;
 
     const handleClick = (oEvent, oElement) => {
-        setAnchorEl(oEvent.currentTarget);
-        setMaxValue(oElement.quantity - 1);
-        setInputValue(Math.trunc(oElement.quantity / 2));
-        setCurrentElement(oElement);
+    setAnchorEl(oEvent.currentTarget);
+    setMaxValue(oElement.quantity - 1);
+    setInputValue(Math.floor(oElement.quantity / 2 / 10) * 10);
+    setCurrentElement(oElement);
     };
 
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const handleSplitItem = (oElement, oEvent) => {
-        const newState = state;
-        const iIndex = newState["productionlist"].indexOf(oCurrentElement);
-        const iNewQuantity = iInputValue;
-        const iOldQuantity = newState["productionlist"][iIndex].quantity;
-        const oNewItem = {
-            ...oCurrentElement,
-            quantity: iNewQuantity,
-            sequenceNumer: newState["productionlist"].length + 1,
-            id: state["productionlist"].length,
-        };
-        newState["productionlist"][iIndex].quantity = iOldQuantity - iNewQuantity;
-        newState["productionlist"].push(oNewItem);
-        setState(newState);
-        setItems(newState["productionlist"]);
-        toast.info(t("toast.infoSplitItem"));
-        setAnchorEl(null);
+const handleSplitItem = (oElement, oEvent) => {
+  if (iInputValue % 10 !== 0) {
+      toast.error(t("toast.errorNotDivisibleBy10"));
+      return;
+  }
+    const newState = state;
+    const iIndex = newState["productionlist"].indexOf(oCurrentElement);
+    const iNewQuantity = iInputValue;
+    const iOldQuantity = newState["productionlist"][iIndex].quantity;
+    const oNewItem = {
+        ...oCurrentElement,
+        quantity: iNewQuantity,
+        sequenceNumer: newState["productionlist"].length + 1,
+        id: state["productionlist"].length,
     };
+    newState["productionlist"][iIndex].quantity = iOldQuantity - iNewQuantity;
+    newState["productionlist"].push(oNewItem);
+    setState(newState);
+    setItems(newState["productionlist"]);
+    toast.info(t("toast.infoSplitItem"));
+    setAnchorEl(null);
+};
+
 
     const handleSequenceNumberChange = (itemId, newSequenceNumber) => {
         const newState = state;

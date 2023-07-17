@@ -118,6 +118,7 @@
     "errorFileUpload": "Something went wrong. Please try again with a different file or contact an administrator.",
     "generateXML": "Generating XML file of your planned values",
     "errorInvalidInputOvertimeExceed": "Please do not exceed the value of 241 minutes of overtime.",
-    "errorInvalidInputShiftOvertime": "No overtime can be ordered with three shifts."
+    "errorInvalidInputShiftOvertime": "No overtime can be ordered with three shifts.",
+    "errorNotDivisibleBy10": "The number has to be divided by 10."
   }
 }
