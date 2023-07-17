@@ -194,9 +194,31 @@ function ProductionProgram(props) {
                     {t("simulation.splitItem")}
                   </Button>
                 </Box>
+                <Box>
+                <InputLabel>{t("simulation.sequenceNumber")}</InputLabel>
+                <Select
+                    variant="outlined"
+                    value={oElement.sequenceNumer}
+                    onChange={(e) =>
+                        handleSequenceNumberChange(
+                            oElement.id,
+                            parseInt(e.target.value)
+                        )
+                    }
+                    sx={{ marginLeft: "10px", width: "6rem" }}
+                >
+                  {[...Array(state["productionlist"].length)].map(
+                      (_, index) => (
+                          <MenuItem key={index} value={index + 1}>
+                            {index + 1}
+                          </MenuItem>
+                      )
+                  )}
+                </Select>
               </Box>
+          </Box>
               {expandedItemIndex === index && (
-                <Box marginTop="1rem">
+                <Box marginTop="1rem" sx={{ fontSize: "16px", textAlign: "left" }}>
                   <p>
                     {t("simulation.component")}: {oElement.name}
                   </p>
@@ -205,7 +227,7 @@ function ProductionProgram(props) {
                   ))}
                 </Box>
               )}
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
                 <Box sx={{ marginTop: "1rem", marginLeft: "1rem" }}>
                   <Button
                     variant="contained"
